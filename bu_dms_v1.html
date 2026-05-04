@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BU Legal Affairs Office — Document Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0c1d3a;--navy2:#122549;--navy3:#1a3366;
+  --blue:#1a5ccc;--blue2:#1449a8;--blue3:#3b7de8;
+  --gold:#c9943a;--gold2:#e8b860;--gold3:#fad27a;
+  --bg:#f5f7fa;--white:#fff;
+  --line:#e4e9f0;--line2:#d0d8e6;
+  --text:#0c1d3a;--muted:#6b7f9e;--soft:#8898b5;
+  --green:#0d7a4e;--gbg:#e8f7f0;
+  --warn:#a06010;--wbg:#fef3e0;
+  --red:#b91c1c;--rbg:#fde8e8;
+  --purple:#5b3ea6;--pbg:#eee8fb;
+  --shadow:0 2px 12px rgba(12,29,58,.08);
+  --shadow2:0 4px 24px rgba(12,29,58,.13);
+}
+html{font-size:14px}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── SCREEN SYSTEM ── */
+.screen{display:none!important}
+.screen.active{display:block!important}
+
+/* ── SHARED COMPONENTS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue2)}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--line2)}
+.btn-ghost:hover{background:var(--bg);color:var(--text)}
+.btn-danger{background:var(--rbg);color:var(--red);border:1.5px solid #f5c5c5}
+.btn-danger:hover{background:#fdd;color:var(--red)}
+.btn-sm{font-size:11.5px;padding:6px 12px}
+.btn svg{width:14px;height:14px;flex-shrink:0}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600;letter-spacing:.2px}
+.badge-blue{background:#ddeeff;color:#1a3f8a}
+.badge-gold{background:#fef3d8;color:#8a5800}
+.badge-green{background:var(--gbg);color:var(--green)}
+.badge-red{background:var(--rbg);color:var(--red)}
+.badge-purple{background:var(--pbg);color:var(--purple)}
+.badge-gray{background:#eef0f4;color:#4a5770}
+
+.chip{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+.chip-pending{background:var(--wbg);color:var(--warn)}
+.chip-active{background:var(--gbg);color:var(--green)}
+.chip-closed{background:#eef0f4;color:#4a5770}
+.chip-urgent{background:var(--rbg);color:var(--red)}
+
+.tag{display:inline-block;padding:2px 7px;border-radius:3px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.tag-contract{background:#dde8ff;color:#1a3f8a}
+.tag-legal{background:var(--pbg);color:var(--purple)}
+.tag-admin{background:#e0f8ee;color:#065f3e}
+.tag-dispute{background:#fde8e8;color:#991b1b}
+.tag-notice{background:#fef9e0;color:#7a5800}
+.tag-permit{background:#e0f4fe;color:#0c4a6e}
+
+/* ══════════════════════════════════════════
+   SCREEN 0: LANDING / PORTAL CHOICE
+══════════════════════════════════════════ */
+#s-landing{background:var(--navy);min-height:100vh;display:flex!important;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.land-bg{position:absolute;inset:0;pointer-events:none}
+.land-circle{position:absolute;border-radius:50%;border:1px solid rgba(201,148,58,.12)}
+.land-c1{width:600px;height:600px;top:-200px;right:-200px}
+.land-c2{width:400px;height:400px;bottom:-180px;left:-100px}
+.land-c3{width:200px;height:200px;top:40%;left:10%}
+.land-line{position:absolute;background:rgba(201,148,58,.07)}
+.land-l1{width:1px;height:100%;left:20%;top:0;transform:rotate(8deg)}
+.land-l2{width:1px;height:100%;right:25%;top:0;transform:rotate(-5deg)}
+.land-inner{position:relative;z-index:1;text-align:center;max-width:520px;padding:2rem}
+.land-seal{width:68px;height:68px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--navy);font-family:'DM Serif Display',serif;margin:0 auto 1.4rem;box-shadow:0 8px 28px rgba(201,148,58,.35)}
+.land-org{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,.35);margin-bottom:.5rem}
+.land-title{font-family:'DM Serif Display',serif;font-size:36px;color:#fff;line-height:1.15;margin-bottom:.6rem}
+.land-title em{color:var(--gold2);font-style:italic}
+.land-sub{font-size:13px;font-weight:300;color:rgba(255,255,255,.45);margin-bottom:2.4rem;line-height:1.7}
+.land-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left}
+.land-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:1.4rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.land-card:hover{background:rgba(255,255,255,.09);border-color:rgba(201,148,58,.4);transform:translateY(-2px)}
+.land-card::before{content:'';position:absolute;bottom:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(201,148,58,.06)}
+.lc-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:.9rem}
+.lc-icon-gold{background:rgba(201,148,58,.18)}
+.lc-icon-blue{background:rgba(58,125,232,.2)}
+.lc-icon svg{width:18px;height:18px;stroke-width:2;stroke-linecap:round;fill:none}
+.lc-icon-gold svg{stroke:var(--gold2)}
+.lc-icon-blue svg{stroke:var(--blue3)}
+.lc-label{font-size:14px;font-weight:700;color:#fff;margin-bottom:.35rem}
+.lc-desc{font-size:11.5px;font-weight:300;color:rgba(255,255,255,.45);line-height:1.6}
+.lc-arrow{position:absolute;top:1.2rem;right:1.2rem;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center}
+.lc-arrow svg{width:11px;height:11px;stroke:rgba(255,255,255,.4);fill:none;stroke-width:2;stroke-linecap:round}
+
+/* ══════════════════════════════════════════
+   SCREEN 1: STAFF REGISTER
+══════════════════════════════════════════ */
+#s-register{min-height:100vh;background:var(--bg);display:flex!important;align-items:center;justify-content:center}
+.auth-card{background:#fff;border-radius:16px;border:1px solid var(--line);box-shadow:var(--shadow2);padding:2.4rem;width:420px}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:1.6rem}
+.auth-seal{width:36px;height:36px;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--gold2);font-family:'DM Serif Display',serif;flex-shrink:0}
+.auth-org{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted)}
+.auth-title{font-family:'DM Serif Display',serif;font-size:24px;color:var(--navy);margin-bottom:.3rem}
+.auth-sub{font-size:12.5px;color:var(--muted);margin-bottom:1.8rem;line-height:1.6}
+.fld{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.fld label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--navy2)}
+.fld input,.fld select{border:1.5px solid var(--line2);border-radius:8px;padding:10px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border .15s}
+.fld input:focus,.fld select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,92,204,.1)}
+.fld input::placeholder{color:#b0bbc8}
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-full{width:100%;justify-content:center;padding:11px;font-size:14px}
+.auth-link{text-align:center;font-size:12px;color:var(--muted);margin-top:1rem}
+.auth-link a{color:var(--blue);font-weight:600;cursor:pointer;text-decoration:none}
+.auth-link a:hover{text-decoration:underline}
+
+/* ══════════════════════════════════════════
+   SCREEN 2: STAFF LOGIN
+══════════════════════════════════════════ */
+#s-login{min-height:100vh;background:var(--bg);display:flex!important;align-items:center;justify-content:center}
+.forgot-link{font-size:12px;color:var(--blue);cursor:pointer;text-align:right;display:block;margin-top:-8px;margin-bottom:4px;font-weight:500}
+
+/* ══════════════════════════════════════════
+   SCREEN 3: FORGOT PASSWORD
+══════════════════════════════════════════ */
+#s-forgot{min-height:100vh;background:var(--bg);display:flex!important;align-items:center;justify-content:center}
+.step-dots{display:flex;gap:6px;align-items:center;margin-bottom:1.6rem}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--line2);transition:all .2s}
+.sdot.active{background:var(--blue);width:20px;border-radius:4px}
+
+/* ══════════════════════════════════════════
+   SCREEN 4: CLIENT EMAIL
+══════════════════════════════════════════ */
+#s-client-email{min-height:100vh;background:var(--navy);display:flex!important;align-items:center;justify-content:center;position:relative;overflow:hidden}
+#s-client-email .land-bg{position:absolute}
+.client-card{background:#fff;border-radius:16px;padding:2.6rem;width:400px;position:relative;z-index:1;text-align:center}
+.client-icon{width:56px;height:56px;border-radius:12px;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem}
+.client-icon svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.client-card h2{font-family:'DM Serif Display',serif;font-size:24px;color:var(--navy);margin-bottom:.4rem}
+.client-card p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:1.6rem}
+
+/* ══════════════════════════════════════════
+   SCREEN 5: CLIENT OTP
+══════════════════════════════════════════ */
+#s-client-otp{min-height:100vh;background:var(--navy);display:flex!important;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.otp-inputs{display:flex;gap:10px;justify-content:center;margin:1.4rem 0}
+.otp-inputs input{width:48px;height:54px;border:2px solid var(--line2);border-radius:10px;text-align:center;font-size:22px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--navy);background:#fff;outline:none;transition:all .15s}
+.otp-inputs input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,92,204,.12)}
+.otp-resend{font-size:12px;color:var(--muted);text-align:center}
+.otp-resend span{color:var(--blue);cursor:pointer;font-weight:600}
+
+/* ══════════════════════════════════════════
+   SCREEN 6: CLIENT UPLOAD
+══════════════════════════════════════════ */
+#s-client-upload{min-height:100vh;background:var(--navy);display:flex!important;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.upload-card{background:#fff;border-radius:16px;padding:2.4rem;width:480px;position:relative;z-index:1}
+.upload-zone{border:2px dashed var(--line2);border-radius:12px;padding:2.8rem 2rem;text-align:center;cursor:pointer;transition:all .2s;background:#fafbfd}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--blue);background:#eef4ff}
+.upload-zone svg{width:36px;height:36px;stroke:var(--soft);fill:none;stroke-width:1.5;stroke-linecap:round;margin-bottom:.8rem}
+.upload-zone h3{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:.35rem}
+.upload-zone p{font-size:12px;color:var(--muted);line-height:1.6}
+.upload-zone .click-txt{color:var(--blue);font-weight:600}
+.upload-formats{font-size:10.5px;color:var(--soft);margin-top:.6rem}
+.upload-progress{margin-top:1.2rem;display:none}
+.up-file{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 13px;margin-bottom:8px}
+.up-file-icon{width:32px;height:32px;background:var(--blue);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.up-file-icon svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.up-file-name{font-size:12.5px;font-weight:600;color:var(--navy);flex:1}
+.up-file-size{font-size:11px;color:var(--muted)}
+.pbar-wrap{height:3px;background:var(--line);border-radius:2px;margin-top:5px;overflow:hidden}
+.pbar{height:100%;background:var(--blue);border-radius:2px;width:0%;transition:width .4s}
+
+/* ══════════════════════════════════════════
+   SCREEN 7: PENDING REVIEW
+══════════════════════════════════════════ */
+#s-pending{min-height:100vh;background:var(--bg)}
+.app-header{background:var(--navy);padding:0 1.8rem;height:54px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.app-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--navy3),var(--gold),var(--navy3))}
+.ah-seal{width:32px;height:32px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:var(--navy);font-family:'DM Serif Display',serif;flex-shrink:0}
+.ah-name{font-size:13px;font-weight:700;color:#fff;letter-spacing:.3px}
+.ah-system{font-size:9.5px;font-weight:400;color:rgba(255,255,255,.38);margin-top:1px}
+.ah-div{width:1px;height:22px;background:rgba(255,255,255,.12);margin:0 2px}
+.ah-nav{display:flex;gap:2px;flex:1}
+.ah-btn{background:none;border:none;color:rgba(255,255,255,.45);font-size:11.5px;font-family:'DM Sans',sans-serif;font-weight:500;padding:6px 12px;border-radius:6px;cursor:pointer;transition:all .12s}
+.ah-btn:hover,.ah-btn.active{background:rgba(255,255,255,.1);color:#fff}
+.ah-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.ah-user{display:flex;align-items:center;gap:7px;cursor:pointer;padding:4px 8px;border-radius:7px;transition:background .12s}
+.ah-user:hover{background:rgba(255,255,255,.08)}
+.ah-avatar{width:28px;height:28px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--navy);flex-shrink:0}
+.ah-uname{font-size:12px;font-weight:600;color:#fff}
+
+.page-toolbar{background:#fff;border-bottom:1px solid var(--line);padding:8px 1.8rem;display:flex;align-items:center;gap:8px}
+.toolbar-title{font-size:13px;font-weight:700;color:var(--navy)}
+.toolbar-count{font-size:11px;color:var(--muted);background:var(--bg);padding:2px 8px;border-radius:10px;border:1px solid var(--line)}
+
+.pending-body{padding:1.4rem 1.8rem;display:flex;flex-direction:column;gap:10px}
+.date-group-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:4px 0;display:flex;align-items:center;gap:8px}
+.date-group-label::after{content:'';flex:1;height:1px;background:var(--line)}
+
+.pending-row{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr 320px;min-height:200px;transition:box-shadow .15s}
+.pending-row:hover{box-shadow:var(--shadow2)}
+.pr-preview{background:#f0f2f5;border-right:1px solid var(--line);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-height:160px}
+.pr-preview-inner{padding:1rem;width:100%;max-height:220px;overflow:hidden}
+.pr-file-thumb{background:#fff;border-radius:8px;padding:1rem;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);line-height:1.8;box-shadow:0 2px 8px rgba(12,29,58,.1);max-height:180px;overflow:hidden}
+.pr-file-thumb h4{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:.5rem;padding-bottom:.5rem;border-bottom:1px solid var(--line)}
+.pr-type-badge{position:absolute;top:10px;left:10px;background:var(--navy);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase}
+.pr-right{padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.7rem}
+.pr-title{font-size:14px;font-weight:700;color:var(--navy);line-height:1.4}
+.pr-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pr-date{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.pr-date svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.pr-mnb{background:var(--navy2);border-radius:9px;padding:.7rem .9rem}
+.pr-mnb-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.4);margin-bottom:.35rem;display:flex;align-items:center;gap:5px}
+.pr-mnb-label span{background:var(--gold);color:var(--navy);padding:1px 5px;border-radius:3px;font-size:8px}
+.pr-mnb-value{font-size:12.5px;font-weight:600;color:#fff}
+.pr-actions{display:flex;gap:7px;margin-top:auto;padding-top:.5rem;border-top:1px solid var(--line)}
+
+/* ══════════════════════════════════════════
+   SCREEN 8: DOCUMENT TRACKER
+══════════════════════════════════════════ */
+#s-tracker{min-height:100vh;background:var(--bg)}
+.tracker-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 54px)}
+.t-sidebar{background:var(--navy);padding:1.2rem .8rem;display:flex;flex-direction:column;gap:4px;overflow-y:auto}
+.t-sidebar-section{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.28);padding:10px 10px 4px;margin-top:4px}
+.t-sidebar-section:first-child{margin-top:0}
+.tsb-btn{display:flex;align-items:center;gap:8px;background:none;border:none;color:rgba(255,255,255,.5);font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;padding:8px 10px;border-radius:8px;cursor:pointer;text-align:left;width:100%;transition:all .12s}
+.tsb-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.85)}
+.tsb-btn.active{background:rgba(26,92,204,.4);color:#fff}
+.tsb-btn svg{width:14px;height:14px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.tsb-count{margin-left:auto;font-size:9.5px;background:rgba(255,255,255,.12);padding:1px 6px;border-radius:8px;color:rgba(255,255,255,.5)}
+.tsb-count.active-count{background:var(--blue);color:#fff}
+
+.t-main{display:flex;flex-direction:column;overflow:hidden}
+.t-toolbar{background:#fff;border-bottom:1px solid var(--line);padding:8px 1.4rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.t-search{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--line2);border-radius:8px;padding:6px 11px;gap:7px;width:220px}
+.t-search input{background:none;border:none;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;width:100%}
+.t-search input::placeholder{color:var(--soft)}
+.t-search svg{width:13px;height:13px;stroke:var(--soft);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.t-filter{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid var(--line2);border-radius:8px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;background:#fff}
+.t-filter svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:1.2rem 1.4rem 0}
+.stat-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.sc-blue::before{background:var(--blue)}.sc-gold::before{background:var(--gold)}.sc-green::before{background:var(--green)}.sc-purple::before{background:var(--purple)}
+.stat-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:700}
+.stat-value{font-size:26px;font-weight:700;font-family:'DM Serif Display',serif;line-height:1.1;margin-top:3px}
+.sc-blue .stat-value{color:var(--blue)}.sc-gold .stat-value{color:var(--gold)}.sc-green .stat-value{color:var(--green)}.sc-purple .stat-value{color:var(--purple)}
+.stat-sub{font-size:10.5px;color:var(--soft);margin-top:2px}
+
+.folder-grid{padding:1.2rem 1.4rem;display:flex;flex-direction:column;gap:14px}
+.folder-group{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.fg-header{background:var(--navy2);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.fg-icon{width:26px;height:26px;border-radius:6px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fg-icon svg{width:13px;height:13px;stroke:rgba(255,255,255,.7);fill:none;stroke-width:2;stroke-linecap:round}
+.fg-title{font-size:12.5px;font-weight:600;color:#fff}
+.fg-sub{font-size:10.5px;color:rgba(255,255,255,.38);margin-left:3px}
+.fg-cnt{margin-left:auto;font-size:10px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);padding:2px 8px;border-radius:8px}
+.fg-body{display:grid;grid-template-columns:120px 1fr 130px 120px 110px 100px;border-bottom:none}
+.fg-col-head{display:grid;grid-template-columns:120px 1fr 130px 120px 110px 100px;padding:7px 14px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);background:#fafbfd;border-bottom:1px solid var(--line)}
+.doc-row{display:grid;grid-template-columns:120px 1fr 130px 120px 110px 100px;align-items:center;padding:10px 14px;border-bottom:.5px solid var(--line);cursor:pointer;transition:background .1s}
+.doc-row:last-child{border-bottom:none}
+.doc-row:hover{background:#f5f8ff}
+.doc-id{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;color:var(--blue)}
+.doc-name{font-size:12.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-sub{font-size:10.5px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ══════════════════════════════════════════
+   SCREEN 9: DOCUMENT VIEW (OPEN)
+══════════════════════════════════════════ */
+#s-docview{min-height:100vh;background:var(--bg)}
+.dv-action-bar{background:#fff;border-bottom:1px solid var(--line);padding:9px 1.8rem;display:flex;align-items:center;gap:10px}
+.dv-id{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--blue);background:#eef4ff;border:1.5px solid #d0e0f8;padding:6px 12px;border-radius:7px}
+.dv-title{font-size:14px;font-weight:700;color:var(--navy);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dv-layout{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 108px)}
+.dv-left{padding:1.4rem 1.8rem;overflow-y:auto;background:var(--bg)}
+.dv-right{background:#fff;border-left:1px solid var(--line);padding:1.3rem;overflow-y:auto;display:flex;flex-direction:column;gap:1rem}
+
+.doc-preview-area{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.dpa-header{background:var(--navy2);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.dpa-header span{font-size:11px;font-weight:600;color:#fff}
+.dpa-body{padding:1.4rem;min-height:440px;font-family:'DM Sans',sans-serif;font-size:12.5px;line-height:1.9;color:var(--text)}
+.dpa-body h3{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1.5px solid var(--line)}
+.dpa-body p{margin-bottom:.8rem;color:var(--muted)}
+.dpa-body .doc-para{font-size:12px;line-height:2;color:#3a4a60}
+
+.panel-section{background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.ps-head{padding:9px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);background:#fff}
+.ps-head-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.ps-head-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--navy2)}
+.ps-body{padding:12px}
+
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.info-item{display:flex;flex-direction:column;gap:3px}
+.info-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.info-value{font-size:12.5px;color:var(--navy);font-weight:500}
+.info-item.full{grid-column:1/-1}
+
+.field-block{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field-block label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.field-block input,.field-block select,.field-block textarea{border:1.5px solid var(--line2);border-radius:7px;padding:8px 10px;font-size:12.5px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border .15s;width:100%}
+.field-block input:focus,.field-block select:focus,.field-block textarea:focus{border-color:var(--blue)}
+.field-block textarea{resize:vertical;min-height:72px}
+
+.note-list{display:flex;flex-direction:column;gap:0}
+.note-item{padding:9px 11px;border-bottom:.5px solid var(--line);display:flex;flex-direction:column;gap:5px}
+.note-item:last-child{border-bottom:none}
+.ni-header{display:flex;align-items:center;gap:6px}
+.ni-avatar{width:22px;height:22px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;flex-shrink:0}
+.ni-author{font-size:11.5px;font-weight:600;color:var(--navy)}
+.ni-time{font-size:10px;color:var(--soft);margin-left:auto}
+.ni-text{font-size:12px;color:var(--muted);line-height:1.6;padding-left:28px}
+
+.add-note-form{background:#fafbfd;border:1.5px dashed var(--line2);border-radius:8px;padding:10px}
+.add-note-form textarea{border:none;background:transparent;width:100%;font-size:12.5px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;resize:none;min-height:56px}
+
+/* ══════════════════════════════════════════
+   SCREEN 10: UPLOAD BY STAFF (tracker upload)
+══════════════════════════════════════════ */
+#s-staff-upload{min-height:100vh;background:var(--bg)}
+.upload-layout{padding:1.4rem 1.8rem;max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:1.2rem}
+.upload-header-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.2rem 1.4rem;display:flex;align-items:center;gap:1rem}
+.uhc-icon{width:44px;height:44px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.uhc-icon svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.uhc-title{font-size:15px;font-weight:700;color:var(--navy)}
+.uhc-sub{font-size:12px;color:var(--muted)}
+
+.classify-folder{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.cf-header{padding:9px 14px;background:var(--navy2);display:flex;align-items:center;gap:8px}
+.cf-header span{font-size:11px;font-weight:600;color:#fff}
+.cf-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.cf-item{padding:12px 14px;border-right:.5px solid var(--line);border-bottom:.5px solid var(--line);cursor:pointer;transition:background .12s;display:flex;flex-direction:column;gap:5px}
+.cf-item:hover{background:#f0f6ff}
+.cf-item.selected{background:#eef4ff;border-color:var(--blue)}
+.cf-item:nth-child(4n){border-right:none}
+.cf-date{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.cf-name{font-size:12px;font-weight:600;color:var(--navy)}
+.cf-count{font-size:10px;color:var(--soft)}
+
+/* ══════════════════════════════════════════
+   MODAL OVERLAY
+══════════════════════════════════════════ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(12,29,58,.5);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;padding:1.8rem;width:460px;max-width:92vw;box-shadow:0 20px 60px rgba(12,29,58,.25);animation:modalIn .2s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(-8px)}to{opacity:1;transform:none}}
+.modal-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);margin-bottom:.3rem}
+.modal-sub{font-size:12.5px;color:var(--muted);margin-bottom:1.4rem;line-height:1.6}
+.modal-actions{display:flex;gap:8px;margin-top:1.4rem;justify-content:flex-end}
+
+/* ══════════════════════════════════════════
+   SUCCESS TOAST
+══════════════════════════════════════════ */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;border-radius:10px;padding:12px 18px;font-size:12.5px;font-weight:500;display:flex;align-items:center;gap:10px;z-index:2000;opacity:0;transform:translateY(12px);transition:all .25s;pointer-events:none;border-left:3px solid var(--gold)}
+.toast.show{opacity:1;transform:none}
+.toast svg{width:14px;height:14px;stroke:var(--gold2);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+
+/* Delete confirm badge */
+.delete-row-btn{background:var(--rbg);border:none;border-radius:6px;padding:5px 9px;color:var(--red);font-size:11px;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;transition:background .12s}
+.delete-row-btn:hover{background:#fdd}
+.delete-row-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* Utilities */
+.mt4{margin-top:4px}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}
+.flex{display:flex}.items-center{align-items:center}.gap-6{gap:6px}.gap-8{gap:8px}
+.ml-auto{margin-left:auto}
+
+/* Password strength */
+.pw-strength{display:flex;gap:4px;margin-top:6px}
+.pws{flex:1;height:3px;border-radius:2px;background:var(--line)}
+.pws.s1{background:#e24b4a}.pws.s2{background:var(--gold)}.pws.s3{background:var(--green)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.fade-up{animation:fadeUp .35s ease both}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     TOAST
+══════════════════════════════════════════ -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg">Action completed.</span>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 0 — LANDING
+══════════════════════════════════════════ -->
+<div id="s-landing" class="screen active">
+  <div class="land-bg">
+    <div class="land-circle land-c1"></div>
+    <div class="land-circle land-c2"></div>
+    <div class="land-circle land-c3"></div>
+    <div class="land-line land-l1"></div>
+    <div class="land-line land-l2"></div>
+  </div>
+  <div class="land-inner fade-up">
+    <div class="land-seal">BU</div>
+    <div class="land-org">Bicol University · Legal Affairs Office</div>
+    <h1 class="land-title">Document <em>Management</em><br>System</h1>
+    <p class="land-sub">Secure, centralized management of legal documents and correspondence.</p>
+    <div class="land-cards">
+      <div class="land-card" onclick="go('s-login')">
+        <div class="lc-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+        <div class="lc-icon lc-icon-gold">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="lc-label">Staff Portal</div>
+        <div class="lc-desc">Login to manage documents, review pending files, and track submissions.</div>
+      </div>
+      <div class="land-card" onclick="go('s-client-email')">
+        <div class="lc-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+        <div class="lc-icon lc-icon-blue">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="lc-label">Submit a Document</div>
+        <div class="lc-desc">Upload files securely. Enter your email to receive an OTP verification.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 1 — STAFF REGISTER
+══════════════════════════════════════════ -->
+<div id="s-register" class="screen">
+  <div class="auth-card fade-up">
+    <div class="auth-logo">
+      <div class="auth-seal">BU</div>
+      <div><div class="auth-org">Legal Affairs Office</div></div>
+    </div>
+    <h2 class="auth-title">Create Account</h2>
+    <p class="auth-sub">Set up your staff account to access the document management system.</p>
+    <div class="frow2">
+      <div class="fld"><label>First Name</label><input type="text" placeholder="Juan"></div>
+      <div class="fld"><label>Last Name</label><input type="text" placeholder="dela Cruz"></div>
+    </div>
+    <div class="fld"><label>Email Address</label><input type="email" placeholder="jdelacruz@bicol-u.edu.ph"></div>
+    <div class="fld"><label>Position / Role</label>
+      <select><option>Select position</option><option>Legal Officer</option><option>Administrative Staff</option><option>Document Controller</option><option>Department Head</option></select>
+    </div>
+    <div class="fld">
+      <label>Password</label>
+      <input type="password" placeholder="Min. 8 characters" id="reg-pw" oninput="strengthCheck(this)">
+      <div class="pw-strength mt4" id="pw-bars"><div class="pws"></div><div class="pws"></div><div class="pws"></div></div>
+    </div>
+    <div class="fld"><label>Confirm Password</label><input type="password" placeholder="Re-enter password"></div>
+    <button class="btn btn-primary btn-full mt12" onclick="go('s-login');toast('Account created. Please sign in.')">Create Account</button>
+    <p class="auth-link">Already have an account? <a onclick="go('s-login')">Sign in</a></p>
+    <p class="auth-link mt8"><a onclick="go('s-landing')">← Back</a></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 2 — STAFF LOGIN
+══════════════════════════════════════════ -->
+<div id="s-login" class="screen">
+  <div class="auth-card fade-up">
+    <div class="auth-logo">
+      <div class="auth-seal">BU</div>
+      <div><div class="auth-org">Legal Affairs Office</div></div>
+    </div>
+    <h2 class="auth-title">Welcome back</h2>
+    <p class="auth-sub">Sign in to the Document Management System.</p>
+    <div class="fld"><label>Email Address</label><input type="email" id="login-email" placeholder="you@bicol-u.edu.ph" value="jdelacruz@bicol-u.edu.ph"></div>
+    <div class="fld">
+      <label>Password</label>
+      <input type="password" id="login-pw" placeholder="Your password" value="password123">
+      <a class="forgot-link" onclick="go('s-forgot')">Forgot password?</a>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="staffLogin()">Sign In</button>
+    <p class="auth-link">Don't have an account? <a onclick="go('s-register')">Create one</a></p>
+    <p class="auth-link mt8"><a onclick="go('s-landing')">← Back</a></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 3 — FORGOT PASSWORD
+══════════════════════════════════════════ -->
+<div id="s-forgot" class="screen">
+  <div class="auth-card fade-up" id="forgot-step1">
+    <div class="auth-logo">
+      <div class="auth-seal">BU</div>
+      <div><div class="auth-org">Legal Affairs Office</div></div>
+    </div>
+    <div class="step-dots"><div class="sdot active"></div><div class="sdot"></div><div class="sdot"></div></div>
+    <h2 class="auth-title">Reset Password</h2>
+    <p class="auth-sub">Enter your email address and we'll send you a reset link.</p>
+    <div class="fld"><label>Email Address</label><input type="email" placeholder="you@bicol-u.edu.ph"></div>
+    <button class="btn btn-primary btn-full mt8" onclick="forgotStep2()">Send Reset Link</button>
+    <p class="auth-link"><a onclick="go('s-login')">← Back to sign in</a></p>
+  </div>
+  <div class="auth-card fade-up" id="forgot-step2" style="display:none">
+    <div class="auth-logo">
+      <div class="auth-seal">BU</div>
+      <div><div class="auth-org">Legal Affairs Office</div></div>
+    </div>
+    <div class="step-dots"><div class="sdot s3"></div><div class="sdot active"></div><div class="sdot"></div></div>
+    <h2 class="auth-title">Check your email</h2>
+    <p class="auth-sub">A password reset link has been sent. Enter the 6-digit OTP to verify.</p>
+    <div class="otp-inputs">
+      <input type="text" maxlength="1" oninput="otpMove(this)">
+      <input type="text" maxlength="1" oninput="otpMove(this)">
+      <input type="text" maxlength="1" oninput="otpMove(this)">
+      <input type="text" maxlength="1" oninput="otpMove(this)">
+      <input type="text" maxlength="1" oninput="otpMove(this)">
+      <input type="text" maxlength="1" oninput="otpMove(this)">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="forgotStep3()">Verify OTP</button>
+  </div>
+  <div class="auth-card fade-up" id="forgot-step3" style="display:none">
+    <div class="auth-logo">
+      <div class="auth-seal">BU</div>
+      <div><div class="auth-org">Legal Affairs Office</div></div>
+    </div>
+    <div class="step-dots"><div class="sdot s3"></div><div class="sdot s3"></div><div class="sdot active"></div></div>
+    <h2 class="auth-title">Set new password</h2>
+    <p class="auth-sub">Choose a strong password for your account.</p>
+    <div class="fld"><label>New Password</label><input type="password" placeholder="Min. 8 characters"></div>
+    <div class="fld"><label>Confirm Password</label><input type="password" placeholder="Re-enter password"></div>
+    <button class="btn btn-primary btn-full mt8" onclick="go('s-login');toast('Password updated successfully.')">Update Password</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 4 — CLIENT EMAIL
+══════════════════════════════════════════ -->
+<div id="s-client-email" class="screen">
+  <div class="land-bg">
+    <div class="land-circle land-c1"></div>
+    <div class="land-circle land-c2"></div>
+  </div>
+  <div class="client-card fade-up">
+    <div class="client-icon">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </div>
+    <h2>Submit a Document</h2>
+    <p>Enter your email address. We'll send a one-time password to verify your identity before uploading.</p>
+    <div class="fld" style="text-align:left"><label>Your Email Address</label><input type="email" placeholder="yourname@gmail.com"></div>
+    <button class="btn btn-primary btn-full mt8" onclick="go('s-client-otp')">Send OTP</button>
+    <p class="auth-link"><a onclick="go('s-landing')">← Back</a></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 5 — CLIENT OTP
+══════════════════════════════════════════ -->
+<div id="s-client-otp" class="screen">
+  <div class="land-bg">
+    <div class="land-circle land-c1"></div>
+    <div class="land-circle land-c2"></div>
+  </div>
+  <div class="client-card fade-up">
+    <div class="client-icon" style="background:var(--navy2)">
+      <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+    </div>
+    <h2>Enter OTP</h2>
+    <p>A 6-digit code was sent to your email. Enter it below to proceed.</p>
+    <div class="otp-inputs">
+      <input type="text" maxlength="1" oninput="otpMove(this)" style="border-color:#d0d8e6;color:#0c1d3a">
+      <input type="text" maxlength="1" oninput="otpMove(this)" style="border-color:#d0d8e6;color:#0c1d3a">
+      <input type="text" maxlength="1" oninput="otpMove(this)" style="border-color:#d0d8e6;color:#0c1d3a">
+      <input type="text" maxlength="1" oninput="otpMove(this)" style="border-color:#d0d8e6;color:#0c1d3a">
+      <input type="text" maxlength="1" oninput="otpMove(this)" style="border-color:#d0d8e6;color:#0c1d3a">
+      <input type="text" maxlength="1" oninput="otpMove(this)" style="border-color:#d0d8e6;color:#0c1d3a">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="go('s-client-upload')">Verify & Continue</button>
+    <p class="otp-resend mt12">Didn't receive it? <span onclick="toast('OTP resent to your email.')">Resend code</span></p>
+    <p class="auth-link mt8"><a onclick="go('s-client-email')">← Back</a></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 6 — CLIENT UPLOAD
+══════════════════════════════════════════ -->
+<div id="s-client-upload" class="screen">
+  <div class="land-bg">
+    <div class="land-circle land-c1"></div>
+    <div class="land-circle land-c2"></div>
+  </div>
+  <div class="upload-card fade-up">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.4rem">
+      <div style="width:36px;height:36px;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg style="width:16px;height:16px;stroke:var(--gold2);fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:var(--navy)">Upload Your Document</div>
+        <div style="font-size:11.5px;color:var(--muted)">BU Legal Affairs Office</div>
+      </div>
+    </div>
+    <div class="upload-zone" id="drop-zone" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)" onclick="document.getElementById('file-input').click()">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <h3>Drag & drop your file here</h3>
+      <p>or <span class="click-txt">click to browse</span> from your device</p>
+      <p class="upload-formats">Supported: PDF, DOCX, DOC, JPG, PNG · Max 20MB</p>
+      <input type="file" id="file-input" style="display:none" onchange="handleFile(this)">
+    </div>
+    <div class="upload-progress" id="upload-progress">
+      <div class="up-file">
+        <div class="up-file-icon"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div style="flex:1">
+          <div class="up-file-name" id="up-filename">document.pdf</div>
+          <div class="up-file-size" id="up-filesize">2.4 MB</div>
+          <div class="pbar-wrap mt4"><div class="pbar" id="pbar"></div></div>
+        </div>
+        <svg onclick="resetUpload()" style="width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;cursor:pointer" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-full mt12" id="submit-btn" style="display:none" onclick="clientSubmit()">Submit Document</button>
+    <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:.8rem;line-height:1.7">Your file will be reviewed by the Legal Affairs Office. No reference number will be issued.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 7 — PENDING REVIEW (Staff)
+══════════════════════════════════════════ -->
+<div id="s-pending" class="screen">
+  <!-- App Header -->
+  <div class="app-header">
+    <div class="ah-seal">BU</div>
+    <div><div class="ah-name">Legal Affairs Office</div><div class="ah-system">Document Management System</div></div>
+    <div class="ah-div"></div>
+    <div class="ah-nav">
+      <button class="ah-btn" onclick="go('s-tracker')">Dashboard</button>
+      <button class="ah-btn active">Pending Review</button>
+      <button class="ah-btn" onclick="go('s-tracker')">Document Tracker</button>
+    </div>
+    <div class="ah-right">
+      <div class="ah-user">
+        <div class="ah-avatar">JD</div>
+        <span class="ah-uname">J. dela Cruz</span>
+      </div>
+    </div>
+  </div>
+  <!-- Toolbar -->
+  <div class="page-toolbar">
+    <span class="toolbar-title">Pending Review</span>
+    <span class="toolbar-count">4 files awaiting review</span>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <div class="t-filter">
+        <svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Filter by date
+      </div>
+    </div>
+  </div>
+  <!-- Body -->
+  <div class="pending-body">
+    <!-- Date Group -->
+    <div class="date-group-label">Today — May 5, 2026</div>
+
+    <!-- Pending Row 1 -->
+    <div class="pending-row">
+      <div class="pr-preview">
+        <div class="pr-type-badge">PDF</div>
+        <div class="pr-preview-inner">
+          <div class="pr-file-thumb">
+            <h4>Contract of Services – Engr. Alvarado</h4>
+            <p>This Contract of Services ("Contract") is entered into this 5th day of May 2026 by and between BICOL UNIVERSITY, a state university duly organized and existing under Philippine laws, with principal office at Legazpi City, Albay, hereinafter referred to as "University"...</p>
+            <p>NOW THEREFORE, for and in consideration of the foregoing premises and the mutual covenants and agreements herein contained, the parties hereto agree as follows: Section 1. Scope of Work. The Service Provider agrees to render technical consultancy services...</p>
+          </div>
+        </div>
+      </div>
+      <div class="pr-right">
+        <div class="pr-title">Contract of Services – Engr. Alvarado</div>
+        <div class="pr-meta">
+          <div class="pr-date">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Uploaded: May 5, 2026 · 9:14 AM
+          </div>
+        </div>
+        <div class="pr-mnb">
+          <div class="pr-mnb-label">MNB Classification <span>Auto</span></div>
+          <div class="pr-mnb-value">Contract · Services Agreement</div>
+        </div>
+        <div class="pr-actions">
+          <button class="btn btn-primary btn-sm" onclick="forwardToTracker('Contract of Services – Engr. Alvarado')">
+            <svg viewBox="0 0 24 24"><polyline points="22 17 13 17 13 11"/><path d="M2 7l10-5 10 5"/><path d="M13 17V7"/></svg>
+            Forward to Tracker
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete()">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6m4-6v6"/><path d="M9 6V4h6v2"/></svg>
+            Discard
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Row 2 -->
+    <div class="pending-row">
+      <div class="pr-preview">
+        <div class="pr-type-badge">DOCX</div>
+        <div class="pr-preview-inner">
+          <div class="pr-file-thumb">
+            <h4>Notice of Demand – Bautista vs. BU</h4>
+            <p>NOTICE OF DEMAND<br><br>To: The President, Bicol University<br>From: Atty. Ramon L. Santos, counsel for Complainant Carlos Bautista<br><br>GREETINGS. This serves as formal notice that our client Carlos T. Bautista, a faculty member of Bicol University...</p>
+          </div>
+        </div>
+      </div>
+      <div class="pr-right">
+        <div class="pr-title">Notice of Demand – Bautista vs. BU</div>
+        <div class="pr-meta">
+          <div class="pr-date">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Uploaded: May 5, 2026 · 10:42 AM
+          </div>
+        </div>
+        <div class="pr-mnb">
+          <div class="pr-mnb-label">MNB Classification <span>Auto</span></div>
+          <div class="pr-mnb-value">Legal · Notice / Demand Letter</div>
+        </div>
+        <div class="pr-actions">
+          <button class="btn btn-primary btn-sm" onclick="forwardToTracker('Notice of Demand – Bautista vs. BU')">
+            <svg viewBox="0 0 24 24"><polyline points="22 17 13 17 13 11"/><path d="M2 7l10-5 10 5"/><path d="M13 17V7"/></svg>
+            Forward to Tracker
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete()">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6m4-6v6"/><path d="M9 6V4h6v2"/></svg>
+            Discard
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Date Group 2 -->
+    <div class="date-group-label" style="margin-top:8px">Yesterday — May 4, 2026</div>
+
+    <!-- Pending Row 3 -->
+    <div class="pending-row">
+      <div class="pr-preview">
+        <div class="pr-type-badge">PDF</div>
+        <div class="pr-preview-inner">
+          <div class="pr-file-thumb">
+            <h4>MOA – City Government Partnership</h4>
+            <p>MEMORANDUM OF AGREEMENT<br><br>This Memorandum of Agreement ("MOA") is entered into by and between: BICOL UNIVERSITY, represented by its President and the CITY GOVERNMENT OF LEGAZPI, represented by the Honorable Mayor...</p>
+          </div>
+        </div>
+      </div>
+      <div class="pr-right">
+        <div class="pr-title">MOA – City Government Partnership</div>
+        <div class="pr-meta">
+          <div class="pr-date">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Uploaded: May 4, 2026 · 2:05 PM
+          </div>
+        </div>
+        <div class="pr-mnb">
+          <div class="pr-mnb-label">MNB Classification <span>Auto</span></div>
+          <div class="pr-mnb-value">Contract · Memorandum of Agreement</div>
+        </div>
+        <div class="pr-actions">
+          <button class="btn btn-primary btn-sm" onclick="forwardToTracker('MOA – City Government Partnership')">
+            <svg viewBox="0 0 24 24"><polyline points="22 17 13 17 13 11"/><path d="M2 7l10-5 10 5"/><path d="M13 17V7"/></svg>
+            Forward to Tracker
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete()">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6m4-6v6"/><path d="M9 6V4h6v2"/></svg>
+            Discard
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 8 — DOCUMENT TRACKER
+══════════════════════════════════════════ -->
+<div id="s-tracker" class="screen">
+  <div class="app-header">
+    <div class="ah-seal">BU</div>
+    <div><div class="ah-name">Legal Affairs Office</div><div class="ah-system">Document Management System</div></div>
+    <div class="ah-div"></div>
+    <div class="ah-nav">
+      <button class="ah-btn active">Dashboard</button>
+      <button class="ah-btn" onclick="go('s-pending')">Pending Review</button>
+      <button class="ah-btn">Document Tracker</button>
+    </div>
+    <div class="ah-right">
+      <button class="btn btn-primary btn-sm" onclick="go('s-staff-upload')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Upload File
+      </button>
+      <div class="ah-user">
+        <div class="ah-avatar">JD</div>
+        <span class="ah-uname">J. dela Cruz</span>
+      </div>
+    </div>
+  </div>
+  <!-- Toolbar -->
+  <div class="page-toolbar">
+    <div class="t-search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search documents…">
+    </div>
+    <div class="t-filter">
+      <svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      Filter
+    </div>
+    <div class="t-filter">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      All Dates
+    </div>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn btn-primary btn-sm" onclick="go('s-staff-upload')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Upload
+      </button>
+    </div>
+  </div>
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card sc-blue"><div class="stat-label">Total Documents</div><div class="stat-value">247</div><div class="stat-sub">All time</div></div>
+    <div class="stat-card sc-gold"><div class="stat-label">Pending Review</div><div class="stat-value">4</div><div class="stat-sub">Needs attention</div></div>
+    <div class="stat-card sc-green"><div class="stat-label">Active</div><div class="stat-value">38</div><div class="stat-sub">In progress</div></div>
+    <div class="stat-card sc-purple"><div class="stat-label">Closed</div><div class="stat-value">205</div><div class="stat-sub">Resolved</div></div>
+  </div>
+  <!-- Folder Grid -->
+  <div class="folder-grid">
+    <!-- May 2026 Folder -->
+    <div class="folder-group">
+      <div class="fg-header">
+        <div class="fg-icon"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+        <span class="fg-title">May 2026</span><span class="fg-sub">/ Contracts &amp; Legal</span>
+        <span class="fg-cnt">12 docs</span>
+        <button class="btn btn-ghost btn-sm" style="margin-left:8px" onclick="go('s-staff-upload')">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add
+        </button>
+      </div>
+      <div class="fg-col-head">
+        <span>Doc ID</span><span>Title</span><span>Classification</span><span>Date Filed</span><span>Status</span><span>Action</span>
+      </div>
+      <div class="doc-row" onclick="go('s-docview')">
+        <div><div class="doc-id">LAO-26-247</div></div>
+        <div><div class="doc-name">Contract of Services – Engr. Alvarado</div><div class="doc-sub">Newly forwarded from pending</div></div>
+        <div><span class="tag tag-contract">Contract</span></div>
+        <div style="font-size:12px;color:var(--muted)">May 5, 2026</div>
+        <div><span class="chip chip-pending">Pending</span></div>
+        <div><button class="btn btn-primary btn-sm" onclick="event.stopPropagation();go('s-docview')">Open</button></div>
+      </div>
+      <div class="doc-row" onclick="go('s-docview')">
+        <div><div class="doc-id">LAO-26-246</div></div>
+        <div><div class="doc-name">MOA – City Government Partnership</div><div class="doc-sub">Inter-agency agreement</div></div>
+        <div><span class="tag tag-admin">Admin</span></div>
+        <div style="font-size:12px;color:var(--muted)">May 4, 2026</div>
+        <div><span class="chip chip-active">Active</span></div>
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();go('s-docview')">Open</button>
+          <button class="delete-row-btn" onclick="event.stopPropagation();confirmDelete()">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+            Delete
+          </button>
+        </div>
+      </div>
+      <div class="doc-row" onclick="go('s-docview')">
+        <div><div class="doc-id">LAO-26-244</div></div>
+        <div><div class="doc-name">Job Order – Campus Maintenance</div><div class="doc-sub">Facilities Management</div></div>
+        <div><span class="tag tag-admin">Admin</span></div>
+        <div style="font-size:12px;color:var(--muted)">May 3, 2026</div>
+        <div><span class="chip chip-active">Active</span></div>
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();go('s-docview')">Open</button>
+          <button class="delete-row-btn" onclick="event.stopPropagation();confirmDelete()">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- April 2026 Folder -->
+    <div class="folder-group">
+      <div class="fg-header">
+        <div class="fg-icon"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+        <span class="fg-title">April 2026</span><span class="fg-sub">/ Legal &amp; Disputes</span>
+        <span class="fg-cnt">19 docs</span>
+        <button class="btn btn-ghost btn-sm" style="margin-left:8px" onclick="go('s-staff-upload')">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add
+        </button>
+      </div>
+      <div class="fg-col-head">
+        <span>Doc ID</span><span>Title</span><span>Classification</span><span>Date Filed</span><span>Status</span><span>Action</span>
+      </div>
+      <div class="doc-row" onclick="go('s-docview')">
+        <div><div class="doc-id">LAO-26-240</div></div>
+        <div><div class="doc-name">Notice of Demand – Bautista vs. BU</div><div class="doc-sub">Faculty dispute, ongoing</div></div>
+        <div><span class="tag tag-dispute">Dispute</span></div>
+        <div style="font-size:12px;color:var(--muted)">Apr 28, 2026</div>
+        <div><span class="chip chip-urgent">Urgent</span></div>
+        <div><button class="btn btn-primary btn-sm" onclick="event.stopPropagation();go('s-docview')">Open</button></div>
+      </div>
+      <div class="doc-row" onclick="go('s-docview')">
+        <div><div class="doc-id">LAO-26-238</div></div>
+        <div><div class="doc-name">Permit to Operate – Medical Clinic</div><div class="doc-sub">Annual renewal</div></div>
+        <div><span class="tag tag-permit">Permit</span></div>
+        <div style="font-size:12px;color:var(--muted)">Apr 22, 2026</div>
+        <div><span class="chip chip-active">Active</span></div>
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();go('s-docview')">Open</button>
+          <button class="delete-row-btn" onclick="event.stopPropagation();confirmDelete()">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 9 — DOCUMENT VIEW
+══════════════════════════════════════════ -->
+<div id="s-docview" class="screen">
+  <div class="app-header">
+    <div class="ah-seal">BU</div>
+    <div><div class="ah-name">Legal Affairs Office</div><div class="ah-system">Document Management System</div></div>
+    <div class="ah-div"></div>
+    <div class="ah-nav">
+      <button class="ah-btn" onclick="go('s-tracker')">Dashboard</button>
+      <button class="ah-btn" onclick="go('s-pending')">Pending Review</button>
+      <button class="ah-btn active">Document Tracker</button>
+    </div>
+    <div class="ah-right">
+      <div class="ah-user">
+        <div class="ah-avatar">JD</div>
+        <span class="ah-uname">J. dela Cruz</span>
+      </div>
+    </div>
+  </div>
+  <!-- Action Bar -->
+  <div class="dv-action-bar">
+    <button class="btn btn-ghost btn-sm" onclick="go('s-tracker')">
+      <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="dv-id">LAO-26-247</div>
+    <div class="dv-title">Contract of Services – Engr. Alvarado</div>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <span class="chip chip-pending">Pending</span>
+      <button class="btn btn-primary btn-sm" onclick="toast('Document updated successfully.')">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Save Changes
+      </button>
+      <button class="delete-row-btn" onclick="confirmDelete()">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+        Delete
+      </button>
+    </div>
+  </div>
+  <!-- Layout -->
+  <div class="dv-layout">
+    <!-- Left: Document Preview -->
+    <div class="dv-left">
+      <div class="doc-preview-area">
+        <div class="dpa-header">
+          <svg style="width:14px;height:14px;stroke:rgba(255,255,255,.6);fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Document Preview</span>
+          <span style="margin-left:auto;font-size:10px;color:rgba(255,255,255,.4);font-family:'JetBrains Mono',monospace">LAO-26-247.pdf</span>
+        </div>
+        <div class="dpa-body">
+          <h3>Contract of Services – Engr. Alvarado</h3>
+          <p><strong>CONTRACT OF SERVICES</strong></p>
+          <p class="doc-para">This Contract of Services ("Contract") is entered into this 5th day of May 2026 by and between BICOL UNIVERSITY, a state university duly organized and existing under Philippine laws, with principal office at Legazpi City, Albay, represented herein by its President, PROF. FERDINAND PASIA, Ed.D., hereinafter referred to as the "University";</p>
+          <p class="doc-para">— AND —</p>
+          <p class="doc-para">ENGR. RAFAEL M. ALVARADO, of legal age, Filipino, and a resident of Daraga, Albay, hereinafter referred to as the "Service Provider".</p>
+          <p><strong>WITNESSETH:</strong></p>
+          <p class="doc-para">WHEREAS, the University is in need of technical consultancy services for the upgrading of its electrical systems in the College of Engineering building;</p>
+          <p class="doc-para">WHEREAS, the Service Provider has the qualifications, skills, and expertise necessary for the aforesaid services;</p>
+          <p class="doc-para">NOW THEREFORE, for and in consideration of the foregoing premises and the mutual covenants and agreements herein contained, the parties hereto agree as follows:</p>
+          <p class="doc-para"><strong>Section 1. Scope of Work.</strong> The Service Provider agrees to render technical consultancy services for the electrical upgrade project of the College of Engineering, including assessment, design, and supervision of works, for the period from May 10, 2026 to August 10, 2026.</p>
+          <p class="doc-para"><strong>Section 2. Compensation.</strong> The University agrees to pay the Service Provider the total amount of ONE HUNDRED TWENTY THOUSAND PESOS (PHP 120,000.00), payable in three (3) equal installments upon completion of each phase.</p>
+          <p class="doc-para"><strong>Section 3. Obligations of the Service Provider.</strong> The Service Provider shall: (a) perform the services with utmost diligence and professional competence; (b) comply with all applicable laws and regulations; (c) submit progress reports every two weeks.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Right: Details Panel -->
+    <div class="dv-right">
+      <!-- Document Info -->
+      <div class="panel-section">
+        <div class="ps-head"><div class="ps-head-dot"></div><span class="ps-head-title">Document Details</span></div>
+        <div class="ps-body">
+          <div class="info-grid">
+            <div class="info-item"><div class="info-label">Document ID</div><div class="info-value" style="font-family:'JetBrains Mono',monospace;color:var(--blue)">LAO-26-247</div></div>
+            <div class="info-item"><div class="info-label">Date Filed</div><div class="info-value">May 5, 2026</div></div>
+            <div class="info-item"><div class="info-label">MNB Class</div><div class="info-value"><span class="tag tag-contract">Contract</span></div></div>
+            <div class="info-item"><div class="info-label">Status</div><div class="info-value"><span class="chip chip-pending">Pending</span></div></div>
+            <div class="info-item full"><div class="info-label">Title</div><div class="info-value">Contract of Services – Engr. Alvarado</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Action Fields -->
+      <div class="panel-section">
+        <div class="ps-head"><div class="ps-head-dot"></div><span class="ps-head-title">Action Details</span></div>
+        <div class="ps-body">
+          <div class="field-block">
+            <label>Action Taken</label>
+            <select>
+              <option>-- Select action --</option>
+              <option>Under Review</option>
+              <option>Approved</option>
+              <option>Returned for Revision</option>
+              <option>Forwarded to Department</option>
+              <option>Archived</option>
+            </select>
+          </div>
+          <div class="field-block">
+            <label>Deadline</label>
+            <input type="date" value="2026-05-20">
+          </div>
+          <div class="field-block">
+            <label>Sent To</label>
+            <input type="text" placeholder="Recipient / Department">
+          </div>
+          <div class="field-block">
+            <label>Notes</label>
+            <textarea placeholder="Add notes or remarks…"></textarea>
+          </div>
+        </div>
+      </div>
+      <!-- Notes Thread -->
+      <div class="panel-section">
+        <div class="ps-head">
+          <div class="ps-head-dot"></div>
+          <span class="ps-head-title">Notes</span>
+          <span style="margin-left:auto;font-size:10px;color:var(--muted)">2 notes</span>
+        </div>
+        <div class="note-list">
+          <div class="note-item">
+            <div class="ni-header">
+              <div class="ni-avatar">JD</div>
+              <span class="ni-author">J. dela Cruz</span>
+              <span class="ni-time">May 5, 10:22 AM</span>
+            </div>
+            <div class="ni-text">Received contract. Forwarded from client submission. Needs legal review before approval.</div>
+          </div>
+          <div class="note-item">
+            <div class="ni-header">
+              <div class="ni-avatar" style="background:var(--green)">SR</div>
+              <span class="ni-author">S. Reyes</span>
+              <span class="ni-time">May 5, 2:14 PM</span>
+            </div>
+            <div class="ni-text">Reviewed initial terms. Compensation clause needs clarification on payment schedule before signing.</div>
+          </div>
+        </div>
+        <div class="add-note-form" style="margin:8px">
+          <textarea placeholder="Add a note…" rows="2"></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:6px">
+            <button class="btn btn-primary btn-sm" onclick="toast('Note added.')">Add Note</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 10 — STAFF UPLOAD
+══════════════════════════════════════════ -->
+<div id="s-staff-upload" class="screen">
+  <div class="app-header">
+    <div class="ah-seal">BU</div>
+    <div><div class="ah-name">Legal Affairs Office</div><div class="ah-system">Document Management System</div></div>
+    <div class="ah-div"></div>
+    <div class="ah-nav">
+      <button class="ah-btn" onclick="go('s-tracker')">Dashboard</button>
+      <button class="ah-btn" onclick="go('s-pending')">Pending Review</button>
+      <button class="ah-btn active">Upload File</button>
+    </div>
+    <div class="ah-right">
+      <div class="ah-user">
+        <div class="ah-avatar">JD</div>
+        <span class="ah-uname">J. dela Cruz</span>
+      </div>
+    </div>
+  </div>
+  <div class="upload-layout">
+    <!-- Header Card -->
+    <div class="upload-header-card">
+      <div class="uhc-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <div>
+        <div class="uhc-title">Upload Document to Tracker</div>
+        <div class="uhc-sub">Select a classification folder, upload the file, and the system will auto-classify and assign a document ID.</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="go('s-tracker')" style="margin-left:auto">Cancel</button>
+    </div>
+
+    <!-- Step 1: Select Folder -->
+    <div class="folder-group">
+      <div class="fg-header">
+        <div class="fg-icon"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+        <span class="fg-title">1. Select Classification Folder</span>
+        <span class="fg-sub">Organized by date</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)">
+        <div class="cf-item selected" onclick="selectFolder(this)">
+          <div class="cf-date">May 2026</div>
+          <div class="cf-name">Contracts &amp; Legal</div>
+          <div class="cf-count">12 files</div>
+        </div>
+        <div class="cf-item" onclick="selectFolder(this)">
+          <div class="cf-date">May 2026</div>
+          <div class="cf-name">Administrative</div>
+          <div class="cf-count">7 files</div>
+        </div>
+        <div class="cf-item" onclick="selectFolder(this)">
+          <div class="cf-date">April 2026</div>
+          <div class="cf-name">Legal &amp; Disputes</div>
+          <div class="cf-count">19 files</div>
+        </div>
+        <div class="cf-item" onclick="selectFolder(this)">
+          <div class="cf-date">April 2026</div>
+          <div class="cf-name">Permits &amp; Licenses</div>
+          <div class="cf-count">8 files</div>
+        </div>
+        <div class="cf-item" onclick="selectFolder(this)">
+          <div class="cf-date">March 2026</div>
+          <div class="cf-name">Contracts &amp; Legal</div>
+          <div class="cf-count">14 files</div>
+        </div>
+        <div class="cf-item" onclick="selectFolder(this)">
+          <div class="cf-date">March 2026</div>
+          <div class="cf-name">MOAs &amp; MOUs</div>
+          <div class="cf-count">5 files</div>
+        </div>
+        <div class="cf-item" onclick="selectFolder(this)">
+          <div class="cf-date">February 2026</div>
+          <div class="cf-name">Administrative</div>
+          <div class="cf-count">22 files</div>
+        </div>
+        <div class="cf-item" onclick="selectFolder(this)">
+          <div class="cf-date">January 2026</div>
+          <div class="cf-name">Legal &amp; Disputes</div>
+          <div class="cf-count">11 files</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Upload -->
+    <div class="folder-group">
+      <div class="fg-header">
+        <div class="fg-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <span class="fg-title">2. Upload File</span>
+      </div>
+      <div style="padding:1.2rem">
+        <div class="upload-zone" id="staff-drop-zone" onclick="document.getElementById('staff-file-input').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleStaffDrop(event)">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <h3>Drag & drop or click to select file</h3>
+          <p>PDF, DOCX, DOC, JPG, PNG · Max 50MB</p>
+          <input type="file" id="staff-file-input" style="display:none" onchange="handleStaffFile(this)">
+        </div>
+        <div id="staff-upload-progress" style="display:none;margin-top:12px">
+          <div class="up-file">
+            <div class="up-file-icon"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+            <div style="flex:1">
+              <div class="up-file-name" id="staff-filename">—</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:3px">
+                <div class="pbar-wrap" style="flex:1"><div class="pbar" id="staff-pbar"></div></div>
+                <span id="staff-mnb" style="font-size:10px;color:var(--muted)">Classifying…</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div style="display:flex;justify-content:flex-end;gap:10px;padding-bottom:2rem">
+      <button class="btn btn-ghost" onclick="go('s-tracker')">Cancel</button>
+      <button class="btn btn-primary" onclick="staffUploadSubmit()">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Upload &amp; Assign Document ID
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DELETE CONFIRM MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal">
+    <div style="width:44px;height:44px;background:var(--rbg);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem">
+      <svg style="width:20px;height:20px;stroke:var(--red);fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6m4-6v6"/><path d="M9 6V4h6v2"/></svg>
+    </div>
+    <div class="modal-title">Delete Document?</div>
+    <div class="modal-sub">This will permanently delete the file and cannot be undone. Make sure this is not a valid document before proceeding.</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="doDelete()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FORWARD CONFIRM MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="forward-modal">
+  <div class="modal">
+    <div style="width:44px;height:44px;background:#eef4ff;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem">
+      <svg style="width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="22 17 13 17 13 11"/><path d="M2 7l10-5 10 5"/><path d="M13 17V7"/></svg>
+    </div>
+    <div class="modal-title">Forward to Tracker?</div>
+    <div class="modal-sub" id="forward-modal-sub">This file will be moved to the Document Tracker and assigned a new document ID automatically.</div>
+    <div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:4px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:4px">Auto-assigned Document ID</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;color:var(--blue)">LAO-26-248</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="doForward()">Confirm &amp; Forward</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── NAVIGATION ──
+function go(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── TOAST ──
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── STAFF LOGIN ──
+function staffLogin() {
+  go('s-tracker');
+  toast('Signed in successfully.');
+}
+
+// ── FORGOT PASSWORD FLOW ──
+function forgotStep2() {
+  document.getElementById('forgot-step1').style.display = 'none';
+  document.getElementById('forgot-step2').style.display = 'block';
+}
+function forgotStep3() {
+  document.getElementById('forgot-step2').style.display = 'none';
+  document.getElementById('forgot-step3').style.display = 'block';
+}
+
+// ── OTP INPUT ──
+function otpMove(input) {
+  if (input.value.length >= 1) {
+    const inputs = input.parentElement.querySelectorAll('input');
+    const idx = Array.from(inputs).indexOf(input);
+    if (idx < inputs.length - 1) inputs[idx + 1].focus();
+  }
+}
+
+// ── CLIENT UPLOAD ──
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) showUploadProgress(file);
+}
+function handleFile(input) {
+  if (input.files[0]) showUploadProgress(input.files[0]);
+}
+function showUploadProgress(file) {
+  document.getElementById('upload-progress').style.display = 'block';
+  document.getElementById('up-filename').textContent = file.name;
+  document.getElementById('up-filesize').textContent = (file.size / 1024 / 1024).toFixed(1) + ' MB';
+  document.getElementById('submit-btn').style.display = 'flex';
+  const bar = document.getElementById('pbar');
+  let w = 0;
+  const t = setInterval(() => { w += 8; bar.style.width = Math.min(w, 100) + '%'; if (w >= 100) clearInterval(t); }, 60);
+}
+function resetUpload() {
+  document.getElementById('upload-progress').style.display = 'none';
+  document.getElementById('submit-btn').style.display = 'none';
+  document.getElementById('pbar').style.width = '0%';
+}
+function clientSubmit() {
+  toast('Document submitted successfully. Thank you!');
+  setTimeout(() => go('s-landing'), 2000);
+}
+
+// ── PASSWORD STRENGTH ──
+function strengthCheck(input) {
+  const bars = document.querySelectorAll('#pw-bars .pws');
+  const v = input.value;
+  let s = 0;
+  if (v.length >= 8) s++;
+  if (/[A-Z]/.test(v) && /[0-9]/.test(v)) s++;
+  if (/[^A-Za-z0-9]/.test(v)) s++;
+  bars.forEach((b, i) => { b.className = 'pws'; if (i < s) b.classList.add('s' + s); });
+}
+
+// ── PENDING REVIEW ──
+let pendingDocTitle = '';
+function forwardToTracker(title) {
+  pendingDocTitle = title;
+  document.getElementById('forward-modal-sub').textContent = '"' + title + '" will be moved to the Document Tracker and assigned a document ID.';
+  document.getElementById('forward-modal').classList.add('open');
+}
+function doForward() {
+  closeModal();
+  toast('Forwarded: ' + pendingDocTitle + ' → ID: LAO-26-248');
+  setTimeout(() => go('s-tracker'), 800);
+}
+
+// ── DELETE ──
+function confirmDelete() {
+  document.getElementById('delete-modal').classList.add('open');
+}
+function doDelete() {
+  closeModal();
+  toast('File deleted successfully.');
+}
+
+// ── MODAL ──
+function closeModal() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', (e) => { if (e.target === m) closeModal(); });
+});
+
+// ── FOLDER SELECT ──
+function selectFolder(el) {
+  el.closest('.folder-group').querySelectorAll('.cf-item').forEach(i => i.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ── STAFF FILE UPLOAD ──
+function handleStaffDrop(e) {
+  e.preventDefault();
+  document.getElementById('staff-drop-zone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) showStaffProgress(file);
+}
+function handleStaffFile(input) {
+  if (input.files[0]) showStaffProgress(input.files[0]);
+}
+function showStaffProgress(file) {
+  document.getElementById('staff-upload-progress').style.display = 'block';
+  document.getElementById('staff-filename').textContent = file.name;
+  const bar = document.getElementById('staff-pbar');
+  const mnbEl = document.getElementById('staff-mnb');
+  let w = 0;
+  const t = setInterval(() => { w += 6; bar.style.width = Math.min(w, 100) + '%'; if (w >= 100) { clearInterval(t); mnbEl.textContent = 'MNB: Contract · Services'; mnbEl.style.color = 'var(--green)'; } }, 60);
+}
+function staffUploadSubmit() {
+  toast('File uploaded. Auto-assigned ID: LAO-26-249');
+  setTimeout(() => go('s-tracker'), 1000);
+}
+</script>
+</body>
+</html>
