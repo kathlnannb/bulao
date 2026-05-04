@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BU Legal Affairs Office — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0a1f3c;--navy2:#0f2d5c;--navy3:#1a3f7a;
+  --blue:#0072C6;--blue2:#005fa3;
+  --gold:#c9a84c;--gold2:#e8c97a;
+  --cream:#faf7f2;--cream2:#f0ebe0;
+  --line:#d8d0c0;--muted:#8a7e6e;
+}
+html,body{height:100%;font-family:'Source Sans 3',sans-serif;overflow:hidden}
+body{background:var(--cream)}
+
+.bg{position:fixed;inset:0;z-index:0}
+.bg-left{position:absolute;left:0;top:0;bottom:0;width:52%;background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 50%,var(--navy3) 100%);overflow:hidden}
+.bg-right{position:absolute;right:0;top:0;bottom:0;left:52%;background:var(--cream)}
+
+.geo{position:absolute;background:rgba(201,168,76,.1)}
+.g1{width:1px;height:130%;top:-15%;left:22%;transform:rotate(12deg)}
+.g2{width:1px;height:130%;top:-15%;left:40%;transform:rotate(-8deg)}
+.g3{width:1px;height:130%;top:-15%;left:58%;transform:rotate(5deg);opacity:.4}
+.g4{width:85%;height:1px;top:68%;left:-10%;transform:rotate(-3deg)}
+.g5{width:85%;height:1px;top:28%;left:5%;transform:rotate(2deg);opacity:.6}
+.circle{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,.13)}
+.c1{width:500px;height:500px;top:-130px;left:-110px}
+.c2{width:340px;height:340px;bottom:-90px;right:-70px;border-color:rgba(201,168,76,.08)}
+.dots{position:absolute;bottom:36px;right:36px;display:grid;grid-template-columns:repeat(6,10px);gap:8px;opacity:.15}
+.dots span{width:3px;height:3px;background:var(--gold);border-radius:50%;display:block}
+
+.layout{position:relative;z-index:1;height:100vh;display:grid;grid-template-columns:52% 48%}
+
+/* LEFT */
+.lp{display:flex;flex-direction:column;justify-content:space-between;padding:3rem 3.5rem;color:#fff;animation:fu .8s ease both}
+.brand{display:flex;align-items:center;gap:14px}
+.seal{width:48px;height:48px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:var(--navy);font-family:serif;border:2px solid rgba(255,255,255,.25);box-shadow:0 4px 16px rgba(0,0,0,.3);flex-shrink:0}
+.bt h1{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#fff}
+.bt p{font-size:10px;font-weight:300;color:rgba(255,255,255,.48);letter-spacing:1.2px;text-transform:uppercase;margin-top:2px}
+.hero{animation:fu .9s .1s ease both}
+.eyebrow{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold2);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--gold)}
+.hero h2{font-family:'Playfair Display',serif;font-size:46px;font-weight:700;color:#fff;line-height:1.12;letter-spacing:-.5px;margin-bottom:16px}
+.hero h2 em{font-style:italic;color:var(--gold2)}
+.hero p{font-size:14px;font-weight:300;color:rgba(255,255,255,.58);line-height:1.75;max-width:380px}
+.fps{display:flex;flex-direction:column;gap:10px;margin-top:1.8rem;animation:fu 1s .2s ease both}
+.fp{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:0.5px solid rgba(255,255,255,.1);border-radius:9px;padding:10px 14px;font-size:12.5px;font-weight:400;color:rgba(255,255,255,.72)}
+.fpi{width:30px;height:30px;background:rgba(201,168,76,.18);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fpi svg{width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lf{font-size:11px;font-weight:300;color:rgba(255,255,255,.28);letter-spacing:.4px;animation:fu 1s .3s ease both}
+
+/* RIGHT */
+.rp{display:flex;flex-direction:column;justify-content:center;padding:2.5rem 3.5rem 2.5rem 3rem;overflow-y:auto}
+.tabs{display:flex;gap:0;background:var(--cream2);border-radius:10px;padding:4px;margin-bottom:2.2rem;border:1px solid var(--line);animation:fu .8s .1s ease both}
+.tab{flex:1;background:none;border:none;padding:10px;font-size:13px;font-family:'Source Sans 3',sans-serif;font-weight:600;color:var(--muted);border-radius:7px;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.tab.active{background:var(--navy2);color:#fff;box-shadow:0 3px 10px rgba(10,31,60,.25)}
+.fh{margin-bottom:1.6rem;animation:fu .85s .15s ease both}
+.fh .ey{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.fh .ey::before{content:'';width:20px;height:1.5px;background:var(--gold);border-radius:1px}
+.fh h3{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--navy);line-height:1.2;letter-spacing:-.3px}
+.fh p{font-size:13.5px;font-weight:300;color:var(--muted);margin-top:5px;line-height:1.6}
+
+.form{display:flex;flex-direction:column;gap:14px;animation:fu .9s .2s ease both}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f{display:flex;flex-direction:column;gap:5px}
+.f label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--navy2)}
+.f label .r{color:#c0392b;margin-left:2px}
+.f input,.f select{border:1.5px solid var(--line);border-radius:8px;padding:10px 13px;font-size:13.5px;font-family:'Source Sans 3',sans-serif;color:var(--navy);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
+.f input:focus,.f select:focus{border-color:var(--blue);box-shadow:0 0 0 3.5px rgba(0,114,198,.1)}
+.f input::placeholder{color:#b0a898;font-weight:300}
+.pww{position:relative}
+.pww input{padding-right:40px}
+.pwe{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:3px}
+.pwe svg{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round}
+.srow{display:flex;gap:4px;margin-top:4px}
+.sb{flex:1;height:3px;border-radius:2px;background:var(--line);transition:background .3s}
+.sh{font-size:10px;color:var(--muted);margin-top:3px}
+.extras{display:flex;align-items:center;justify-content:space-between;margin-top:-2px}
+.rem{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer}
+.rem input{width:15px;height:15px;border-radius:3px;accent-color:var(--navy2);cursor:pointer}
+.fgt{font-size:12.5px;color:var(--blue);text-decoration:none;font-weight:600}
+.fgt:hover{text-decoration:underline}
+.btn{background:var(--navy2);color:#fff;border:none;padding:13px;border-radius:9px;font-size:14px;font-family:'Source Sans 3',sans-serif;font-weight:700;letter-spacing:.4px;cursor:pointer;width:100%;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s,transform .1s,box-shadow .15s;box-shadow:0 4px 14px rgba(10,31,60,.22)}
+.btn:hover{background:var(--navy3);box-shadow:0 6px 20px rgba(10,31,60,.3);transform:translateY(-1px)}
+.btn svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+.tn{font-size:11px;color:var(--muted);text-align:center;line-height:1.6}
+.tn a{color:var(--blue);text-decoration:none;font-weight:600}
+.rw{position:relative}
+.rw select{appearance:none;padding-right:32px}
+.ra{position:absolute;right:11px;top:50%;transform:translateY(-50%);pointer-events:none}
+.ra svg{width:12px;height:12px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round}
+.ob{background:rgba(0,114,198,.08);border:1px solid rgba(0,114,198,.2);border-radius:7px;padding:10px 13px;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--navy2);font-weight:500}
+.ob svg{width:14px;height:14px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+
+.panel{display:none}
+.panel.active{display:flex;flex-direction:column}
+
+/* FORGOT MODAL */
+.mo{position:fixed;inset:0;background:rgba(10,31,60,.65);z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.mo.hidden{display:none}
+.mc{background:#fff;border-radius:16px;width:420px;overflow:hidden;box-shadow:0 24px 60px rgba(10,31,60,.28);animation:fu .4s ease both}
+.mch{background:linear-gradient(135deg,var(--navy),var(--navy3));padding:18px 22px;display:flex;align-items:center;gap:12px}
+.mchi{width:36px;height:36px;background:rgba(255,255,255,.12);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mchi svg{width:18px;height:18px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round}
+.mch h3{font-size:15px;font-weight:700;color:#fff;font-family:'Playfair Display',serif;flex:1}
+.mcl{background:rgba(255,255,255,.15);border:none;color:#fff;width:27px;height:27px;border-radius:6px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+.mcb{padding:22px;display:flex;flex-direction:column;gap:14px}
+.mcb p{font-size:13px;color:var(--muted);line-height:1.65}
+.mcf{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:9px;justify-content:flex-end;background:#faf9f7}
+.mfcan{background:#fff;border:1px solid var(--line);color:var(--muted);font-size:13px;font-family:sans-serif;font-weight:600;padding:9px 18px;border-radius:7px;cursor:pointer}
+.mfsend{background:var(--navy2);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 22px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.mfsend svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.msucc{display:none;flex-direction:column;align-items:center;padding:2.5rem 2rem;text-align:center}
+.msi{width:56px;height:56px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:.9rem;border:3px solid #6ee7b7}
+.msi svg{width:24px;height:24px;stroke:#065f46;fill:none;stroke-width:2.5;stroke-linecap:round}
+.mst{font-size:17px;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:6px}
+.msm{font-size:12.5px;color:var(--muted);line-height:1.7;max-width:300px}
+.msc{background:var(--navy2);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 22px;border-radius:7px;cursor:pointer;margin-top:1rem}
+
+/* SIGNUP SUCCESS */
+.signup-success{display:none;flex-direction:column;align-items:center;padding:1.5rem 0;text-align:center;gap:10px}
+.ss-ico{width:64px;height:64px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #6ee7b7;margin:0 auto}
+.ss-ico svg{width:28px;height:28px;stroke:#065f46;fill:none;stroke-width:2.5;stroke-linecap:round}
+.ss-t{font-size:20px;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif}
+.ss-m{font-size:13px;color:var(--muted);line-height:1.7;max-width:360px}
+.ss-back{background:var(--navy2);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:10px 22px;border-radius:7px;cursor:pointer}
+
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="bg">
+  <div class="bg-left">
+    <div class="geo g1"></div><div class="geo g2"></div><div class="geo g3"></div>
+    <div class="geo g4"></div><div class="geo g5"></div>
+    <div class="circle c1"></div><div class="circle c2"></div>
+    <div class="dots" id="dg"></div>
+  </div>
+  <div class="bg-right"></div>
+</div>
+
+<div class="layout">
+  <div class="lp">
+    <div class="brand">
+      <div class="seal">BU</div>
+      <div class="bt"><h1>Bicol University</h1><p>Legal Affairs Office</p></div>
+    </div>
+    <div class="hero">
+      <div class="eyebrow">Document Management System</div>
+      <h2>Secure. <em>Organized.</em><br>Efficient.</h2>
+      <p>The official document management platform of the Bicol University Legal Affairs Office — designed for secure filing, tracking, and collaboration.</p>
+      <div class="fps">
+        <div class="fp"><div class="fpi"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>Date-grouped document tracking by received date</div>
+        <div class="fp"><div class="fpi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>Client document submission portal with audit trail</div>
+        <div class="fp"><div class="fpi"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>Real-time review deadlines and staff notifications</div>
+      </div>
+    </div>
+    <div class="lf">Bicol University — Legal Affairs Office &nbsp;·&nbsp; Document Control System v2.5 &nbsp;·&nbsp; Confidential</div>
+  </div>
+
+  <div class="rp">
+    <div class="tabs">
+      <button class="tab active" onclick="showP('login',this)">Sign In</button>
+      <button class="tab" onclick="showP('signup',this)">Create Account</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="panel active" id="panel-login">
+      <div class="fh"><div class="ey">Staff Access</div><h3>Welcome Back</h3><p>Sign in to your Legal Affairs Office account to continue.</p></div>
+      <div class="form">
+        <div class="f"><label>Email Address <span class="r">*</span></label><input type="email" placeholder="yourname@bicol-u.edu.ph"></div>
+        <div class="f"><label>Password <span class="r">*</span></label>
+          <div class="pww"><input type="password" id="lpw" placeholder="Enter your password">
+          <button class="pwe" onclick="tpw('lpw')" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        </div>
+        <div class="extras">
+          <label class="rem"><input type="checkbox"> Keep me signed in</label>
+          <a href="#" class="fgt" onclick="openFgt();return false">Forgot password?</a>
+        </div>
+        <button class="btn" onclick="doLogin()"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>Sign In to Dashboard</button>
+        <div class="tn">Protected by Bicol University IT Security Policy. &nbsp;<a href="#">Privacy Notice</a></div>
+      </div>
+    </div>
+
+    <!-- SIGNUP -->
+    <div class="panel" id="panel-signup">
+      <div class="fh"><div class="ey">New Staff Account</div><h3>Create Account</h3><p>Register as a Legal Affairs Office staff member. Accounts require admin approval before activation.</p></div>
+      <div class="form" id="signup-form">
+        <div class="row2">
+          <div class="f"><label>First Name <span class="r">*</span></label><input type="text" placeholder="e.g. Maria"></div>
+          <div class="f"><label>Last Name <span class="r">*</span></label><input type="text" placeholder="e.g. Santos"></div>
+        </div>
+        <div class="f"><label>BU Email Address <span class="r">*</span></label><input type="email" placeholder="yourname@bicol-u.edu.ph"></div>
+        <div class="row2">
+          <div class="f"><label>Role / Position <span class="r">*</span></label>
+            <div class="rw"><select><option value="">— Select Role —</option><option>Legal Counsel</option><option>Legal Officer</option><option>Document Officer</option><option>Legal Support Staff</option><option>Administrator</option></select>
+            <div class="ra"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          </div>
+          <div class="f"><label>Employee ID</label><input type="text" placeholder="e.g. BU-LAO-0043"></div>
+        </div>
+        <div class="ob"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Office: Legal Affairs Office — Bicol University</div>
+        <div class="row2">
+          <div class="f"><label>Password <span class="r">*</span></label>
+            <div class="pww"><input type="password" id="spw" placeholder="Create a password" oninput="chkStr(this.value)">
+            <button class="pwe" onclick="tpw('spw')" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+            <div class="srow"><div class="sb" id="s1"></div><div class="sb" id="s2"></div><div class="sb" id="s3"></div><div class="sb" id="s4"></div></div>
+            <div class="sh" id="sh">Use 8+ chars with letters, numbers &amp; symbols</div>
+          </div>
+          <div class="f"><label>Confirm Password <span class="r">*</span></label>
+            <div class="pww"><input type="password" id="spw2" placeholder="Repeat password">
+            <button class="pwe" onclick="tpw('spw2')" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          </div>
+        </div>
+        <button class="btn" onclick="doSignup()"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>Submit Registration Request</button>
+        <div class="tn">By registering you agree to the <a href="#">BU IT Acceptable Use Policy</a> and <a href="#">Privacy Notice</a>.</div>
+      </div>
+      <div class="signup-success" id="signup-success">
+        <div class="ss-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="ss-t">Request Submitted!</div>
+        <div class="ss-m">Your account request has been sent to the administrator for approval. You will receive an email at your BU address once your account is activated.</div>
+        <button class="ss-back" onclick="showP('login',document.querySelectorAll('.tab')[0])">Back to Sign In</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD -->
+<div class="mo hidden" id="fgt-mo">
+  <div class="mc">
+    <div class="mch"><div class="mchi"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><h3>Reset Password</h3><button class="mcl" onclick="closeFgt()">✕</button></div>
+    <div class="mcb" id="fgt-body"><p>Enter your BU email address and we'll send you a link to reset your password.</p>
+    <div class="f"><label>BU Email Address</label><input type="email" placeholder="yourname@bicol-u.edu.ph"></div></div>
+    <div class="msucc" id="fgt-succ">
+      <div class="msi"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="mst">Email Sent!</div>
+      <div class="msm">A password reset link has been sent to your BU email. Please check your inbox.</div>
+      <button class="msc" onclick="closeFgt()">Done</button>
+    </div>
+    <div class="mcf" id="fgt-foot">
+      <button class="mfcan" onclick="closeFgt()">Cancel</button>
+      <button class="mfsend" onclick="sendReset()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Reset Link</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const dg=document.getElementById('dg');for(let i=0;i<42;i++){const s=document.createElement('span');dg.appendChild(s);}
+function showP(id,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');btn.classList.add('active');}
+function tpw(id){const i=document.getElementById(id);i.type=i.type==='text'?'password':'text';}
+function chkStr(v){let s=0;if(v.length>=8)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;const bs=['s1','s2','s3','s4'];const lvs=['','#e74c3c','#f39c12','#3498db','#27ae60'];const lbs=['','Weak','Fair','Good','Strong ✓'];bs.forEach((id,i)=>{const el=document.getElementById(id);el.style.background=i<s?lvs[s]:'var(--line)';});document.getElementById('sh').textContent=lbs[s]||'Use 8+ chars with letters, numbers & symbols';}
+function openFgt(){document.getElementById('fgt-body').style.display='flex';document.getElementById('fgt-succ').style.display='none';document.getElementById('fgt-foot').style.display='flex';document.getElementById('fgt-mo').classList.remove('hidden');}
+function closeFgt(){document.getElementById('fgt-mo').classList.add('hidden');}
+function sendReset(){document.getElementById('fgt-body').style.display='none';document.getElementById('fgt-foot').style.display='none';document.getElementById('fgt-succ').style.display='flex';}
+function doLogin(){const b=document.querySelector('#panel-login .btn');b.innerHTML='Signing in…';b.style.background='#10b981';setTimeout(()=>{b.innerHTML='<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="20 6 9 17 4 12"/></svg> Signed In — Redirecting…';},800);}
+function doSignup(){document.getElementById('signup-form').style.display='none';document.getElementById('signup-success').style.display='flex';}
+</script>
+</body>
+</html>

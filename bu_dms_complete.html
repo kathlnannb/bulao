@@ -1,0 +1,2808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bicol University – Legal Affairs Office DMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ──────────────────────────────────────────────────────────────
+   ROOT / RESET
+────────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bu:#0072C6;--bu2:#005fa3;--bu3:#004080;--bud:#003060;
+  --gold:#e8a020;--gold2:#f5c55a;
+  --soft:#f0f4f8;--line:#dce6f0;
+  --mid:#3a527a;--muted:#7a90b0;
+  --success:#0e7c4a;--sbg:#e6f7ef;
+  --warn-bg:#fef3c7;--warn:#92400e;
+  --danger-bg:#fee2e2;--danger:#991b1b;
+  --del-bg:#ede9fe;--del:#5b21b6;
+}
+html{font-size:14px}
+body{font-family:'Source Sans 3',sans-serif;background:var(--soft);color:#0d1f3c;min-height:100vh}
+
+/* ──────────────────────────────────────────────────────────────
+   SHARED HEADER
+────────────────────────────────────────────────────────────── */
+.header{background:var(--bu);height:56px;display:flex;align-items:center;padding:0 2rem;gap:14px;position:relative;z-index:200}
+.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--bud) 0%,var(--bu) 35%,var(--gold) 50%,var(--bu) 65%,var(--bud) 100%)}
+.bu-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.bu-seal{width:38px;height:38px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--bu);font-family:serif;border:2px solid rgba(255,255,255,.35);flex-shrink:0}
+.bu-name{font-size:14.5px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px}
+.hdr-center{flex:1;display:flex;align-items:center;justify-content:center}
+.hdr-sys{font-size:10.5px;color:rgba(255,255,255,.65);letter-spacing:.8px;text-transform:uppercase;background:rgba(255,255,255,.1);padding:4px 14px;border-radius:3px;border:0.5px solid rgba(255,255,255,.2)}
+.hdr-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.hdr-search{display:flex;align-items:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:5px 11px;gap:7px;width:200px}
+.hdr-search input{background:none;border:none;color:#fff;font-size:12px;font-family:sans-serif;outline:none;width:100%}
+.hdr-search input::placeholder{color:rgba(255,255,255,.55)}
+.hdr-search svg{width:13px;height:13px;stroke:rgba(255,255,255,.7);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.user-pill{display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 9px;border-radius:7px;transition:background .15s;position:relative}
+.user-pill:hover{background:rgba(255,255,255,.18)}
+.user-pill .uname{font-size:12px;font-weight:600;color:#fff;white-space:nowrap}
+.user-pill .uavatar{width:34px;height:34px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--bu);flex-shrink:0;border:2px solid rgba(255,255,255,.4)}
+
+/* subnav */
+.subnav{background:var(--bud);display:flex;padding:0 2rem;border-bottom:2px solid rgba(232,160,32,.3)}
+.snav{background:none;border:none;color:rgba(255,255,255,.42);font-size:12px;font-family:'Source Sans 3',sans-serif;font-weight:500;padding:10px 18px;border-bottom:2px solid transparent;margin-bottom:-2px;letter-spacing:.4px;cursor:pointer;transition:color .12s}
+.snav:hover:not(.active){color:rgba(255,255,255,.8)}
+.snav.active{color:#fff;border-bottom-color:var(--gold)}
+
+/* breadcrumb */
+.bc{background:#fff;border-bottom:1px solid var(--line);padding:8px 2rem;display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted)}
+.bc a{color:var(--bu);text-decoration:none}
+.bcsep{color:#c8d5e8}
+.bccur{color:#0d1f3c;font-weight:600}
+
+/* ──────────────────────────────────────────────────────────────
+   SCREEN SYSTEM
+────────────────────────────────────────────────────────────── */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ──────────────────────────────────────────────────────────────
+   SCREEN 1: TRACKER
+────────────────────────────────────────────────────────────── */
+.toolbar{background:#fff;border-bottom:1px solid var(--line);padding:7px 2rem;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.tbg{display:flex;align-items:center;background:var(--soft);border:1px solid var(--line);border-radius:7px;padding:3px;gap:2px}
+.tbb{display:flex;align-items:center;gap:5px;background:none;border:none;color:var(--mid);font-size:11.5px;font-family:'Source Sans 3',sans-serif;font-weight:500;padding:5px 10px;border-radius:5px;cursor:pointer;white-space:nowrap}
+.tbb:hover{background:var(--bu);color:#fff}
+.tbb.prim{background:var(--bu);color:#fff}
+.tbb.prim:hover{background:var(--bu2)}
+.tbb svg{width:13px;height:13px;flex-shrink:0}
+.tbarr{padding:5px 6px;border-left:1px solid var(--line)}
+.tbdiv{width:1px;height:20px;background:var(--line);margin:0 4px}
+.srch{margin-left:auto;position:relative;display:flex;align-items:center;gap:6px}
+.srch input{border:1px solid var(--line);border-radius:7px;padding:7px 10px 7px 30px;font-size:12px;font-family:'Source Sans 3',sans-serif;background:#fff;width:220px;outline:none;color:#0d1f3c}
+.srch input:focus{border-color:var(--bu)}
+.srch-ico{position:absolute;left:9px;pointer-events:none}
+.srch-ico svg{width:13px;height:13px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round}
+.srch select{border:1px solid var(--line);border-radius:7px;padding:7px 9px;font-size:11.5px;background:#fff;color:#0d1f3c;font-family:'Source Sans 3',sans-serif;outline:none}
+
+.tracker-main{padding:1.4rem 2rem;display:flex;flex-direction:column;gap:1.1rem}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sc{background:#fff;border-radius:9px;border:1px solid var(--line);padding:13px 16px;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px}
+.sc-b::before{background:var(--bu)}.sc-w::before{background:#f59e0b}.sc-g::before{background:var(--gold)}.sc-gr::before{background:#10b981}
+.sc .sl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-family:sans-serif;font-weight:700}
+.sc .sv{font-size:24px;font-weight:700;font-family:'Source Sans 3',sans-serif;line-height:1.1;margin-top:3px}
+.sc .ss{font-size:10.5px;color:var(--muted);font-family:sans-serif;margin-top:1px}
+.sc-b .sv{color:var(--bu)}.sc-w .sv{color:#92400e}.sc-g .sv{color:#b45309}.sc-gr .sv{color:var(--success)}
+
+.col-head{display:grid;grid-template-columns:108px 1fr 145px 115px 108px 100px;gap:10px;padding:0 14px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-family:sans-serif}
+
+.dg{border-radius:9px;overflow:hidden;border:1px solid var(--line);margin-bottom:4px}
+.fhdr{background:var(--bud);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.fhdrico{width:27px;height:27px;background:rgba(255,255,255,.12);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fhdrico svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.fhdr h3{font-size:12.5px;font-weight:600;color:#fff;font-family:sans-serif}
+.fhdr .fsub{font-size:10.5px;color:rgba(255,255,255,.42);font-family:sans-serif;margin-left:2px}
+.fcnt{font-size:10.5px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.1);padding:2px 8px;border-radius:10px;font-family:sans-serif}
+.rbadge{font-size:9px;color:var(--gold2);background:rgba(232,160,32,.18);border:0.5px solid rgba(232,160,32,.35);padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;font-family:sans-serif}
+.fhr{margin-left:auto;display:flex;align-items:center;gap:7px}
+.add-date-btn{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:0.5px solid rgba(255,255,255,.2);color:#fff;font-size:11px;font-family:sans-serif;font-weight:500;padding:4px 10px;border-radius:5px;cursor:pointer}
+.add-date-btn svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+
+.doclist{background:#fff}
+.dr{display:grid;grid-template-columns:108px 1fr 145px 115px 108px 100px;align-items:center;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--line);cursor:pointer;transition:background .12s}
+.dr:hover{background:#eef5ff}
+.dr:last-child{border-bottom:none}
+.dr.late{border-left:3px solid var(--gold)}
+.did{font-size:12px;font-weight:700;color:var(--bud);font-family:sans-serif;letter-spacing:.4px}
+.dname{font-size:12.5px;color:#0d1f3c;font-family:sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dsub{font-size:10.5px;color:var(--muted);font-family:sans-serif;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tp{display:inline-block;padding:2px 7px;border-radius:3px;font-size:9.5px;font-weight:700;font-family:sans-serif;text-transform:uppercase;letter-spacing:.3px}
+.tc{background:#dbeafe;color:#1e40af}.tl{background:#ede9fe;color:#5b21b6}.tcf{background:#fee2e2;color:#991b1b}
+.ta{background:#e0f2fe;color:#0c4a6e}.td{background:#fef9c3;color:#713f12}.tn{background:#f0fdf4;color:#14532d}.to{background:#f3f4f6;color:#374151}
+.sp{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase;font-family:sans-serif}
+.spp{background:#fef3c7;color:#92400e;border:1px solid #f5d97a}
+.spd{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
+.spo{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+.sdot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.latelbl{font-size:9px;font-weight:700;color:#92400e;background:#fef3c7;padding:1px 5px;border-radius:2px;text-transform:uppercase;display:inline-block;margin-bottom:2px;font-family:sans-serif}
+.openbtn{display:inline-flex;align-items:center;gap:5px;background:var(--bu);color:#fff;border:none;font-size:11.5px;font-family:sans-serif;font-weight:600;padding:6px 13px;border-radius:6px;cursor:pointer}
+.openbtn:hover{background:var(--bu2)}
+.openbtn svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+/* ──────────────────────────────────────────────────────────────
+   SCREEN 2: VIEW/EDIT
+────────────────────────────────────────────────────────────── */
+.abar{background:#fff;border-bottom:2px solid var(--line);padding:10px 2rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.abbk{display:inline-flex;align-items:center;gap:5px;background:var(--soft);border:1px solid var(--line);color:var(--mid);font-size:12px;font-family:sans-serif;font-weight:600;padding:7px 13px;border-radius:7px;cursor:pointer}
+.abbk svg{width:12px;height:12px;stroke:var(--mid);fill:none;stroke-width:2;stroke-linecap:round}
+.abdiv{width:1px;height:26px;background:var(--line);margin:0 4px}
+.btnupd{display:inline-flex;align-items:center;gap:7px;background:var(--bu);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 22px;border-radius:7px;cursor:pointer}
+.btnupd:hover{background:var(--bu2)}
+.btnupd svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.btnnew{display:inline-flex;align-items:center;gap:7px;background:#fff;color:var(--bu);border:2px solid var(--bu);font-size:13px;font-family:sans-serif;font-weight:700;padding:8px 22px;border-radius:7px;cursor:pointer}
+.btnnew:hover{background:#eef5ff}
+.btnnew svg{width:13px;height:13px;stroke:var(--bu);fill:none;stroke-width:2;stroke-linecap:round}
+.idchip{font-size:13px;font-weight:700;color:var(--bud);font-family:sans-serif;letter-spacing:.6px;background:#e8f2fc;border:1.5px solid var(--bu);padding:7px 14px;border-radius:6px}
+.editbadge{display:inline-flex;align-items:center;gap:5px;background:var(--warn-bg);border:1px solid #f5d97a;color:var(--warn);font-size:11px;font-family:sans-serif;font-weight:600;padding:6px 12px;border-radius:6px;margin-left:auto}
+.editbadge svg{width:12px;height:12px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round}
+
+.dhstrip{background:linear-gradient(135deg,var(--bud),var(--bu3));padding:14px 2rem;display:flex;align-items:center;gap:16px;border-bottom:3px solid var(--gold)}
+.dhid{background:var(--gold);color:var(--bud);font-size:16px;font-weight:700;font-family:sans-serif;padding:7px 16px;border-radius:7px;white-space:nowrap;letter-spacing:1px}
+.dhinfo{flex:1}
+.dhtitle{font-size:15px;font-weight:700;color:#fff;font-family:'Playfair Display',serif;line-height:1.3}
+.dhmeta{display:flex;gap:8px;margin-top:7px;flex-wrap:wrap;align-items:center}
+.dhtag{font-size:10px;font-family:sans-serif;padding:3px 9px;border-radius:4px;font-weight:600}
+.dhtype{background:rgba(255,255,255,.15);color:rgba(255,255,255,.92)}
+.dhstatus{background:var(--gold);color:var(--bud)}
+.dhroute{font-size:11px;color:rgba(255,255,255,.5);font-family:sans-serif}
+
+.editwrap{display:grid;grid-template-columns:1fr 330px;min-height:600px}
+.editleft{padding:1.5rem 2rem;display:flex;flex-direction:column;gap:1.1rem;background:var(--soft);border-right:1px solid var(--line)}
+.editright{background:#fff;padding:1.3rem;display:flex;flex-direction:column;gap:.9rem;overflow-y:auto}
+
+.tbar{display:flex;background:#fff;border-radius:9px;border:1px solid var(--line);overflow:hidden;flex-shrink:0}
+.tab{flex:1;background:none;border:none;font-size:12px;font-family:'Source Sans 3',sans-serif;font-weight:600;color:var(--muted);padding:9px 14px;cursor:pointer;border-bottom:2.5px solid transparent;transition:all .15s;text-align:center}
+.tab.active{color:var(--bu);border-bottom-color:var(--bu);background:#f0f7ff}
+.tab:hover:not(.active){background:var(--soft)}
+
+.epanel{display:none}
+.epanel.active{display:flex;flex-direction:column;gap:1.1rem}
+
+.sh{display:flex;align-items:center;gap:8px}
+.shbar{width:4px;height:16px;background:var(--gold);border-radius:2px;flex-shrink:0}
+.sh h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--bud);font-family:sans-serif}
+
+.fc{background:#fff;border-radius:9px;border:1px solid var(--line);overflow:hidden}
+.fch{background:var(--bud);padding:9px 14px;display:flex;align-items:center;gap:7px}
+.fcdot{width:5px;height:5px;background:var(--gold);border-radius:50%}
+.fch span{font-size:10.5px;font-weight:600;color:#fff;letter-spacing:1px;text-transform:uppercase;font-family:sans-serif}
+.fcb{padding:14px;display:flex;flex-direction:column;gap:12px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.fg1{grid-template-columns:1fr}
+.fld{display:flex;flex-direction:column;gap:4px}
+.fld label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-family:sans-serif}
+.req{color:#e05555;margin-left:2px}
+.fld input,.fld select,.fld textarea{border:1.5px solid #d0e4f4;border-radius:6px;padding:8px 10px;font-size:12.5px;color:#0d1f3c;background:#f8fbff;font-family:'Source Sans 3',sans-serif;width:100%;outline:none;transition:border .15s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--bu);background:#fff}
+.fld textarea{min-height:72px;resize:vertical}
+.fld input.ed,.fld select.ed,.fld textarea.ed{border-color:var(--gold);background:#fffcf0}
+.fld input[readonly]{background:#f0f4f8;font-weight:700;color:var(--bud);letter-spacing:.5px}
+
+.prevrow{display:flex;gap:12px;align-items:flex-start}
+.prevthumb{width:90px;flex-shrink:0;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.prevtop{background:var(--bu2);padding:5px 8px;font-size:9px;color:#fff;font-family:sans-serif;font-weight:600}
+.prevbody{background:#fff;height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;gap:3px}
+.pline{height:3px;border-radius:2px;background:#e8eef8;width:100%}
+.pline.m{width:78%}.pline.s{width:55%}.pline.g{margin-top:5px}
+.previnfo{flex:1}
+.prevfn{font-size:12.5px;font-weight:600;color:var(--bud);font-family:sans-serif;margin-bottom:4px}
+.prevm{font-size:11px;color:var(--muted);font-family:sans-serif;line-height:1.7}
+.prevbtns{display:flex;gap:7px;margin-top:8px}
+.btnrep{background:var(--bu);color:#fff;border:none;font-size:11.5px;font-family:sans-serif;font-weight:600;padding:6px 13px;border-radius:5px;cursor:pointer;display:flex;align-items:center;gap:5px}
+.btnrep svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.btndl{background:#fff;border:1px solid var(--line);color:var(--mid);font-size:11.5px;font-family:sans-serif;padding:6px 12px;border-radius:5px;cursor:pointer}
+
+/* NOTES */
+.na{background:#fff;border-radius:9px;border:1px solid var(--line);overflow:hidden}
+.nah{background:var(--bud);padding:9px 13px;display:flex;align-items:center;justify-content:space-between}
+.nahl{display:flex;align-items:center;gap:7px}
+.nahl .dot{width:5px;height:5px;background:var(--gold);border-radius:50%}
+.nahl span{font-size:10.5px;font-weight:600;color:#fff;letter-spacing:1px;text-transform:uppercase;font-family:sans-serif}
+.ncnt{background:rgba(255,255,255,.14);color:rgba(255,255,255,.75);font-size:10px;font-family:sans-serif;padding:2px 8px;border-radius:10px}
+.compose{padding:10px 13px;border-bottom:1px solid var(--line);background:#f8fbff}
+.compose textarea{width:100%;border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--bud);font-family:sans-serif;resize:none;min-height:56px;outline:none;background:#fff}
+.compose-row{display:flex;align-items:center;justify-content:space-between;margin-top:7px}
+.ntyp{border:1px solid var(--line);border-radius:5px;padding:5px 8px;font-size:11px;color:var(--bud);font-family:sans-serif;outline:none}
+.btnadd{background:var(--bu);color:#fff;border:none;padding:6px 13px;border-radius:5px;font-size:11.5px;font-family:sans-serif;font-weight:600;cursor:pointer}
+.nlist{display:flex;flex-direction:column}
+.ni{padding:10px 13px;border-bottom:0.5px solid #f0f4fa;position:relative}
+.ni:last-child{border-bottom:none}
+.ni.nact{background:#f0fdf4;border-left:3px solid #10b981}
+.ni.ndel{background:#fff7f7;border-left:3px solid #ef4444;opacity:.75}
+.ni.npend{background:#fff;border-left:3px solid #cce0f5}
+.nhdr{display:flex;align-items:center;gap:6px;margin-bottom:5px;flex-wrap:wrap}
+.nav-av{width:26px;height:26px;background:#e8f2fc;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--bu2);font-family:sans-serif;flex-shrink:0;border:1px solid #cce0f5}
+.nauthor{font-size:11.5px;font-weight:600;color:var(--bud);font-family:sans-serif}
+.nts{font-size:10px;color:var(--muted);font-family:sans-serif;margin-left:auto}
+.nbg{font-size:9px;font-family:sans-serif;font-weight:700;padding:2px 6px;border-radius:3px;text-transform:uppercase}
+.nbgen{background:#e0f2fe;color:#0c4a6e}.nbleg{background:#ede9fe;color:#5b21b6}.nbact{background:#fef9c3;color:#713f12}
+.ntxt{font-size:12px;color:var(--mid);font-family:sans-serif;line-height:1.6}
+.ntag{font-size:9.5px;font-family:sans-serif;font-weight:600;padding:2px 7px;border-radius:3px;display:inline-block;margin-top:5px}
+.ntg-done{background:#d1fae5;color:#065f46}.ntg-del{background:#fee2e2;color:#991b1b}.ntg-wait{background:#e0f2fe;color:#0c4a6e}
+/* note action buttons */
+.note-actions{display:flex;gap:6px;margin-top:7px}
+.nbtn{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-family:sans-serif;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;border:none}
+.nbtn-check{background:#d1fae5;color:#065f46}
+.nbtn-check:hover{background:#a7f3d0}
+.nbtn-del{background:#fee2e2;color:#991b1b}
+.nbtn-del:hover{background:#fecaca}
+.nbtn svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+
+/* DEADLINE */
+.dlc{background:#fff;border-radius:9px;border:1px solid var(--line);overflow:hidden}
+.dlh{background:var(--bud);padding:9px 13px;display:flex;align-items:center;gap:7px}
+.dlh .dot{width:5px;height:5px;background:var(--gold);border-radius:50%}
+.dlh span{font-size:10.5px;font-weight:600;color:#fff;letter-spacing:1px;text-transform:uppercase;font-family:sans-serif}
+.dlb{padding:12px;display:flex;flex-direction:column;gap:8px}
+.dli{background:var(--soft);border-radius:6px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line)}
+.dli.urg{border-left:3px solid #e24b4a;border-radius:0 6px 6px 0}
+.dli.upc{border-left:3px solid var(--gold);border-radius:0 6px 6px 0}
+.dli.dn{border-left:3px solid #10b981;border-radius:0 6px 6px 0;opacity:.72}
+.dldot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.dldot.urg{background:#e24b4a}.dldot.upc{background:var(--gold)}.dldot.dn{background:#10b981}
+.dlcc{flex:1}
+.dllab{font-size:12px;font-weight:600;color:var(--bud);font-family:sans-serif}
+.dldate{font-size:10.5px;color:var(--muted);font-family:sans-serif;margin-top:2px}
+.dlassign{font-size:10px;color:var(--muted);font-family:sans-serif;margin-top:2px}
+.dlbg{font-size:9px;font-family:sans-serif;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;float:right}
+.dlb-urg{background:#fee2e2;color:#991b1b}.dlb-upc{background:#fef3c7;color:#92400e}.dlb-dn{background:var(--sbg);color:var(--success)}
+.adlf{background:#e8f4ff;border:1px solid #cce0f5;border-radius:7px;padding:11px 12px;margin-top:2px}
+.adlt{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--bud);font-family:sans-serif;margin-bottom:8px}
+.adlrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.adlf2{display:flex;flex-direction:column;gap:3px}
+.adlf2 label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--mid);font-family:sans-serif}
+.adlf2 input,.adlf2 select{border:1px solid var(--line);border-radius:5px;padding:6px 8px;font-size:11.5px;font-family:sans-serif;color:var(--bud);background:#fff;width:100%;outline:none}
+.btnadl{background:var(--bu);color:#fff;border:none;padding:7px 14px;border-radius:5px;font-size:11px;font-family:sans-serif;font-weight:600;display:block;width:100%;margin-top:2px;cursor:pointer}
+
+/* RIGHT SIDE PANEL */
+.rtitle{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--bud);font-family:sans-serif;padding-bottom:7px;border-bottom:1.5px solid #cce0f5;margin-bottom:9px}
+.dic{background:var(--soft);border-radius:8px;border:1px solid var(--line);overflow:hidden}
+.dich{background:var(--bud);padding:8px 12px}
+.dich span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#fff;font-family:sans-serif}
+.dicr{display:flex;padding:7px 12px;border-bottom:0.5px solid #eef2f8;gap:7px}
+.dicr:last-child{border-bottom:none}
+.dick{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;width:78px;font-family:sans-serif;padding-top:1px;flex-shrink:0}
+.dicv{font-size:12px;color:var(--bud);font-family:sans-serif;flex:1}
+.spill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase;font-family:sans-serif;background:#fef3c7;color:#92400e;border:1px solid #f5d97a}
+.spill .sdot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.unsaved{background:var(--warn-bg);border:1px solid #f5d97a;border-radius:8px;padding:11px 13px}
+.unsaved .ut{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--warn);font-family:sans-serif;margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.unsaved .ut svg{width:11px;height:11px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round}
+.unsaved p{font-size:11.5px;color:#7a5400;font-family:sans-serif;line-height:1.6}
+.actfeed{display:flex;flex-direction:column}
+.ai{display:flex;gap:9px;padding:7px 0;border-bottom:0.5px solid #f0f4fa;align-items:flex-start}
+.ai:last-child{border-bottom:none}
+.aiico{width:22px;height:22px;border-radius:50%;background:#e8f2fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid #cce0f5}
+.aiico svg{width:10px;height:10px;stroke:var(--bu2);fill:none;stroke-width:2;stroke-linecap:round}
+.aitxt{font-size:11px;color:var(--mid);font-family:sans-serif;line-height:1.5;flex:1}
+.aitxt strong{color:var(--bud)}
+.aits{font-size:9.5px;color:var(--muted);font-family:sans-serif;white-space:nowrap}
+
+/* ──────────────────────────────────────────────────────────────
+   SCREEN 3: USER PROFILE
+────────────────────────────────────────────────────────────── */
+.profile-wrap{padding:2rem;max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:1.5rem}
+.profile-hero{background:linear-gradient(135deg,var(--bud),var(--bu3));border-radius:14px;padding:2rem 2.5rem;display:flex;align-items:center;gap:2rem;position:relative;overflow:hidden;box-shadow:0 6px 24px rgba(15,45,92,.2)}
+.profile-hero::before{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.04)}
+.profile-hero::after{content:'';position:absolute;right:60px;bottom:-60px;width:160px;height:160px;border-radius:50%;background:rgba(232,160,32,.07)}
+.ph-avatar{width:90px;height:90px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--bud);font-family:sans-serif;border:4px solid rgba(255,255,255,.3);flex-shrink:0;position:relative;z-index:1}
+.ph-info{flex:1;position:relative;z-index:1}
+.ph-name{font-size:22px;font-weight:700;color:#fff;font-family:'Playfair Display',serif;line-height:1.2}
+.ph-role{font-size:12px;color:var(--gold2);letter-spacing:.8px;text-transform:uppercase;font-family:sans-serif;font-weight:500;margin-top:4px}
+.ph-dept{font-size:12px;color:rgba(255,255,255,.55);font-family:sans-serif;margin-top:3px}
+.ph-tags{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.ph-tag{font-size:10px;font-family:sans-serif;font-weight:600;padding:3px 10px;border-radius:20px;border:0.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);background:rgba(255,255,255,.1)}
+.ph-tag.active-tag{background:rgba(16,185,129,.25);border-color:rgba(16,185,129,.4);color:#6ee7b7}
+.ph-actions{display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
+.ph-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12px;font-family:sans-serif;font-weight:600;padding:8px 18px;border-radius:7px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.ph-btn:hover{background:rgba(255,255,255,.25)}
+.ph-btn svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.ph-btn.primary{background:var(--gold);color:var(--bud);border-color:var(--gold)}
+.ph-btn.primary:hover{background:var(--gold2)}
+.ph-btn.primary svg{stroke:var(--bud)}
+
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.pcard{background:#fff;border-radius:12px;border:1px solid var(--line);overflow:hidden}
+.pcardhead{background:var(--bud);padding:10px 15px;display:flex;align-items:center;gap:7px}
+.pcardhead .dot{width:5px;height:5px;background:var(--gold);border-radius:50%}
+.pcardhead span{font-size:10.5px;font-weight:600;color:#fff;letter-spacing:1px;text-transform:uppercase;font-family:sans-serif}
+.pcardbody{padding:16px;display:flex;flex-direction:column;gap:11px}
+.pfld{display:flex;flex-direction:column;gap:4px}
+.pfld label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-family:sans-serif}
+.pfld input,.pfld select{border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:13px;color:#0d1f3c;background:#f8fbff;font-family:'Source Sans 3',sans-serif;width:100%;outline:none}
+.pfld input:focus{border-color:var(--bu);background:#fff}
+.pfld .pval{font-size:13px;color:#0d1f3c;font-family:sans-serif;padding:4px 0;font-weight:500}
+
+.stats-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sm{background:var(--soft);border-radius:8px;padding:12px 14px;text-align:center;border:1px solid var(--line)}
+.sm .smv{font-size:22px;font-weight:700;color:var(--bu);font-family:sans-serif}
+.sm .sml{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-family:sans-serif;font-weight:700;margin-top:2px}
+
+.pcard-full{grid-column:1/-1}
+
+.save-profile-row{display:flex;gap:10px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--line)}
+.btn-sp{background:var(--bu);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 24px;border-radius:7px;cursor:pointer}
+.btn-sp:hover{background:var(--bu2)}
+.btn-spc{background:#fff;border:1px solid var(--line);color:var(--mid);font-size:13px;font-family:sans-serif;padding:9px 18px;border-radius:7px;cursor:pointer}
+
+/* ──────────────────────────────────────────────────────────────
+   NOTE ACTION MODAL
+────────────────────────────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,30,60,.55);z-index:1000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.modal-overlay.hidden{display:none}
+.modal{background:#fff;border-radius:14px;width:540px;max-width:95vw;box-shadow:0 20px 60px rgba(0,30,80,.25);overflow:hidden;position:relative}
+.modal-top{background:var(--bud);padding:14px 18px;display:flex;align-items:center;gap:10px}
+.modal-top .mico{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.modal-top .mico svg{width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round}
+.modal-top h3{font-size:14px;font-weight:700;color:#fff;font-family:'Playfair Display',serif;flex:1}
+.modal-top .mclose{background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px}
+.modal-top .mclose:hover{background:rgba(255,255,255,.25)}
+.modal-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+.modal-note-preview{background:var(--soft);border-radius:8px;padding:13px 15px;border-left:3px solid var(--bu);border:1px solid var(--line);border-left:3px solid var(--bu)}
+.mnp-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.mnp-av{width:26px;height:26px;background:#e8f2fc;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--bu2);font-family:sans-serif;flex-shrink:0;border:1px solid #cce0f5}
+.mnp-author{font-size:12px;font-weight:600;color:var(--bud);font-family:sans-serif}
+.mnp-ts{font-size:10px;color:var(--muted);font-family:sans-serif;margin-left:auto}
+.mnp-text{font-size:12.5px;color:var(--mid);font-family:sans-serif;line-height:1.6}
+.modal-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mid);font-family:sans-serif;margin-bottom:6px}
+.modal-options{display:flex;flex-direction:column;gap:8px}
+.mo{display:flex;align-items:flex-start;gap:12px;background:var(--soft);border-radius:9px;padding:13px 15px;border:2px solid transparent;cursor:pointer;transition:border .15s,background .15s}
+.mo:hover{border-color:var(--bu);background:#eef5ff}
+.mo.selected-check{border-color:#10b981;background:#f0fdf4}
+.mo.selected-del{border-color:#ef4444;background:#fff7f7}
+.mo-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mo-ico.check{background:#d1fae5}
+.mo-ico.del{background:#fee2e2}
+.mo-ico svg{width:16px;height:16px;fill:none;stroke-width:2;stroke-linecap:round}
+.mo-ico.check svg{stroke:#065f46}
+.mo-ico.del svg{stroke:#991b1b}
+.mo-info{flex:1}
+.mo-title{font-size:13px;font-weight:700;color:#0d1f3c;font-family:sans-serif;margin-bottom:3px}
+.mo-desc{font-size:11.5px;color:var(--muted);font-family:sans-serif;line-height:1.5}
+.modal-remark{display:flex;flex-direction:column;gap:4px}
+.modal-remark label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mid);font-family:sans-serif}
+.modal-remark textarea{width:100%;border:1.5px solid var(--line);border-radius:7px;padding:9px 11px;font-size:12.5px;color:#0d1f3c;font-family:sans-serif;resize:none;min-height:72px;outline:none;background:#f8fbff}
+.modal-remark textarea:focus{border-color:var(--bu);background:#fff}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:9px;justify-content:flex-end;background:var(--soft)}
+.mbtn-cancel{background:#fff;border:1px solid var(--line);color:var(--mid);font-size:13px;font-family:sans-serif;font-weight:600;padding:9px 20px;border-radius:7px;cursor:pointer}
+.mbtn-cancel:hover{background:var(--soft)}
+.mbtn-confirm-check{background:#10b981;color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 22px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.mbtn-confirm-check svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+.mbtn-confirm-del{background:#ef4444;color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 22px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:7px;display:none}
+.mbtn-confirm-del svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+/* ──────────────────────────────────────────────────────────────
+   USER PROFILE DROPDOWN POPUP
+────────────────────────────────────────────────────────────── */
+
+/* NOTIFICATION BELL BUTTON */
+.notif-btn{position:relative;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;flex-shrink:0}
+.notif-btn:hover{background:rgba(255,255,255,.28)}
+.notif-badge{position:absolute;top:-5px;right:-5px;background:#ef4444;color:#fff;font-size:9px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:sans-serif;border:2px solid var(--bu);line-height:1}
+
+/* NOTIFICATION PANEL */
+.npop-overlay{position:fixed;inset:0;z-index:500;display:none}
+.npop-overlay.show{display:block}
+.npop{position:fixed;top:62px;right:72px;background:#fff;border-radius:13px;width:380px;box-shadow:0 16px 48px rgba(0,30,80,.22);border:1px solid var(--line);overflow:hidden;z-index:502;display:none}
+.npop.show{display:block}
+.npop-head{background:var(--bud);padding:13px 16px;display:flex;align-items:center;gap:10px}
+.npop-head-ico{width:30px;height:30px;background:rgba(255,255,255,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.npop-head-ico svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round}
+.npop-head h3{font-size:13px;font-weight:700;color:#fff;font-family:sans-serif;flex:1}
+.npop-head .nbadge2{background:var(--gold);color:var(--bud);font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:10px;font-family:sans-serif}
+.npop-tabs{display:flex;background:rgba(0,0,0,.15);border-bottom:1px solid rgba(255,255,255,.1)}
+.ntab{flex:1;background:none;border:none;color:rgba(255,255,255,.5);font-size:11px;font-family:sans-serif;font-weight:600;padding:8px 10px;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.3px}
+.ntab.active{color:#fff;border-bottom-color:var(--gold)}
+.npop-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--soft);border-bottom:1px solid var(--line)}
+.npop-markall{background:none;border:none;color:var(--bu);font-size:11.5px;font-family:sans-serif;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
+.npop-markall svg{width:12px;height:12px;stroke:var(--bu);fill:none;stroke-width:2;stroke-linecap:round}
+.npop-cnt{font-size:10.5px;color:var(--muted);font-family:sans-serif}
+.nscroll{max-height:340px;overflow-y:auto;display:flex;flex-direction:column}
+.nit{display:flex;gap:11px;padding:12px 14px;border-bottom:0.5px solid var(--line);cursor:pointer;transition:background .12s;align-items:flex-start;position:relative}
+.nit:hover{background:#f5f9ff}
+.nit:last-child{border-bottom:none}
+.nit.unread{background:#f0f7ff}
+.nit.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--bu)}
+.nit-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.nit-ico svg{width:16px;height:16px;fill:none;stroke-width:2;stroke-linecap:round}
+.ico-note{background:#ede9fe}.ico-note svg{stroke:#5b21b6}
+.ico-dead{background:#fee2e2}.ico-dead svg{stroke:#991b1b}
+.ico-doc{background:#dbeafe}.ico-doc svg{stroke:#1e40af}
+.ico-ok{background:#d1fae5}.ico-ok svg{stroke:#065f46}
+.ico-warn{background:#fef3c7}.ico-warn svg{stroke:#92400e}
+.nit-body{flex:1;min-width:0}
+.nit-title{font-size:12.5px;font-weight:600;color:#0d1f3c;font-family:sans-serif;margin-bottom:3px;line-height:1.3}
+.nit-desc{font-size:11.5px;color:var(--mid);font-family:sans-serif;line-height:1.5;overflow:hidden;text-overflow:ellipsis}
+.nit-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}
+.nit-ts{font-size:10px;color:var(--muted);font-family:sans-serif}
+.nit-tag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;font-family:sans-serif;text-transform:uppercase;letter-spacing:.3px}
+.nt-action{background:#fef9c3;color:#713f12}
+.nt-info{background:#dbeafe;color:#1e40af}
+.nt-urgent{background:#fee2e2;color:#991b1b}
+.nt-done{background:#d1fae5;color:#065f46}
+.nit-unread-dot{width:8px;height:8px;background:var(--bu);border-radius:50%;flex-shrink:0;margin-top:5px}
+.nit-dismiss{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:1px 4px;border-radius:3px;line-height:1;flex-shrink:0}
+.nit-dismiss:hover{background:var(--line);color:#0d1f3c}
+.npop-foot{padding:11px 15px;border-top:1px solid var(--line);text-align:center;background:var(--soft)}
+.npop-foot button{background:none;border:none;font-size:12px;color:var(--bu);font-family:sans-serif;font-weight:600;cursor:pointer}
+.upop-overlay{position:fixed;inset:0;z-index:500;display:none}
+.upop-overlay.show{display:block}
+.upop{position:fixed;top:62px;right:18px;background:#fff;border-radius:12px;width:260px;box-shadow:0 12px 40px rgba(0,30,80,.2);border:1px solid var(--line);overflow:hidden;z-index:501}
+.upop-head{background:var(--bud);padding:14px 16px;display:flex;align-items:center;gap:12px}
+.upop-av{width:42px;height:42px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bud);flex-shrink:0;border:2px solid rgba(255,255,255,.3)}
+.upop-name{font-size:13px;font-weight:700;color:#fff;font-family:sans-serif}
+.upop-role{font-size:10px;color:rgba(255,255,255,.55);font-family:sans-serif;margin-top:1px}
+.upop-body{display:flex;flex-direction:column}
+.upop-item{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;font-size:12.5px;color:#0d1f3c;font-family:sans-serif;font-weight:500;border-bottom:0.5px solid var(--line);transition:background .12s}
+.upop-item:last-child{border-bottom:none}
+.upop-item:hover{background:var(--soft)}
+.upop-item svg{width:15px;height:15px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.upop-item.upop-logout{color:#991b1b}
+.upop-item.upop-logout svg{stroke:#991b1b}
+
+/* FOOTER */
+.footer{background:var(--bud);color:rgba(255,255,255,.3);font-size:10px;text-align:center;padding:9px;letter-spacing:.5px;border-top:3px solid var(--bu);font-family:sans-serif;margin-top:2rem}
+.footer span{color:var(--gold2);font-weight:600}
+
+/* ─── EDIT PROFILE SCREEN ─────────────────────────────────── */
+.ep-hero{background:linear-gradient(135deg,var(--bud),var(--bu3));border-radius:14px;padding:1.8rem 2.5rem;display:flex;align-items:center;gap:2rem;position:relative;overflow:hidden;box-shadow:0 6px 24px rgba(15,45,92,.2);margin-bottom:1.5rem}
+.ep-hero::before{content:'';position:absolute;right:-50px;top:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.04)}
+.ep-avatar-wrap{position:relative;flex-shrink:0}
+.ep-avatar{width:90px;height:90px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--bud);font-family:sans-serif;border:4px solid rgba(255,255,255,.3);cursor:pointer;transition:opacity .2s}
+.ep-avatar:hover{opacity:.85}
+.ep-avatar-change{position:absolute;bottom:0;right:0;width:26px;height:26px;background:var(--gold);border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.ep-avatar-change svg{width:12px;height:12px;stroke:var(--bud);fill:none;stroke-width:2.5;stroke-linecap:round}
+.ep-hero-info{flex:1;position:relative;z-index:1}
+.ep-hero-name{font-size:22px;font-weight:700;color:#fff;font-family:'Playfair Display',serif;line-height:1.2}
+.ep-hero-role{font-size:12px;color:var(--gold2);letter-spacing:.8px;text-transform:uppercase;font-family:sans-serif;font-weight:500;margin-top:4px}
+.ep-hero-dept{font-size:12px;color:rgba(255,255,255,.5);font-family:sans-serif;margin-top:3px}
+.ep-hero-hint{font-size:11px;color:rgba(255,255,255,.35);font-family:sans-serif;margin-top:10px;font-style:italic}
+.ep-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.ep-card{background:#fff;border-radius:12px;border:1px solid var(--line);overflow:hidden}
+.ep-card-full{grid-column:1/-1}
+.ep-head{background:var(--bud);padding:10px 15px;display:flex;align-items:center;gap:7px}
+.ep-head .dot{width:5px;height:5px;background:var(--gold);border-radius:50%}
+.ep-head span{font-size:10.5px;font-weight:600;color:#fff;letter-spacing:1px;text-transform:uppercase;font-family:sans-serif}
+.ep-body{padding:16px;display:flex;flex-direction:column;gap:12px}
+.ep-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ep-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.ep-fld{display:flex;flex-direction:column;gap:4px}
+.ep-fld label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-family:sans-serif}
+.ep-fld input,.ep-fld select,.ep-fld textarea{border:1.5px solid #d0e4f4;border-radius:6px;padding:8px 11px;font-size:13px;color:#0d1f3c;background:#f8fbff;font-family:'Source Sans 3',sans-serif;width:100%;outline:none;transition:border .15s}
+.ep-fld input:focus,.ep-fld select:focus,.ep-fld textarea:focus{border-color:var(--bu);background:#fff}
+.ep-fld input[readonly]{background:#f0f4f8;color:var(--bud);font-weight:600}
+.ep-fld textarea{min-height:72px;resize:vertical}
+.ep-pass-strength{height:4px;border-radius:2px;background:var(--line);margin-top:4px;overflow:hidden}
+.ep-pass-strength .bar{height:100%;border-radius:2px;width:0;transition:width .3s,background .3s}
+.ep-pass-hint{font-size:10px;color:var(--muted);font-family:sans-serif;margin-top:2px}
+.ep-footer{padding:13px 16px;border-top:1px solid var(--line);display:flex;gap:9px;justify-content:flex-end;background:var(--soft)}
+.ep-btn-save{background:var(--bu);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 26px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.ep-btn-save svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.ep-btn-save:hover{background:var(--bu2)}
+.ep-btn-cancel{background:#fff;border:1px solid var(--line);color:var(--mid);font-size:13px;font-family:sans-serif;padding:9px 18px;border-radius:7px;cursor:pointer}
+.ep-notify-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--line)}
+.ep-notify-row:last-child{border-bottom:none}
+.ep-notify-label{font-size:12.5px;color:#0d1f3c;font-family:sans-serif;font-weight:500}
+.ep-notify-sub{font-size:11px;color:var(--muted);font-family:sans-serif;margin-top:2px}
+.ep-toggle{width:42px;height:22px;background:#d1d5db;border-radius:11px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.ep-toggle.on{background:var(--bu)}
+.ep-toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.ep-toggle.on::after{left:23px}
+
+/* ─── CLIENT UPLOAD PORTAL ────────────────────────────────── */
+.portal-page{min-height:100vh;background:linear-gradient(160deg,#e8f2fc 0%,#f4f7fc 50%,#e0ecf8 100%);display:flex;flex-direction:column;align-items:center;padding:2rem 1rem}
+.portal-topbar{width:100%;max-width:700px;display:flex;align-items:center;gap:12px;margin-bottom:2rem;background:var(--bud);border-radius:12px;padding:14px 20px;box-shadow:0 6px 20px rgba(0,30,80,.18)}
+.portal-seal{width:40px;height:40px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:var(--bud);font-family:serif;border:2px solid rgba(255,255,255,.3);flex-shrink:0}
+.portal-topbar-info{flex:1}
+.portal-topbar-info h2{font-size:15px;font-weight:700;color:#fff;font-family:'Source Sans 3',sans-serif;text-transform:uppercase;letter-spacing:.4px}
+.portal-topbar-info p{font-size:10.5px;color:rgba(255,255,255,.55);font-family:sans-serif;letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+.portal-secure{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:0.5px solid rgba(255,255,255,.2);padding:4px 10px;border-radius:5px;font-size:10px;color:rgba(255,255,255,.7);font-family:sans-serif;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.portal-secure svg{width:11px;height:11px;stroke:var(--gold2);fill:none;stroke-width:2;stroke-linecap:round}
+.portal-card{width:100%;max-width:700px;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,30,80,.14);overflow:hidden}
+.portal-card-head{background:linear-gradient(135deg,var(--bud),var(--bu3));padding:1.8rem 2rem;position:relative;overflow:hidden}
+.portal-card-head::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.05)}
+.portal-card-head h1{font-size:20px;font-weight:700;color:#fff;font-family:'Playfair Display',serif;line-height:1.3;position:relative;z-index:1}
+.portal-card-head p{font-size:12px;color:rgba(255,255,255,.6);font-family:sans-serif;margin-top:6px;line-height:1.6;max-width:500px;position:relative;z-index:1}
+.portal-folder-select{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;margin-top:14px;display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.pfs-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.55);font-family:sans-serif;font-weight:600;white-space:nowrap}
+.pfs-value{font-size:13px;font-weight:700;color:var(--gold2);font-family:sans-serif;letter-spacing:.3px}
+.pfs-ico{width:20px;height:20px;background:rgba(232,160,32,.25);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pfs-ico svg{width:11px;height:11px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round}
+.portal-body{padding:1.8rem 2rem;display:flex;flex-direction:column;gap:1.3rem}
+.portal-section{display:flex;flex-direction:column;gap:.6rem}
+.portal-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--bud);font-family:sans-serif;display:flex;align-items:center;gap:6px}
+.portal-label .req{color:#e05555}
+.portal-input{border:1.5px solid #d0e4f4;border-radius:8px;padding:9px 12px;font-size:13px;color:#0d1f3c;background:#f8fbff;font-family:'Source Sans 3',sans-serif;width:100%;outline:none;transition:border .15s}
+.portal-input:focus{border-color:var(--bu);background:#fff}
+.portal-input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.portal-select{border:1.5px solid #d0e4f4;border-radius:8px;padding:9px 12px;font-size:13px;color:#0d1f3c;background:#f8fbff;font-family:'Source Sans 3',sans-serif;width:100%;outline:none}
+.portal-textarea{border:1.5px solid #d0e4f4;border-radius:8px;padding:9px 12px;font-size:13px;color:#0d1f3c;background:#f8fbff;font-family:'Source Sans 3',sans-serif;width:100%;outline:none;min-height:80px;resize:vertical}
+.portal-dropzone{border:2px dashed #a8c8e8;border-radius:10px;padding:2rem 1.5rem;background:#f0f7ff;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;cursor:pointer;transition:all .2s}
+.portal-dropzone:hover{border-color:var(--bu);background:#e4f0fc}
+.pdz-ico{width:52px;height:52px;background:#dbeafe;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #bfdbfe}
+.pdz-ico svg{width:22px;height:22px;stroke:var(--bu2);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pdz-title{font-size:14px;font-weight:600;color:var(--bud);font-family:sans-serif}
+.pdz-sub{font-size:11.5px;color:var(--muted);font-family:sans-serif}
+.pdz-btn{background:var(--bu);color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:12.5px;font-family:sans-serif;font-weight:600;cursor:pointer;margin-top:4px}
+.portal-file-attached{display:flex;align-items:center;gap:10px;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:8px;padding:10px 14px}
+.pfa-ico{width:36px;height:36px;background:#d1fae5;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pfa-ico svg{width:17px;height:17px;stroke:#065f46;fill:none;stroke-width:2;stroke-linecap:round}
+.pfa-name{font-size:12.5px;font-weight:600;color:#065f46;font-family:sans-serif;flex:1}
+.pfa-size{font-size:11px;color:#047857;font-family:sans-serif}
+.pfa-rm{background:none;border:none;color:#6ee7b7;font-size:16px;cursor:pointer;line-height:1}
+.pfa-rm:hover{color:#ef4444}
+.portal-info-box{background:#fef3c7;border:1px solid #f5d97a;border-radius:8px;padding:11px 14px;display:flex;gap:10px;align-items:flex-start}
+.portal-info-box svg{width:15px;height:15px;stroke:#92400e;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0;margin-top:1px}
+.portal-info-box p{font-size:11.5px;color:#7a5400;font-family:sans-serif;line-height:1.6}
+.portal-submit-row{display:flex;gap:10px;justify-content:flex-end;padding-top:4px}
+.portal-btn-submit{background:var(--bu);color:#fff;border:none;font-size:14px;font-family:sans-serif;font-weight:700;padding:11px 30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;letter-spacing:.2px}
+.portal-btn-submit svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+.portal-btn-submit:hover{background:var(--bu2)}
+.portal-btn-clear{background:#fff;border:1.5px solid var(--line);color:var(--mid);font-size:13px;font-family:sans-serif;padding:10px 20px;border-radius:8px;cursor:pointer}
+.portal-footer{width:100%;max-width:700px;text-align:center;margin-top:1.2rem;font-size:11px;color:var(--muted);font-family:sans-serif;line-height:1.7}
+.portal-footer span{color:var(--bu);font-weight:600}
+.portal-success{display:none;flex-direction:column;align-items:center;padding:3rem 2rem;text-align:center}
+.ps-ico{width:70px;height:70px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;border:3px solid #6ee7b7}
+.ps-ico svg{width:32px;height:32px;stroke:#065f46;fill:none;stroke-width:2.5;stroke-linecap:round}
+.ps-title{font-size:20px;font-weight:700;color:var(--bud);font-family:'Playfair Display',serif;margin-bottom:.5rem}
+.ps-ref{font-size:14px;color:var(--bu);font-family:sans-serif;font-weight:700;background:#dbeafe;padding:6px 18px;border-radius:6px;margin:8px 0}
+.ps-msg{font-size:13px;color:var(--mid);font-family:sans-serif;line-height:1.7;max-width:420px}
+.ps-back{background:var(--bu);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:10px 24px;border-radius:7px;cursor:pointer;margin-top:1.2rem}
+
+/* ─── CLIENT SUBMISSIONS ADMIN VIEW ──────────────────────── */
+.cs-toolbar{background:#fff;border-bottom:1px solid var(--line);padding:8px 2rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cs-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cs-stat{background:#fff;border-radius:9px;border:1px solid var(--line);padding:13px 16px;position:relative;overflow:hidden}
+.cs-stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px}
+.cs-b::before{background:var(--bu)}.cs-w::before{background:#f59e0b}.cs-r::before{background:#ef4444}.cs-g::before{background:#10b981}
+.cs-stat .sl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:700;font-family:sans-serif}
+.cs-stat .sv{font-size:24px;font-weight:700;font-family:'Source Sans 3',sans-serif;line-height:1.1;margin-top:3px}
+.cs-stat .ss{font-size:10.5px;color:var(--muted);font-family:sans-serif;margin-top:1px}
+.cs-b .sv{color:var(--bu)}.cs-w .sv{color:#92400e}.cs-r .sv{color:#991b1b}.cs-g .sv{color:var(--success)}
+
+/* client submission banner */
+.cs-banner{background:linear-gradient(135deg,var(--bud),var(--bu3));border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:.2rem}
+.cs-banner-ico{width:40px;height:40px;background:rgba(232,160,32,.2);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(232,160,32,.35)}
+.cs-banner-ico svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round}
+.cs-banner-info h3{font-size:14px;font-weight:700;color:#fff;font-family:sans-serif;margin-bottom:3px}
+.cs-banner-info p{font-size:11.5px;color:rgba(255,255,255,.55);font-family:sans-serif;line-height:1.5}
+.cs-banner-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.cs-portal-link{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:11.5px;font-family:sans-serif;font-weight:600;padding:7px 13px;border-radius:6px;cursor:pointer;letter-spacing:.2px}
+.cs-portal-link svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.cs-portal-link:hover{background:rgba(255,255,255,.2)}
+.cs-copy-link{display:flex;align-items:center;gap:6px;background:var(--gold);border:none;color:var(--bud);font-size:11.5px;font-family:sans-serif;font-weight:700;padding:7px 14px;border-radius:6px;cursor:pointer}
+.cs-copy-link svg{width:13px;height:13px;stroke:var(--bud);fill:none;stroke-width:2;stroke-linecap:round}
+
+/* col header */
+.cs-col-head{display:grid;grid-template-columns:70px 90px 1fr 140px 110px 110px 130px;gap:8px;padding:0 14px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-family:sans-serif}
+
+/* date group */
+.cs-dg{border-radius:9px;overflow:hidden;border:1px solid var(--line);margin-bottom:6px}
+.cs-fhdr{background:var(--bud);padding:9px 14px;display:flex;align-items:center;gap:10px}
+.cs-fhdr-ico{width:26px;height:26px;background:rgba(255,255,255,.12);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cs-fhdr-ico svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.cs-fhdr h3{font-size:12.5px;font-weight:600;color:#fff;font-family:sans-serif}
+.cs-fhdr .fsub{font-size:10.5px;color:rgba(255,255,255,.42);font-family:sans-serif;margin-left:2px}
+.cs-fcnt{font-size:10.5px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.1);padding:2px 8px;border-radius:10px;font-family:sans-serif}
+.cs-client-badge{font-size:9px;color:#86efac;background:rgba(16,185,129,.18);border:0.5px solid rgba(16,185,129,.3);padding:2px 8px;border-radius:3px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;font-family:sans-serif;margin-left:6px}
+.cs-fhdr-right{margin-left:auto;display:flex;align-items:center;gap:7px}
+.cs-pending-count{font-size:10px;color:var(--gold2);background:rgba(232,160,32,.15);border:0.5px solid rgba(232,160,32,.3);padding:2px 8px;border-radius:4px;font-family:sans-serif;font-weight:600}
+
+/* row */
+.cs-list{background:#fff}
+.cs-row{display:grid;grid-template-columns:70px 90px 1fr 140px 110px 110px 130px;align-items:center;gap:8px;padding:11px 14px;border-bottom:0.5px solid var(--line);transition:background .12s;cursor:pointer}
+.cs-row:hover{background:#f0f7ff}
+.cs-row:last-child{border-bottom:none}
+.cs-row.new-submission{background:linear-gradient(90deg,rgba(219,234,254,.35) 0%,rgba(255,255,255,0) 50%)}
+.cs-row.new-submission:hover{background:#e8f2fc}
+.cs-ref{font-size:11px;font-weight:700;color:var(--bud);font-family:sans-serif;letter-spacing:.3px}
+.cs-submitter{display:flex;flex-direction:column;gap:1px}
+.cs-submitter-name{font-size:12px;font-weight:600;color:#0d1f3c;font-family:sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cs-submitter-org{font-size:10px;color:var(--muted);font-family:sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cs-doc-col{min-width:0}
+.cs-doc-title{font-size:12.5px;color:#0d1f3c;font-family:sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.cs-doc-type{font-size:10px;color:var(--muted);font-family:sans-serif;margin-top:1px}
+.cs-new-dot{width:8px;height:8px;background:var(--bu);border-radius:50%;flex-shrink:0;display:inline-block;margin-right:4px;vertical-align:middle}
+
+/* status pills */
+.csp{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase;font-family:sans-serif;white-space:nowrap}
+.csp-pending{background:#fef3c7;color:#92400e;border:1px solid #f5d97a}
+.csp-review{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
+.csp-new{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
+.csp-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+/* action buttons */
+.cs-actions{display:flex;gap:5px;align-items:center}
+.cs-btn-review{display:inline-flex;align-items:center;gap:4px;background:var(--bu);color:#fff;border:none;font-size:11px;font-family:sans-serif;font-weight:600;padding:5px 11px;border-radius:5px;cursor:pointer;white-space:nowrap}
+.cs-btn-review:hover{background:var(--bu2)}
+.cs-btn-review svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+.cs-btn-assign{display:inline-flex;align-items:center;gap:4px;background:#fff;color:var(--mid);border:1px solid var(--line);font-size:11px;font-family:sans-serif;font-weight:600;padding:5px 9px;border-radius:5px;cursor:pointer;white-space:nowrap}
+.cs-btn-assign:hover{background:var(--soft);color:var(--bud)}
+
+/* upload time chip */
+.cs-time{font-size:10.5px;color:var(--muted);font-family:sans-serif}
+.cs-time-new{font-size:10.5px;color:var(--bu);font-family:sans-serif;font-weight:600}
+
+/* empty state */
+.cs-empty{padding:3rem;text-align:center;color:var(--muted);font-family:sans-serif;font-size:13px;background:#fff}
+
+/* ─────────────────────────────────────────────
+   PENDING REVIEW SCREEN
+───────────────────────────────────────────── */
+.pr-wrap{padding:1.4rem 2rem;display:flex;flex-direction:column;gap:1.1rem}
+.pr-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* pending document card */
+.pr-card-list{display:flex;flex-direction:column;gap:10px}
+.pr-card{background:#fff;border-radius:11px;border:1px solid var(--line);overflow:hidden;transition:box-shadow .15s}
+.pr-card:hover{box-shadow:0 4px 16px rgba(0,48,96,.1)}
+.pr-card.new-card{border-left:4px solid var(--bu)}
+.pr-card.pending-card{border-left:4px solid var(--gold)}
+.pr-card.review-card{border-left:4px solid #10b981}
+.pr-card-head{padding:12px 16px;display:flex;align-items:flex-start;gap:14px;border-bottom:0.5px solid var(--line);background:var(--soft)}
+.pr-ref-badge{background:var(--bud);color:#fff;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:5px;font-family:sans-serif;letter-spacing:.4px;white-space:nowrap;align-self:flex-start;flex-shrink:0}
+.pr-head-info{flex:1;min-width:0}
+.pr-doc-title{font-size:14px;font-weight:700;color:#0d1f3c;font-family:'Playfair Display',serif;line-height:1.3;margin-bottom:5px}
+.pr-meta-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pr-type-pill{display:inline-block;padding:2px 8px;border-radius:3px;font-size:9.5px;font-weight:700;font-family:sans-serif;text-transform:uppercase;letter-spacing:.3px}
+.pr-status-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase;font-family:sans-serif}
+.pr-sp-new{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
+.pr-sp-pend{background:#fef3c7;color:#92400e;border:1px solid #f5d97a}
+.pr-sp-review{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
+.pr-sdot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.pr-divider{width:1px;height:13px;background:var(--line)}
+.pr-submitter{font-size:11.5px;color:var(--muted);font-family:sans-serif}
+.pr-submitter strong{color:var(--mid);font-weight:600}
+.pr-received{font-size:11px;color:var(--muted);font-family:sans-serif}
+.pr-head-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.pr-time{font-size:11px;color:var(--muted);font-family:sans-serif;white-space:nowrap}
+.pr-time-new{font-size:11px;color:var(--bu);font-family:sans-serif;font-weight:600;white-space:nowrap}
+.pr-new-indicator{font-size:9px;font-weight:700;color:var(--bu);background:#dbeafe;padding:2px 7px;border-radius:3px;text-transform:uppercase;font-family:sans-serif;letter-spacing:.4px}
+
+/* card body: file + description */
+.pr-card-body{padding:12px 16px;display:flex;gap:14px;align-items:flex-start}
+.pr-file-thumb{width:44px;height:52px;background:var(--soft);border:1px solid var(--line);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;gap:2px}
+.pr-file-thumb svg{width:18px;height:18px;stroke:var(--bu2);fill:none;stroke-width:1.8;stroke-linecap:round}
+.pr-file-ext{font-size:8px;font-weight:700;color:var(--bu2);font-family:sans-serif;text-transform:uppercase;letter-spacing:.5px}
+.pr-file-info{flex:1;min-width:0}
+.pr-filename{font-size:12px;font-weight:600;color:var(--bud);font-family:sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pr-filesize{font-size:10.5px;color:var(--muted);font-family:sans-serif;margin-top:1px}
+.pr-description{font-size:12px;color:var(--mid);font-family:sans-serif;line-height:1.6;margin-top:5px;padding-top:5px;border-top:0.5px solid var(--line)}
+.pr-submitter-contact{display:flex;gap:12px;margin-top:5px;flex-wrap:wrap}
+.pr-contact-item{font-size:11px;color:var(--muted);font-family:sans-serif;display:flex;align-items:center;gap:4px}
+.pr-contact-item svg{width:11px;height:11px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+
+/* card footer: actions */
+.pr-card-foot{padding:10px 16px;display:flex;align-items:center;gap:8px;background:var(--soft);border-top:0.5px solid var(--line)}
+.pr-btn-forward{display:inline-flex;align-items:center;gap:6px;background:var(--bu);color:#fff;border:none;font-size:12px;font-family:sans-serif;font-weight:700;padding:8px 18px;border-radius:7px;cursor:pointer;letter-spacing:.2px}
+.pr-btn-forward:hover{background:var(--bu2)}
+.pr-btn-forward svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.pr-btn-open{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--bud);border:1.5px solid var(--bu);font-size:12px;font-family:sans-serif;font-weight:600;padding:7px 14px;border-radius:7px;cursor:pointer}
+.pr-btn-open:hover{background:#eef5ff}
+.pr-btn-open svg{width:12px;height:12px;stroke:var(--bud);fill:none;stroke-width:2;stroke-linecap:round}
+.pr-btn-decline{display:inline-flex;align-items:center;gap:5px;background:#fff;color:#991b1b;border:1px solid #fca5a5;font-size:12px;font-family:sans-serif;font-weight:600;padding:7px 12px;border-radius:7px;cursor:pointer;margin-left:auto}
+.pr-btn-decline:hover{background:#fff7f7}
+.pr-btn-decline svg{width:12px;height:12px;stroke:#991b1b;fill:none;stroke-width:2;stroke-linecap:round}
+.pr-assigned-to{font-size:11px;color:var(--muted);font-family:sans-serif;display:flex;align-items:center;gap:5px;margin-left:4px}
+.pr-assigned-to svg{width:11px;height:11px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round}
+
+/* forwarded state */
+.pr-forwarded-banner{display:flex;align-items:center;gap:8px;background:#f0fdf4;border-top:0.5px solid #a7f3d0;padding:8px 16px;font-size:11.5px;color:#065f46;font-family:sans-serif;font-weight:600}
+.pr-forwarded-banner svg{width:14px;height:14px;stroke:#065f46;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+
+/* ─────────────────────────────────────────────
+   FORWARD TO TRACKER MODAL
+───────────────────────────────────────────── */
+.fwd-overlay{position:fixed;inset:0;background:rgba(0,30,60,.55);z-index:1000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.fwd-overlay.hidden{display:none}
+.fwd-modal{background:#fff;border-radius:14px;width:580px;max-width:95vw;box-shadow:0 24px 64px rgba(0,30,80,.28);overflow:hidden}
+.fwd-top{background:linear-gradient(135deg,var(--bud),var(--bu3));padding:16px 20px;display:flex;align-items:center;gap:12px}
+.fwd-top-ico{width:36px;height:36px;background:rgba(255,255,255,.12);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fwd-top-ico svg{width:18px;height:18px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round}
+.fwd-top h3{font-size:15px;font-weight:700;color:#fff;font-family:'Playfair Display',serif;flex:1}
+.fwd-top .mclose{background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.fwd-top .mclose:hover{background:rgba(255,255,255,.25)}
+
+.fwd-doc-strip{background:var(--soft);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;gap:12px}
+.fwd-doc-ico{width:36px;height:36px;background:#dbeafe;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fwd-doc-ico svg{width:17px;height:17px;stroke:var(--bu2);fill:none;stroke-width:2;stroke-linecap:round}
+.fwd-doc-name{font-size:13px;font-weight:600;color:var(--bud);font-family:sans-serif}
+.fwd-doc-sub{font-size:11px;color:var(--muted);font-family:sans-serif;margin-top:2px}
+.fwd-ref{margin-left:auto;background:var(--bud);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;font-family:sans-serif;letter-spacing:.4px;white-space:nowrap}
+
+.fwd-body{padding:20px;display:flex;flex-direction:column;gap:16px}
+
+.fwd-step{display:flex;flex-direction:column;gap:6px}
+.fwd-step-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--bud);font-family:sans-serif;display:flex;align-items:center;gap:7px}
+.fwd-step-label .step-num{width:20px;height:20px;background:var(--bu);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;flex-shrink:0}
+
+/* date received picker */
+.fwd-date-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fwd-fld{display:flex;flex-direction:column;gap:4px}
+.fwd-fld label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-family:sans-serif}
+.fwd-fld input,.fwd-fld select,.fwd-fld textarea{border:1.5px solid #d0e4f4;border-radius:7px;padding:9px 11px;font-size:13px;color:#0d1f3c;background:#f8fbff;font-family:'Source Sans 3',sans-serif;width:100%;outline:none;transition:border .15s}
+.fwd-fld input:focus,.fwd-fld select:focus,.fwd-fld textarea:focus{border-color:var(--bu);background:#fff}
+.fwd-fld input.highlight{border-color:var(--bu);background:#eef5ff}
+
+/* folder target preview */
+.fwd-folder-preview{background:#eef5ff;border:1.5px solid #bfdbfe;border-radius:9px;padding:12px 15px;display:flex;align-items:center;gap:12px}
+.ffp-ico{width:38px;height:38px;background:#dbeafe;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ffp-ico svg{width:18px;height:18px;stroke:var(--bu2);fill:none;stroke-width:2;stroke-linecap:round}
+.ffp-text{flex:1}
+.ffp-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--bu2);font-family:sans-serif;font-weight:700;margin-bottom:3px}
+.ffp-value{font-size:13px;font-weight:700;color:var(--bud);font-family:sans-serif}
+.ffp-sub{font-size:11px;color:var(--muted);font-family:sans-serif;margin-top:2px}
+.ffp-new-badge{font-size:9.5px;font-weight:700;color:#fff;background:var(--bu);padding:2px 8px;border-radius:4px;font-family:sans-serif;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+
+/* doc id assignment */
+.fwd-id-row{display:flex;align-items:center;gap:10px}
+.fwd-id-box{flex:1;background:#f0fdf4;border:1.5px solid #a7f3d0;border-radius:7px;padding:9px 13px;display:flex;align-items:center;justify-content:space-between}
+.fwd-id-val{font-size:18px;font-weight:700;color:var(--bud);font-family:sans-serif;letter-spacing:1.5px}
+.fwd-id-hint{font-size:10px;color:#047857;font-family:sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.fwd-id-regen{background:#fff;border:1px solid var(--line);color:var(--mid);font-size:11px;font-family:sans-serif;padding:7px 12px;border-radius:6px;cursor:pointer}
+
+/* status + assign row */
+.fwd-status-assign{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* info note */
+.fwd-note{background:var(--warn-bg);border:1px solid #f5d97a;border-radius:8px;padding:10px 13px;display:flex;gap:9px;align-items:flex-start}
+.fwd-note svg{width:13px;height:13px;stroke:#c9a84c;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0;margin-top:1px}
+.fwd-note p{font-size:11.5px;color:#7a5400;font-family:sans-serif;line-height:1.6}
+
+.fwd-footer{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:9px;justify-content:flex-end;background:var(--soft)}
+.fwd-btn-cancel{background:#fff;border:1px solid var(--line);color:var(--mid);font-size:13px;font-family:sans-serif;font-weight:600;padding:9px 20px;border-radius:7px;cursor:pointer}
+.fwd-btn-cancel:hover{background:var(--soft)}
+.fwd-btn-confirm{background:var(--bu);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 24px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.fwd-btn-confirm:hover{background:var(--bu2)}
+.fwd-btn-confirm svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+/* success state inside modal */
+.fwd-success{display:none;flex-direction:column;align-items:center;padding:2.5rem 2rem;text-align:center}
+.fwds-ico{width:64px;height:64px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;border:3px solid #6ee7b7}
+.fwds-ico svg{width:28px;height:28px;stroke:#065f46;fill:none;stroke-width:2.5;stroke-linecap:round}
+.fwds-title{font-size:18px;font-weight:700;color:var(--bud);font-family:'Playfair Display',serif;margin-bottom:.4rem}
+.fwds-id{font-size:14px;color:var(--bu);font-family:sans-serif;font-weight:700;background:#dbeafe;padding:5px 16px;border-radius:5px;margin:6px 0}
+.fwds-msg{font-size:12.5px;color:var(--mid);font-family:sans-serif;line-height:1.7;max-width:400px;margin-top:4px}
+.fwds-close{background:var(--bu);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 24px;border-radius:7px;cursor:pointer;margin-top:1.2rem}
+
+/* Hide admin chrome when portal screen is active */
+body.portal-mode .header,
+body.portal-mode .subnav { display: none !important; }
+body.portal-mode { background: transparent; }
+
+/* ─── ASSIGN STAFF MODAL ─────────────────────────────────── */
+.asn-overlay{position:fixed;inset:0;background:rgba(0,30,60,.55);z-index:1000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.asn-overlay.hidden{display:none}
+.asn-modal{background:#fff;border-radius:14px;width:520px;max-width:95vw;box-shadow:0 24px 60px rgba(0,30,80,.28);overflow:hidden}
+
+/* top */
+.asn-top{background:linear-gradient(135deg,var(--bud),var(--bu3));padding:15px 20px;display:flex;align-items:center;gap:12px}
+.asn-top-ico{width:36px;height:36px;background:rgba(255,255,255,.12);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.asn-top-ico svg{width:18px;height:18px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round}
+.asn-top h3{font-size:15px;font-weight:700;color:#fff;font-family:'Playfair Display',serif;flex:1}
+.asn-top .mclose{background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.asn-top .mclose:hover{background:rgba(255,255,255,.28)}
+
+/* doc strip */
+.asn-doc-strip{background:var(--soft);border-bottom:1px solid var(--line);padding:11px 20px;display:flex;align-items:center;gap:12px}
+.asn-doc-ico{width:34px;height:34px;background:#dbeafe;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.asn-doc-ico svg{width:16px;height:16px;stroke:var(--bu2);fill:none;stroke-width:2;stroke-linecap:round}
+.asn-doc-name{font-size:12.5px;font-weight:600;color:var(--bud);font-family:sans-serif;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asn-doc-ref{background:var(--bud);color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;font-family:sans-serif;letter-spacing:.4px;white-space:nowrap;flex-shrink:0}
+
+/* body */
+.asn-body{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+
+/* staff cards */
+.asn-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);font-family:sans-serif;margin-bottom:4px}
+.asn-staff-grid{display:flex;flex-direction:column;gap:7px}
+.asn-staff-card{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid var(--line);border-radius:9px;cursor:pointer;transition:all .15s;background:#fff}
+.asn-staff-card:hover{border-color:var(--bu);background:#f0f7ff}
+.asn-staff-card.selected{border-color:var(--bu);background:#eef5ff;box-shadow:0 0 0 3px rgba(0,114,198,.1)}
+.asn-staff-card.busy{opacity:.55;cursor:not-allowed}
+.asn-staff-card.busy:hover{border-color:var(--line);background:#fff}
+.asn-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:sans-serif;flex-shrink:0;border:2px solid rgba(255,255,255,.6)}
+.asn-av-blue{background:#dbeafe;color:var(--bu2);border-color:#bfdbfe}
+.asn-av-purple{background:#ede9fe;color:#5b21b6;border-color:#c4b5fd}
+.asn-av-green{background:#d1fae5;color:#065f46;border-color:#6ee7b7}
+.asn-av-gold{background:#fef3c7;color:#92400e;border-color:#f5d97a}
+.asn-staff-info{flex:1;min-width:0}
+.asn-staff-name{font-size:13px;font-weight:600;color:#0d1f3c;font-family:sans-serif}
+.asn-staff-role{font-size:11px;color:var(--muted);font-family:sans-serif;margin-top:1px}
+.asn-staff-meta{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap}
+.asn-workload{font-size:10px;font-family:sans-serif;font-weight:600;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.3px}
+.asn-wl-low{background:#d1fae5;color:#065f46}
+.asn-wl-med{background:#fef3c7;color:#92400e}
+.asn-wl-high{background:#fee2e2;color:#991b1b}
+.asn-active-docs{font-size:10.5px;color:var(--muted);font-family:sans-serif}
+.asn-select-ico{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.asn-staff-card.selected .asn-select-ico{background:var(--bu);border-color:var(--bu)}
+.asn-staff-card.selected .asn-select-ico svg{display:block}
+.asn-select-ico svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;display:none}
+
+/* priority + due date */
+.asn-options-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.asn-fld{display:flex;flex-direction:column;gap:4px}
+.asn-fld label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-family:sans-serif}
+.asn-fld select,.asn-fld input{border:1.5px solid #d0e4f4;border-radius:7px;padding:8px 11px;font-size:13px;color:#0d1f3c;background:#f8fbff;font-family:'Source Sans 3',sans-serif;width:100%;outline:none;transition:border .15s}
+.asn-fld select:focus,.asn-fld input:focus{border-color:var(--bu);background:#fff}
+.asn-fld textarea{border:1.5px solid #d0e4f4;border-radius:7px;padding:8px 11px;font-size:13px;color:#0d1f3c;background:#f8fbff;font-family:'Source Sans 3',sans-serif;width:100%;outline:none;resize:none;min-height:60px}
+
+/* note box */
+.asn-note{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 13px;font-size:11.5px;color:var(--mid);font-family:sans-serif;line-height:1.6;display:flex;gap:8px;align-items:flex-start}
+.asn-note svg{width:13px;height:13px;stroke:var(--bu2);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0;margin-top:1px}
+
+/* footer */
+.asn-footer{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:9px;justify-content:flex-end;background:var(--soft)}
+.asn-btn-cancel{background:#fff;border:1px solid var(--line);color:var(--mid);font-size:13px;font-family:sans-serif;font-weight:600;padding:9px 18px;border-radius:7px;cursor:pointer}
+.asn-btn-cancel:hover{background:var(--soft)}
+.asn-btn-confirm{background:var(--bu);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 24px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.asn-btn-confirm:hover{background:var(--bu2)}
+.asn-btn-confirm svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.asn-btn-confirm:disabled{background:#94a3b8;cursor:not-allowed}
+
+/* success */
+.asn-success{display:none;flex-direction:column;align-items:center;padding:2.2rem 2rem;text-align:center}
+.asns-ico{width:60px;height:60px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:.9rem;border:3px solid #6ee7b7}
+.asns-ico svg{width:26px;height:26px;stroke:#065f46;fill:none;stroke-width:2.5;stroke-linecap:round}
+.asns-title{font-size:17px;font-weight:700;color:var(--bud);font-family:'Playfair Display',serif;margin-bottom:.3rem}
+.asns-who{font-size:14px;color:var(--bu);font-family:sans-serif;font-weight:700;background:#dbeafe;padding:5px 16px;border-radius:5px;margin:5px 0}
+.asns-msg{font-size:12px;color:var(--mid);font-family:sans-serif;line-height:1.7;max-width:380px}
+.asns-close{background:var(--bu);color:#fff;border:none;font-size:13px;font-family:sans-serif;font-weight:700;padding:9px 22px;border-radius:7px;cursor:pointer;margin-top:1rem}
+</style>
+</head>
+<body>
+
+<!-- ────────────────── SHARED HEADER ────────────────── -->
+<div class="header">
+  <div class="bu-logo">
+    <div class="bu-seal">BU</div>
+    <div class="bu-name">Bicol University</div>
+  </div>
+  <div class="hdr-center">
+    <div class="hdr-sys">Legal Affairs Office — Document Management System</div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search">
+    </div>
+    <button class="notif-btn" onclick="toggleNotifPop()" id="notif-btn" title="Notifications">
+      <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="notif-badge" id="notif-badge">3</span>
+    </button>
+    <div class="user-pill" onclick="toggleUserPop()">
+      <div class="uname">Ma. Myra Caparos</div>
+      <div class="uavatar">MC</div>
+    </div>
+  </div>
+</div>
+
+<!-- User profile popup dropdown -->
+<div class="upop-overlay" id="upop-overlay" onclick="toggleUserPop()">
+</div>
+<div class="upop" id="upop" style="display:none">
+  <div class="upop-head">
+    <div class="upop-av">MC</div>
+    <div>
+      <div class="upop-name">Ma. Myra Caparos</div>
+      <div class="upop-role">Legal Document Officer</div>
+    </div>
+  </div>
+  <div class="upop-body">
+    <div class="upop-item" onclick="goEditProfile()">
+      <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Edit Profile
+    </div>
+    <div class="upop-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Account Settings
+    </div>
+
+    <div class="upop-item upop-logout">
+      <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign Out
+    </div>
+  </div>
+</div>
+
+
+<!-- NOTIFICATION PANEL -->
+<div class="npop-overlay" id="npop-overlay" onclick="closeNotifPop()"></div>
+<div class="npop" id="npop">
+  <div class="npop-head">
+    <div class="npop-head-ico"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+    <h3>Notifications</h3>
+    <span class="nbadge2" id="npop-badge-count">3 unread</span>
+  </div>
+  <div class="npop-tabs">
+    <button class="ntab active" onclick="switchNotifTab('all',this)">All</button>
+    <button class="ntab" onclick="switchNotifTab('unread',this)">Unread</button>
+    <button class="ntab" onclick="switchNotifTab('actions',this)">Action Required</button>
+  </div>
+  <div class="npop-bar">
+    <button class="npop-markall" onclick="markAllRead()"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Mark all as read</button>
+    <span class="npop-cnt" id="npop-cnt">3 unread notifications</span>
+  </div>
+  <div class="nscroll" id="nscroll">
+    <!-- Unread: Urgent deadline -->
+    <div class="nit unread" id="nit-1">
+      <div class="nit-ico ico-dead"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="nit-body">
+        <div class="nit-title">Deadline Due Today — LAO-278</div>
+        <div class="nit-desc">Initial Legal Review for MOA – DOST Research Collaboration is due today.</div>
+        <div class="nit-meta"><span class="nit-ts">Today, 08:00 AM</span><span class="nit-tag nt-urgent">Urgent</span></div>
+      </div>
+      <div class="nit-unread-dot"></div>
+      <button class="nit-dismiss" onclick="dismissNotif(event,'nit-1')" title="Dismiss">&#x2715;</button>
+    </div>
+    <!-- Unread: Note action needed -->
+    <div class="nit unread" id="nit-2">
+      <div class="nit-ico ico-note"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+      <div class="nit-body">
+        <div class="nit-title">Note Awaiting Your Action — LAO-278</div>
+        <div class="nit-desc">Atty. Santos added a note marked "Action Required". Please review and respond.</div>
+        <div class="nit-meta"><span class="nit-ts">Yesterday, 09:15 AM</span><span class="nit-tag nt-action">Action Required</span></div>
+      </div>
+      <div class="nit-unread-dot"></div>
+      <button class="nit-dismiss" onclick="dismissNotif(event,'nit-2')" title="Dismiss">&#x2715;</button>
+    </div>
+    <!-- Unread: New document assigned -->
+    <div class="nit unread" id="nit-3">
+      <div class="nit-ico ico-doc"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div class="nit-body">
+        <div class="nit-title">New Document Assigned — LAO-279</div>
+        <div class="nit-desc">MOU – CHED Academic Program Alignment 2025 has been assigned to you for processing.</div>
+        <div class="nit-meta"><span class="nit-ts">Yesterday, 08:30 AM</span><span class="nit-tag nt-info">New Document</span></div>
+      </div>
+      <div class="nit-unread-dot"></div>
+      <button class="nit-dismiss" onclick="dismissNotif(event,'nit-3')" title="Dismiss">&#x2715;</button>
+    </div>
+    <!-- Read: Note resolved -->
+    <div class="nit" id="nit-4">
+      <div class="nit-ico ico-ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="nit-body">
+        <div class="nit-title">Note Resolved — LAO-278</div>
+        <div class="nit-desc">The Action Required note by Legal Staff has been resolved by Ma. Myra Caparos.</div>
+        <div class="nit-meta"><span class="nit-ts">Apr 20, 09:00 AM</span><span class="nit-tag nt-done">Resolved</span></div>
+      </div>
+      <button class="nit-dismiss" onclick="dismissNotif(event,'nit-4')" title="Dismiss">&#x2715;</button>
+    </div>
+    <!-- Read: Upload reminder -->
+    <div class="nit" id="nit-5">
+      <div class="nit-ico ico-warn"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="nit-body">
+        <div class="nit-title">Late Upload Recorded — LAO-278</div>
+        <div class="nit-desc">Document received Apr 25 was uploaded on Apr 26. Late upload has been logged in the audit trail.</div>
+        <div class="nit-meta"><span class="nit-ts">Apr 18, 02:00 PM</span><span class="nit-tag nt-info">System</span></div>
+      </div>
+      <button class="nit-dismiss" onclick="dismissNotif(event,'nit-5')" title="Dismiss">&#x2715;</button>
+    </div>
+  </div>
+  <div class="npop-foot">
+    <button onclick="closeNotifPop()">View all notifications</button>
+  </div>
+</div>
+
+<!-- SUBNAV -->
+<div class="subnav">
+  <button class="snav active" onclick="goScreen('tracker',this)">② Document Tracker</button>
+  <button class="snav" onclick="goScreen('clientsub',this)" id="client-sub-tab">📥 Client Submissions <span style="background:#ef4444;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:4px;font-family:sans-serif">4</span></button>
+  <button class="snav" onclick="goScreen('edit',this)">③ Document View / Edit</button>
+  <button class="snav" id="profile-tab" onclick="goScreen('profile',this)" style="display:none">👤 My Profile</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 1: TRACKER
+══════════════════════════════════════════════════════════ -->
+<div class="screen active" id="screen-tracker">
+  <div class="bc"><a href="#">Dashboard</a><span class="bcsep"> › </span><span class="bccur">Document Tracker — By Date Received</span></div>
+
+  <div class="toolbar">
+    <div class="tbg">
+      <button class="tbb prim">
+        <svg viewBox="0 0 24 24" style="stroke:#fff;fill:none;stroke-width:2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        Add File
+      </button>
+      <button class="tbb prim tbarr"><svg viewBox="0 0 10 6" style="width:9px;height:9px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="1 1 5 5 9 1"/></svg></button>
+    </div>
+    <div class="tbdiv"></div>
+    <div class="tbg">
+      <button class="tbb"><svg viewBox="0 0 24 24" style="stroke:var(--mid);fill:none;stroke-width:2;stroke-linecap:round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>New Folder</button>
+      <button class="tbb tbarr"><svg viewBox="0 0 10 6" style="width:9px;height:9px;stroke:var(--mid);fill:none;stroke-width:2;stroke-linecap:round"><polyline points="1 1 5 5 9 1"/></svg></button>
+    </div>
+    <div class="tbdiv"></div>
+    <div class="tbg">
+      <button class="tbb"><svg viewBox="0 0 24 24" style="stroke:var(--mid);fill:none;stroke-width:2;stroke-linecap:round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/></svg>All Fields &amp; Tags</button>
+    </div>
+    <div class="srch">
+      <div class="srch-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <input type="text" placeholder="Search by ID, title, office…">
+      <select><option>All Categories</option><option>Contract / MOA / MOU</option><option>Legal Opinion</option><option>Court Filing</option></select>
+      <select><option>All Status</option><option>Pending</option><option>For Review</option><option>Approved</option></select>
+    </div>
+  </div>
+
+  <div class="tracker-main">
+    <div class="stats-row">
+      <div class="sc sc-b"><div class="sl">Total Documents</div><div class="sv">47</div><div class="ss">All date folders</div></div>
+      <div class="sc sc-w"><div class="sl">Pending Review</div><div class="sv">12</div><div class="ss">Awaiting action</div></div>
+      <div class="sc sc-g"><div class="sl">Late Uploads</div><div class="sv">5</div><div class="ss">Filed next day</div></div>
+      <div class="sc sc-gr"><div class="sl">Resolved</div><div class="sv">31</div><div class="ss">This month</div></div>
+    </div>
+
+    <div class="col-head"><span>Doc ID</span><span>Document Title</span><span>Category</span><span>Status</span><span>Upload Note</span><span>Action</span></div>
+
+    <!-- Apr 26 -->
+    <div class="dg">
+      <div class="fhdr">
+        <div class="fhdrico"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+        <h3>Received: April 26, 2025</h3><span class="fsub">&nbsp;(Today)</span>
+        <span class="fcnt" style="margin-left:7px">2 documents</span>
+        <span class="rbadge" style="margin-left:8px">Received Date</span>
+        <div class="fhr"><button class="add-date-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add file to this date</button></div>
+      </div>
+      <div class="doclist">
+        <div class="dr" onclick="openDoc()">
+          <div class="did">LAO-279</div>
+          <div><div class="dname">MOU — CHED Academic Program Alignment 2025</div><div class="dsub">Academic Affairs → Board of Regents</div></div>
+          <div><span class="tp tc">Contract / MOA</span></div>
+          <div><span class="sp spp"><span class="sdot"></span>For Review</span></div>
+          <div style="font-size:10.5px;color:var(--muted);font-family:sans-serif">Same day</div>
+          <div><button class="openbtn" onclick="event.stopPropagation();openDoc()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button></div>
+        </div>
+        <div class="dr late" onclick="openDoc()">
+          <div class="did">LAO-278</div>
+          <div><div class="dname">MOA — DOST Research Collaboration 2025</div><div class="dsub">Office of Research &amp; Dev. → Board of Regents</div></div>
+          <div><span class="tp tc">Contract / MOA</span></div>
+          <div><span class="sp spp"><span class="sdot"></span>For Review</span></div>
+          <div><div class="latelbl">Late Upload</div><div style="font-size:10px;color:var(--muted);font-family:sans-serif">Received Apr 25</div></div>
+          <div><button class="openbtn" onclick="event.stopPropagation();openDoc()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Apr 25 -->
+    <div class="dg">
+      <div class="fhdr">
+        <div class="fhdrico"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+        <h3>Received: April 25, 2025</h3>
+        <span class="fcnt" style="margin-left:7px">2 documents</span>
+        <span class="rbadge" style="margin-left:8px">Received Date</span>
+        <div class="fhr"><button class="add-date-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add file to this date</button></div>
+      </div>
+      <div class="doclist">
+        <div class="dr" onclick="openDoc()">
+          <div class="did">LAO-277</div>
+          <div><div class="dname">Legal Opinion on Faculty Tenure Policy</div><div class="dsub">Human Resources Office → Legal Counsel</div></div>
+          <div><span class="tp tl">Legal Opinion</span></div>
+          <div><span class="sp spd"><span class="sdot"></span>Under Deliberation</span></div>
+          <div style="font-size:10.5px;color:var(--muted);font-family:sans-serif">Same day</div>
+          <div><button class="openbtn" onclick="event.stopPropagation();openDoc()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button></div>
+        </div>
+        <div class="dr" onclick="openDoc()">
+          <div class="did">LAO-276</div>
+          <div><div class="dname">Summons — Administrative Case No. 2025-04</div><div class="dsub">CSC Regional Office → University Admin</div></div>
+          <div><span class="tp tn">Notice / Summons</span></div>
+          <div><span class="sp spp"><span class="sdot"></span>Pending</span></div>
+          <div style="font-size:10.5px;color:var(--muted);font-family:sans-serif">Same day</div>
+          <div><button class="openbtn" onclick="event.stopPropagation();openDoc()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Apr 24 -->
+    <div class="dg">
+      <div class="fhdr">
+        <div class="fhdrico"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+        <h3>Received: April 24, 2025</h3>
+        <span class="fcnt" style="margin-left:7px">2 documents</span>
+        <span class="rbadge" style="margin-left:8px">Received Date</span>
+        <div class="fhr"><button class="add-date-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add file to this date</button></div>
+      </div>
+      <div class="doclist">
+        <div class="dr" onclick="openDoc()">
+          <div class="did">LAO-275</div>
+          <div><div class="dname">Administrative Order No. 12 — Building Policy</div><div class="dsub">Office of the President → All Units</div></div>
+          <div><span class="tp ta">Admin. Order</span></div>
+          <div><span class="sp spo"><span class="sdot"></span>Approved</span></div>
+          <div style="font-size:10.5px;color:var(--muted);font-family:sans-serif">Same day</div>
+          <div><button class="openbtn" onclick="event.stopPropagation();openDoc()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button></div>
+        </div>
+        <div class="dr" onclick="openDoc()">
+          <div class="did">LAO-274</div>
+          <div><div class="dname">Demand Letter — Unpaid Contractor Balance</div><div class="dsub">Accounting Office → Contractor / Vendor</div></div>
+          <div><span class="tp td">Demand Letter</span></div>
+          <div><span class="sp spp"><span class="sdot"></span>Pending</span></div>
+          <div style="font-size:10.5px;color:var(--muted);font-family:sans-serif">Same day</div>
+          <div><button class="openbtn" onclick="event.stopPropagation();openDoc()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 2: VIEW/EDIT
+══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-edit">
+  <div class="bc"><a href="#" onclick="goScreen('tracker',document.querySelectorAll('.snav')[0]);return false">Document Tracker</a><span class="bcsep"> › </span><span class="bccur">LAO-278 — View / Edit</span></div>
+
+  <div class="abar">
+    <button class="abbk" onclick="goScreen('tracker',document.querySelectorAll('.snav')[0])"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
+    <div class="abdiv"></div>
+    <button class="btnupd"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Update Document</button>
+    <button class="btnnew"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>Save as New File</button>
+    <div class="idchip">LAO-278</div>
+    <div class="editbadge"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit Mode — Unsaved changes</div>
+  </div>
+
+  <div class="dhstrip">
+    <div class="dhid">LAO-278</div>
+    <div class="dhinfo">
+      <div class="dhtitle">Memorandum of Agreement — DOST Research Collaboration 2025</div>
+      <div class="dhmeta">
+        <span class="dhtag dhtype">Contract / MOA / MOU</span>
+        <span class="dhtag dhstatus">For Review</span>
+        <span class="dhroute">Office of Research &amp; Development → Board of Regents &nbsp;·&nbsp; Received: April 25, 2025</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="editwrap">
+    <div class="editleft">
+
+      <div class="tbar">
+        <button class="tab active" onclick="switchTab('details',this)">Document Details</button>
+        <button class="tab" onclick="switchTab('notes',this)">Notes &amp; Comments</button>
+        <button class="tab" onclick="switchTab('deadlines',this)">Review Deadlines</button>
+      </div>
+
+      <!-- DETAILS -->
+      <div class="epanel active" id="tab-details">
+        <div class="fc">
+          <div class="fch"><div class="fcdot"></div><span>Classification &amp; Information</span></div>
+          <div class="fcb">
+            <div class="fg">
+              <div class="fld"><label>Document Type <span class="req">*</span></label><select class="ed"><option selected>Contract / MOA / MOU</option><option>Legal Opinion</option><option>Court Filing</option><option>Administrative Order</option></select></div>
+              <div class="fld"><label>Action Taken</label><select><option selected>For Review</option><option>For Signature</option><option>Under Deliberation</option><option>Approved &amp; Released</option></select></div>
+            </div>
+            <div class="fld"><label>Document Description</label><textarea class="ed">Memorandum of Agreement between the University and the Department of Science and Technology for a joint research collaboration on advanced materials science. Covers funding, intellectual property, and deliverables for FY 2025–2027.</textarea></div>
+          </div>
+        </div>
+        <div class="fc">
+          <div class="fch"><div class="fcdot"></div><span>Routing &amp; Tracking</span></div>
+          <div class="fcb">
+            <div class="fg3">
+              <div class="fld"><label>Date Received</label><input type="date" value="2025-04-25"></div>
+              <div class="fld"><label>Date Uploaded</label><input type="date" value="2025-04-26" class="ed"></div>
+              <div class="fld"><label>Sent Date</label><input type="date" value="2025-04-18"></div>
+            </div>
+            <div class="fg">
+              <div class="fld"><label>From — Unit / Office <span class="req">*</span></label><input type="text" value="Office of Research &amp; Development"></div>
+              <div class="fld"><label>Sent To</label><input type="text" value="Board of Regents"></div>
+            </div>
+            <div class="fg">
+              <div class="fld"><label>Document Status</label><select><option>For Review</option><option>Pending</option><option>Under Deliberation</option><option>Approved</option></select></div>
+              <div class="fld"><label>Document ID</label><input type="text" value="LAO-278" readonly></div>
+            </div>
+          </div>
+        </div>
+        <div class="fc">
+          <div class="fch"><div class="fcdot"></div><span>Attached File</span></div>
+          <div class="fcb">
+            <div class="prevrow">
+              <div class="prevthumb">
+                <div class="prevtop">PDF · 3 pages</div>
+                <div class="prevbody">
+                  <div style="width:28px;height:28px;background:#e8f2fc;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;margin-bottom:5px;border:1.5px solid #cce0f5">⚖</div>
+                  <div class="pline"></div><div class="pline m"></div><div class="pline s"></div><div class="pline g"></div><div class="pline m"></div>
+                </div>
+              </div>
+              <div class="previnfo">
+                <div class="prevfn">MOA_DOST_Research_2025.pdf</div>
+                <div class="prevm">Size: 2.4 MB &nbsp;·&nbsp; 3 pages<br>Uploaded: April 26, 2025 at 09:42 AM<br>By: Ma. Myra Caparos</div>
+                <div class="prevbtns">
+                  <button class="btnrep"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Replace</button>
+                  <button class="btndl">Download</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTES -->
+      <div class="epanel" id="tab-notes">
+        <div class="na">
+          <div class="nah">
+            <div class="nahl"><div class="dot"></div><span>Legal Notes &amp; Comments</span></div>
+            <span class="ncnt">4 notes</span>
+          </div>
+          <div class="compose">
+            <textarea placeholder="Add a legal note, observation, or action item…"></textarea>
+            <div class="compose-row">
+              <select class="ntyp"><option>General</option><option>Legal Opinion</option><option>Action Required</option></select>
+              <button class="btnadd">Add Note</button>
+            </div>
+          </div>
+          <div class="nlist">
+            <!-- Note 1: actioned -->
+            <div class="ni nact">
+              <div class="nhdr">
+                <div class="nav-av">AR</div>
+                <span class="nauthor">Atty. Reyes</span>
+                <span class="nbg nbleg">Legal Opinion</span>
+                <span class="nts">Apr 18, 10:05</span>
+              </div>
+              <div class="ntxt">Document appears compliant with CHED regulations. Verify signatory authority before routing to BOR.</div>
+              <span class="ntag ntg-done">✓ Actioned by Atty. Santos — Apr 19</span>
+            </div>
+            <!-- Note 2: actioned -->
+            <div class="ni nact">
+              <div class="nhdr">
+                <div class="nav-av">LS</div>
+                <span class="nauthor">Legal Staff</span>
+                <span class="nbg nbact">Action Required</span>
+                <span class="nts">Apr 18, 11:20</span>
+              </div>
+              <div class="ntxt">Follow up with Research Office — MOA Annex B (Budget Breakdown) is missing from uploaded file.</div>
+              <span class="ntag ntg-done">✓ Resolved by Ma. Myra Caparos — Apr 20</span>
+            </div>
+            <!-- Note 3: pending — show action buttons -->
+            <div class="ni npend" id="note3">
+              <div class="nhdr">
+                <div class="nav-av">AS</div>
+                <span class="nauthor">Atty. Santos</span>
+                <span class="nbg nbgen">General</span>
+                <span class="nts">Apr 19, 09:15</span>
+              </div>
+              <div class="ntxt">Initial review complete. Will coordinate with DOST counterpart legal team for IP clause alignment before May 2 deadline.</div>
+              <span class="ntag ntg-wait">⏳ Awaiting action</span>
+              <div class="note-actions">
+                <button class="nbtn nbtn-check" onclick="openNoteModal('check')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Mark as Done</button>
+                <button class="nbtn nbtn-del" onclick="openNoteModal('delete')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>Delete Note</button>
+              </div>
+            </div>
+            <!-- Note 4: marked for deletion -->
+            <div class="ni ndel">
+              <div class="nhdr">
+                <div class="nav-av">MC</div>
+                <span class="nauthor">Ma. Myra Caparos</span>
+                <span class="nbg nbgen">General</span>
+                <span class="nts">Apr 20, 08:30</span>
+              </div>
+              <div class="ntxt">Duplicate note — already captured in Atty. Santos entry above.</div>
+              <span class="ntag ntg-del">✕ Marked for deletion</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEADLINES -->
+      <div class="epanel" id="tab-deadlines">
+        <div class="dlc">
+          <div class="dlh"><div class="dot"></div><span>Scheduled Reviews</span></div>
+          <div class="dlb">
+            <div class="dli dn"><div class="dldot dn"></div><div class="dlcc"><div class="dllab">Preliminary Reading <span class="dlbg dlb-dn">Completed</span></div><div class="dldate">Due: April 16, 2025</div><div class="dlassign">Assigned: Legal Staff</div></div></div>
+            <div class="dli urg"><div class="dldot urg"></div><div class="dlcc"><div class="dllab">Initial Legal Review <span class="dlbg dlb-urg">Urgent</span></div><div class="dldate">Due: April 26, 2025 &nbsp;·&nbsp; <span style="color:#991b1b;font-weight:700;font-size:10px">Due Today</span></div><div class="dlassign">Assigned: Atty. Reyes</div></div></div>
+            <div class="dli upc"><div class="dldot upc"></div><div class="dlcc"><div class="dllab">Compliance Validation <span class="dlbg dlb-upc">Upcoming</span></div><div class="dldate">Due: May 2, 2025</div><div class="dlassign">Assigned: Atty. Santos</div></div></div>
+            <div class="adlf">
+              <div class="adlt">Add New Deadline</div>
+              <div class="adlrow">
+                <div class="adlf2"><label>Review Type</label><select><option selected>Final Approval</option><option>Initial Review</option><option>Compliance Check</option></select></div>
+                <div class="adlf2"><label>Due Date</label><input type="date" value="2025-05-10"></div>
+              </div>
+              <div class="adlrow">
+                <div class="adlf2"><label>Assigned To</label><input type="text" value="Atty. Reyes"></div>
+                <div class="adlf2"><label>Priority</label><select><option>Normal</option><option>Urgent</option></select></div>
+              </div>
+              <button class="btnadl">Add Deadline</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="editright">
+      <div class="rtitle">Document Summary</div>
+      <div class="dic">
+        <div class="dich"><span>File Details</span></div>
+        <div class="dicr"><span class="dick">Doc ID</span><span class="dicv" style="font-weight:700;font-size:13px;letter-spacing:.5px;color:var(--bud)">LAO-278</span></div>
+        <div class="dicr"><span class="dick">Type</span><span class="dicv">Contract / MOA / MOU</span></div>
+        <div class="dicr"><span class="dick">From</span><span class="dicv">Research &amp; Dev. Office</span></div>
+        <div class="dicr"><span class="dick">Sent To</span><span class="dicv">Board of Regents</span></div>
+        <div class="dicr"><span class="dick">Received</span><span class="dicv">April 25, 2025</span></div>
+        <div class="dicr"><span class="dick">Uploaded</span><span class="dicv">April 26, 2025</span></div>
+        <div class="dicr"><span class="dick">Status</span><span class="dicv"><span class="spill"><span class="sdot"></span>For Review</span></span></div>
+      </div>
+      <div class="unsaved">
+        <div class="ut"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Unsaved Changes</div>
+        <p>Use <strong>Update Document</strong> to overwrite, or <strong>Save as New File</strong> to preserve the original.</p>
+      </div>
+      <div class="rtitle" style="margin-top:2px">Audit Log</div>
+      <div class="actfeed">
+        <div class="ai"><div class="aiico"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div style="flex:1"><div class="aitxt"><strong>Opened for editing</strong> — by Ma. Myra Caparos</div><div class="aits">Just now</div></div></div>
+        <div class="ai"><div class="aiico"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div style="flex:1"><div class="aitxt"><strong>Note resolved</strong> — by Ma. Myra Caparos</div><div class="aits">Apr 20, 09:00</div></div></div>
+        <div class="ai"><div class="aiico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div style="flex:1"><div class="aitxt"><strong>Deadline set</strong> — Compliance Validation May 2</div><div class="aits">Apr 18, 14:00</div></div></div>
+        <div class="ai"><div class="aiico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg></div><div style="flex:1"><div class="aitxt"><strong>Document uploaded</strong> — LAO-278 added</div><div class="aits">Apr 26, 09:42</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 3: USER PROFILE
+══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-profile">
+  <div class="bc"><a href="#" onclick="goScreen('tracker',document.querySelectorAll('.snav')[0]);return false">Dashboard</a><span class="bcsep"> › </span><span class="bccur">My Profile</span></div>
+  <div class="profile-wrap">
+
+    <div class="profile-hero">
+      <div class="ph-avatar">MC</div>
+      <div class="ph-info">
+        <div class="ph-name">Ma. Myra Caparos</div>
+        <div class="ph-role">Legal Document Officer</div>
+        <div class="ph-dept">Legal Affairs Office — Bicol University</div>
+        <div class="ph-tags">
+          <span class="ph-tag active-tag">● Active</span>
+          <span class="ph-tag">Document Officer</span>
+          <span class="ph-tag">Admin</span>
+          <span class="ph-tag">Bicol University</span>
+        </div>
+      </div>
+      <div class="ph-actions">
+        <button class="ph-btn primary"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit Profile</button>
+        <button class="ph-btn"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign Out</button>
+      </div>
+    </div>
+
+    <!-- Mini stats -->
+    <div class="stats-mini">
+      <div class="sm"><div class="smv">24</div><div class="sml">Documents Filed</div></div>
+      <div class="sm"><div class="smv" style="color:#10b981">18</div><div class="sml">Notes Resolved</div></div>
+      <div class="sm"><div class="smv" style="color:var(--gold)">3</div><div class="sml">Pending Actions</div></div>
+    </div>
+
+    <div class="profile-grid">
+      <!-- Personal Info -->
+      <div class="pcard">
+        <div class="pcardhead"><div class="dot"></div><span>Personal Information</span></div>
+        <div class="pcardbody">
+          <div class="fg">
+            <div class="pfld"><label>First Name</label><input type="text" value="Ma. Myra"></div>
+            <div class="pfld"><label>Last Name</label><input type="text" value="Caparos"></div>
+          </div>
+          <div class="pfld"><label>Email Address</label><input type="email" value="mmcaparos@bicol-u.edu.ph"></div>
+          <div class="pfld"><label>Contact Number</label><input type="text" value="+63 912 345 6789"></div>
+        </div>
+        <div class="save-profile-row">
+          <button class="btn-spc">Cancel</button>
+          <button class="btn-sp">Save Changes</button>
+        </div>
+      </div>
+
+      <!-- Position Info -->
+      <div class="pcard">
+        <div class="pcardhead"><div class="dot"></div><span>Position &amp; Office</span></div>
+        <div class="pcardbody">
+          <div class="pfld"><label>Position / Title</label><input type="text" value="Legal Document Officer I" readonly style="background:#f0f4f8;color:var(--bud);font-weight:600"></div>
+          <div class="pfld"><label>Office / Department</label><input type="text" value="Legal Affairs Office" readonly style="background:#f0f4f8;color:var(--bud);font-weight:600"></div>
+          <div class="pfld"><label>Role in System</label>
+            <select>
+              <option selected>Document Officer</option>
+              <option>Administrator</option>
+              <option>Viewer</option>
+              <option>Legal Counsel</option>
+            </select>
+          </div>
+          <div class="pfld"><label>Employee ID</label><input type="text" value="BU-LAO-0042" readonly style="background:#f0f4f8;color:var(--bud)"></div>
+        </div>
+        <div class="save-profile-row">
+          <button class="btn-spc">Cancel</button>
+          <button class="btn-sp">Save Changes</button>
+        </div>
+      </div>
+
+      <!-- Change Password -->
+      <div class="pcard pcard-full">
+        <div class="pcardhead"><div class="dot"></div><span>Change Password</span></div>
+        <div class="pcardbody">
+          <div class="fg3">
+            <div class="pfld"><label>Current Password</label><input type="password" placeholder="Enter current password"></div>
+            <div class="pfld"><label>New Password</label><input type="password" placeholder="Enter new password"></div>
+            <div class="pfld"><label>Confirm New Password</label><input type="password" placeholder="Confirm new password"></div>
+          </div>
+        </div>
+        <div class="save-profile-row">
+          <button class="btn-spc">Cancel</button>
+          <button class="btn-sp">Update Password</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     NOTE ACTION MODAL
+══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="note-modal-overlay">
+  <div class="modal">
+    <div class="modal-top">
+      <div class="mico"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+      <h3>Note Action</h3>
+      <button class="mclose" onclick="closeNoteModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-note-preview">
+        <div class="mnp-hdr">
+          <div class="mnp-av">AS</div>
+          <span class="mnp-author">Atty. Santos</span>
+          <span class="nts" style="font-size:10px;color:var(--muted);font-family:sans-serif;margin-left:auto">Apr 19, 09:15</span>
+        </div>
+        <div class="mnp-text">Initial review complete. Will coordinate with DOST counterpart legal team for IP clause alignment before May 2 deadline.</div>
+      </div>
+
+      <div>
+        <div class="modal-label">Select Action</div>
+        <div class="modal-options">
+          <div class="mo" id="mo-check" onclick="selectAction('check')">
+            <div class="mo-ico check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="mo-info">
+              <div class="mo-title">Mark as Done / Actioned</div>
+              <div class="mo-desc">Confirm that this note has been acted upon. It will be marked as resolved with your name and timestamp.</div>
+            </div>
+          </div>
+          <div class="mo" id="mo-del" onclick="selectAction('delete')">
+            <div class="mo-ico del"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></div>
+            <div class="mo-info">
+              <div class="mo-title">Delete Note</div>
+              <div class="mo-desc">Remove this note from the document. This action will be logged in the audit log for audit purposes.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-remark">
+        <label>Remark / Reason <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <textarea id="modal-remark-text" placeholder="Add a remark or reason for this action…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="mbtn-cancel" onclick="closeNoteModal()">Cancel</button>
+      <button class="mbtn-confirm-check" id="mbtn-check" onclick="confirmNoteAction()"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Confirm — Mark Done</button>
+      <button class="mbtn-confirm-del" id="mbtn-del" onclick="confirmNoteAction()"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>Confirm — Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Bicol University — Legal Affairs Office &nbsp;·&nbsp; <span>Document Control System</span> &nbsp;·&nbsp; v2.5 &nbsp;·&nbsp; Confidential</div>
+
+<script>
+// ── SCREEN NAVIGATION ──
+function goScreen(id, btn) {
+  document.body.classList.remove('portal-mode');
+  // hide profile-tab unless going to profile/editprofile
+  if(id !== 'profile' && id !== 'editprofile'){
+    const pt=document.getElementById('profile-tab'); if(pt) pt.style.display='none';
+  }
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.snav').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  closeUserPop();
+}
+
+function openDoc() {
+  const editTab = document.querySelectorAll('.snav')[1];
+  goScreen('edit', editTab);
+}
+
+// ── TABS ──
+function switchTab(id, btn) {
+  document.querySelectorAll('.epanel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── USER POPUP ──
+function toggleUserPop() {
+  const pop = document.getElementById('upop');
+  const ov = document.getElementById('upop-overlay');
+  const isShown = pop.style.display !== 'none';
+  pop.style.display = isShown ? 'none' : 'block';
+  ov.classList.toggle('show', !isShown);
+}
+function closeUserPop() {
+  document.getElementById('upop').style.display = 'none';
+  document.getElementById('upop-overlay').classList.remove('show');
+}
+function goProfile() {
+  closeUserPop();
+  const ptab = document.getElementById('profile-tab');
+  ptab.style.display = 'block';
+  goScreen('profile', ptab);
+}
+
+// ── NOTE MODAL ──
+let currentAction = 'check';
+function openNoteModal(action) {
+  currentAction = action;
+  document.getElementById('note-modal-overlay').classList.remove('hidden');
+  selectAction(action);
+}
+function closeNoteModal() {
+  document.getElementById('note-modal-overlay').classList.add('hidden');
+  document.getElementById('modal-remark-text').value = '';
+  // reset selection
+  document.getElementById('mo-check').className = 'mo';
+  document.getElementById('mo-del').className = 'mo';
+}
+function selectAction(action) {
+  currentAction = action;
+  document.getElementById('mo-check').className = 'mo' + (action === 'check' ? ' selected-check' : '');
+  document.getElementById('mo-del').className = 'mo' + (action === 'delete' ? ' selected-del' : '');
+  document.getElementById('mbtn-check').style.display = action === 'check' ? 'inline-flex' : 'none';
+  document.getElementById('mbtn-del').style.display = action === 'delete' ? 'inline-flex' : 'none';
+}
+function confirmNoteAction() {
+  const remark = document.getElementById('modal-remark-text').value;
+  const note3 = document.getElementById('note3');
+  if (currentAction === 'check') {
+    note3.className = 'ni nact';
+    note3.querySelector('.ntag').className = 'ntag ntg-done';
+    note3.querySelector('.ntag').textContent = '✓ Actioned by Ma. Myra Caparos — just now';
+    note3.querySelector('.note-actions').style.display = 'none';
+  } else {
+    note3.className = 'ni ndel';
+    note3.querySelector('.ntag').className = 'ntag ntg-del';
+    note3.querySelector('.ntag').textContent = '✕ Marked for deletion — just now';
+    note3.querySelector('.note-actions').style.display = 'none';
+  }
+  closeNoteModal();
+}
+
+// NOTIFICATION PANEL
+function toggleNotifPop(){
+  const pop=document.getElementById('npop');
+  const ov=document.getElementById('npop-overlay');
+  const isOpen=pop.classList.contains('show');
+  pop.classList.toggle('show',!isOpen);
+  ov.classList.toggle('show',!isOpen);
+  if(!isOpen) closeUserPop();
+}
+function closeNotifPop(){
+  document.getElementById('npop').classList.remove('show');
+  document.getElementById('npop-overlay').classList.remove('show');
+}
+function dismissNotif(e,id){
+  e.stopPropagation();
+  const el=document.getElementById(id);
+  if(el){ el.style.opacity='0'; el.style.transition='opacity .2s'; setTimeout(()=>{el.remove(); updateNotifCount();},200); }
+}
+function markAllRead(){
+  document.querySelectorAll('.nit.unread').forEach(n=>{
+    n.classList.remove('unread');
+    const dot=n.querySelector('.nit-unread-dot');
+    if(dot) dot.remove();
+  });
+  updateNotifCount();
+}
+function updateNotifCount(){
+  const unread=document.querySelectorAll('.nit.unread').length;
+  const badge=document.getElementById('notif-badge');
+  const badge2=document.getElementById('npop-badge-count');
+  const cnt=document.getElementById('npop-cnt');
+  if(unread===0){badge.style.display='none';}
+  else{badge.style.display='flex';badge.textContent=unread;}
+  if(badge2) badge2.textContent=unread+' unread';
+  if(cnt) cnt.textContent=unread+' unread notification'+(unread!==1?'s':'');
+}
+function switchNotifTab(tab,btn){
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const items=document.querySelectorAll('.nit');
+  items.forEach(it=>{
+    if(tab==='all') it.style.display='';
+    else if(tab==='unread') it.style.display=it.classList.contains('unread')?'':'none';
+    else if(tab==='actions'){
+      const hasAction=it.querySelector('.nt-action,.nt-urgent');
+      it.style.display=hasAction?'':'none';
+    }
+  });
+}
+
+
+
+
+// ASSIGN MODAL
+let asnSelectedStaff = 'Atty. Reyes';
+let asnSelectedIdx = 0;
+
+function openAsnModal(ref, title){
+  document.getElementById('asn-doc-title').textContent = title;
+  document.getElementById('asn-doc-ref').textContent = ref;
+  // reset
+  document.getElementById('asn-form-body').style.display = 'flex';
+  document.getElementById('asn-success').style.display = 'none';
+  document.getElementById('asn-footer').style.display = 'flex';
+  // reset selection to first card
+  selectStaff(0, 'Atty. Reyes');
+  document.getElementById('asn-modal-overlay').classList.remove('hidden');
+}
+function closeAsnModal(){
+  document.getElementById('asn-modal-overlay').classList.add('hidden');
+}
+function selectStaff(idx, name){
+  // don't allow selecting busy card (idx 3)
+  if(idx === 3) return;
+  asnSelectedStaff = name;
+  asnSelectedIdx = idx;
+  for(let i = 0; i <= 3; i++){
+    const card = document.getElementById('asn-card-' + i);
+    if(card && !card.classList.contains('busy')){
+      card.classList.toggle('selected', i === idx);
+    }
+  }
+}
+function confirmAssign(){
+  document.getElementById('asns-who-display').textContent = asnSelectedStaff;
+  document.getElementById('asns-who-display2').textContent = asnSelectedStaff;
+  document.getElementById('asn-form-body').style.display = 'none';
+  document.getElementById('asn-footer').style.display = 'none';
+  document.getElementById('asn-success').style.display = 'flex';
+}
+
+// PENDING REVIEW SCREEN
+function goPending(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.snav').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-pending').classList.add('active');
+}
+
+// FORWARD MODAL
+let fwdIdCounter = 280;
+function openForwardModal(ref, title){
+  document.getElementById('fwd-ref-no').textContent = 'Ref: ' + ref;
+  document.getElementById('fwd-doc-name').textContent = title;
+  document.getElementById('fwd-doc-id').textContent = 'LAO-' + fwdIdCounter;
+  document.getElementById('fwd-form-body').style.display = 'flex';
+  document.getElementById('fwd-success').style.display = 'none';
+  document.getElementById('fwd-footer').style.display = 'flex';
+  document.getElementById('fwd-modal-overlay').classList.remove('hidden');
+  updateFolderPreview();
+}
+function closeFwdModal(){
+  document.getElementById('fwd-modal-overlay').classList.add('hidden');
+}
+function regenId(){
+  fwdIdCounter++;
+  document.getElementById('fwd-doc-id').textContent = 'LAO-' + fwdIdCounter;
+}
+function updateFolderPreview(){
+  const dateVal = document.getElementById('fwd-date-received').value;
+  if(!dateVal) return;
+  const d = new Date(dateVal + 'T12:00:00');
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const label = months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  document.getElementById('fwd-folder-label').textContent = '\uD83D\uDCC1 Received: ' + label;
+  const today = new Date();
+  const isToday = d.toDateString() === today.toDateString();
+  const badge = document.getElementById('fwd-new-badge');
+  badge.textContent = isToday ? 'Today' : 'Existing Folder';
+  badge.style.background = isToday ? 'var(--bu)' : '#10b981';
+}
+function confirmForward(){
+  const dateVal = document.getElementById('fwd-date-received').value;
+  const d = new Date(dateVal + 'T12:00:00');
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dateStr = months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  const assign = document.getElementById('fwd-assign').value;
+  const docId = document.getElementById('fwd-doc-id').textContent;
+  document.getElementById('fwds-id-display').textContent = docId;
+  document.getElementById('fwds-date-display').textContent = dateStr;
+  document.getElementById('fwds-assign-display').textContent = assign;
+  document.getElementById('fwd-form-body').style.display = 'none';
+  document.getElementById('fwd-footer').style.display = 'none';
+  document.getElementById('fwd-success').style.display = 'flex';
+}
+
+// EDIT PROFILE
+function goEditProfile(){
+  closeUserPop();
+  const ptab = document.getElementById('profile-tab');
+  ptab.style.display = 'block';
+  ptab.textContent = '✏ Edit Profile';
+  goScreen('editprofile', ptab);
+}
+function saveProfile(){
+  const btn = event.target.closest('.ep-btn-save');
+  if(btn){ btn.textContent = '✓ Saved!'; btn.style.background='#10b981'; setTimeout(()=>{ btn.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round"><polyline points=\'20 6 9 17 4 12\'/></svg> Save'; btn.style.background=''; }, 2000); }
+}
+function checkStrength(inp){
+  const v = inp.value;
+  const bar = document.getElementById('strength-bar');
+  const hint = document.getElementById('strength-hint');
+  if(!bar) return;
+  let score = 0;
+  if(v.length >= 8) score++;
+  if(/[A-Z]/.test(v)) score++;
+  if(/[0-9]/.test(v)) score++;
+  if(/[^A-Za-z0-9]/.test(v)) score++;
+  const cfg = [
+    {w:'0%',bg:'transparent',t:''},
+    {w:'25%',bg:'#ef4444',t:'Weak'},
+    {w:'50%',bg:'#f59e0b',t:'Fair'},
+    {w:'75%',bg:'#3b82f6',t:'Good'},
+    {w:'100%',bg:'#10b981',t:'Strong'}
+  ][score];
+  bar.style.width = cfg.w; bar.style.background = cfg.bg;
+  hint.textContent = cfg.t || 'Use 8+ characters with letters, numbers & symbols';
+}
+
+// CLIENT PORTAL
+function goPortal(){
+  const ptab = document.getElementById('profile-tab');
+  if(ptab) ptab.style.display = 'none';
+  document.querySelectorAll('.snav').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-portal').classList.add('active');
+  document.body.classList.add('portal-mode');
+  closeUserPop();
+}
+function simulateAttach(){
+  document.getElementById('portal-attached').style.display = 'flex';
+}
+function submitPortal(){
+  document.getElementById('portal-form-body').style.display = 'none';
+  document.getElementById('portal-success').style.display = 'flex';
+}
+function resetPortal(){
+  document.getElementById('portal-form-body').style.display = 'flex';
+  document.getElementById('portal-success').style.display = 'none';
+}
+
+// Pre-select check on modal open
+selectAction('check');
+</script>
+
+<!-- ════════════ SCREEN: EDIT PROFILE ════════════ -->
+<div class="screen" id="screen-editprofile">
+  <div class="bc">
+    <a href="#" onclick="goScreen('tracker',document.querySelectorAll('.snav')[0]);return false">Dashboard</a>
+    <span class="bcsep"> › </span>
+    <a href="#" onclick="goProfile();return false">My Profile</a>
+    <span class="bcsep"> › </span>
+    <span class="bccur">Edit Profile</span>
+  </div>
+  <div style="padding:1.6rem 2rem;max-width:960px;margin:0 auto">
+
+    <!-- HERO -->
+    <div class="ep-hero">
+      <div class="ep-avatar-wrap">
+        <div class="ep-avatar">MC</div>
+        <div class="ep-avatar-change"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      </div>
+      <div class="ep-hero-info">
+        <div class="ep-hero-name">Ma. Myra Caparos</div>
+        <div class="ep-hero-role">Legal Document Officer</div>
+        <div class="ep-hero-dept">Legal Affairs Office — Bicol University</div>
+        <div class="ep-hero-hint">Click the camera icon to change your profile photo</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="ep-btn-save" onclick="saveProfile()">
+          <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save Changes
+        </button>
+        <button class="ep-btn-cancel" onclick="goProfile()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="ep-grid">
+
+      <!-- Personal Info -->
+      <div class="ep-card">
+        <div class="ep-head"><div class="dot"></div><span>Personal Information</span></div>
+        <div class="ep-body">
+          <div class="ep-row">
+            <div class="ep-fld"><label>First Name</label><input type="text" value="Ma. Myra"></div>
+            <div class="ep-fld"><label>Last Name</label><input type="text" value="Caparos"></div>
+          </div>
+          <div class="ep-fld"><label>Email Address</label><input type="email" value="mmcaparos@bicol-u.edu.ph"></div>
+          <div class="ep-row">
+            <div class="ep-fld"><label>Contact Number</label><input type="tel" value="+63 912 345 6789"></div>
+            <div class="ep-fld"><label>Gender</label>
+              <select><option>Female</option><option>Male</option><option>Prefer not to say</option></select>
+            </div>
+          </div>
+          <div class="ep-fld"><label>Address</label><textarea>Legazpi City, Albay, Bicol Region, Philippines</textarea></div>
+        </div>
+        <div class="ep-footer">
+          <button class="ep-btn-cancel" onclick="goProfile()">Cancel</button>
+          <button class="ep-btn-save" onclick="saveProfile()"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Save</button>
+        </div>
+      </div>
+
+      <!-- Position Info -->
+      <div class="ep-card">
+        <div class="ep-head"><div class="dot"></div><span>Position &amp; Office</span></div>
+        <div class="ep-body">
+          <div class="ep-fld"><label>Position / Title</label><input type="text" value="Legal Document Officer I" readonly></div>
+          <div class="ep-fld"><label>Office / Department</label><input type="text" value="Legal Affairs Office" readonly></div>
+          <div class="ep-fld"><label>Role in System</label>
+            <select><option selected>Document Officer</option><option>Administrator</option><option>Viewer</option><option>Legal Counsel</option></select>
+          </div>
+          <div class="ep-fld"><label>Employee ID</label><input type="text" value="BU-LAO-0042" readonly></div>
+          <div class="ep-fld"><label>Date Hired</label><input type="date" value="2020-06-15"></div>
+        </div>
+        <div class="ep-footer">
+          <button class="ep-btn-cancel" onclick="goProfile()">Cancel</button>
+          <button class="ep-btn-save" onclick="saveProfile()"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Save</button>
+        </div>
+      </div>
+
+      <!-- Change Password -->
+      <div class="ep-card">
+        <div class="ep-head"><div class="dot"></div><span>Change Password</span></div>
+        <div class="ep-body">
+          <div class="ep-fld"><label>Current Password</label><input type="password" placeholder="Enter current password"></div>
+          <div class="ep-fld"><label>New Password</label>
+            <input type="password" placeholder="Enter new password" oninput="checkStrength(this)">
+            <div class="ep-pass-strength"><div class="bar" id="strength-bar"></div></div>
+            <div class="ep-pass-hint" id="strength-hint">Use 8+ characters with letters, numbers &amp; symbols</div>
+          </div>
+          <div class="ep-fld"><label>Confirm New Password</label><input type="password" placeholder="Confirm new password"></div>
+        </div>
+        <div class="ep-footer">
+          <button class="ep-btn-cancel">Clear</button>
+          <button class="ep-btn-save"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Update Password</button>
+        </div>
+      </div>
+
+      <!-- Notification Preferences -->
+      <div class="ep-card">
+        <div class="ep-head"><div class="dot"></div><span>Notification Preferences</span></div>
+        <div class="ep-body">
+          <div class="ep-notify-row">
+            <div><div class="ep-notify-label">Deadline Reminders</div><div class="ep-notify-sub">Get alerts when reviews are due</div></div>
+            <div class="ep-toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="ep-notify-row">
+            <div><div class="ep-notify-label">Note Actions</div><div class="ep-notify-sub">Notify when a note is actioned</div></div>
+            <div class="ep-toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="ep-notify-row">
+            <div><div class="ep-notify-label">New Document Assigned</div><div class="ep-notify-sub">Alert when a document is assigned to you</div></div>
+            <div class="ep-toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="ep-notify-row">
+            <div><div class="ep-notify-label">Client Uploads</div><div class="ep-notify-sub">Notify when a client submits a document</div></div>
+            <div class="ep-toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="ep-notify-row">
+            <div><div class="ep-notify-label">System Announcements</div><div class="ep-notify-sub">General system updates and notices</div></div>
+            <div class="ep-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+        <div class="ep-footer">
+          <button class="ep-btn-cancel">Reset to Default</button>
+          <button class="ep-btn-save"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Save Preferences</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ SCREEN: CLIENT UPLOAD PORTAL ════════════ -->
+<div class="screen" id="screen-portal">
+  <div class="portal-page">
+
+    <!-- Standalone portal header (replaces admin header) -->
+    <div style="width:100%;max-width:700px;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:38px;height:38px;background:var(--bud);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--gold);font-family:serif;border:2px solid rgba(0,48,96,.25);flex-shrink:0">BU</div>
+        <div>
+          <div style="font-size:14.5px;font-weight:700;color:var(--bud);font-family:'Source Sans 3',sans-serif;text-transform:uppercase;letter-spacing:.4px">Bicol University</div>
+          <div style="font-size:10px;color:var(--muted);font-family:sans-serif;letter-spacing:.6px;text-transform:uppercase;margin-top:1px">Legal Affairs Office</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);font-family:sans-serif;background:#fff;border:1px solid var(--line);padding:5px 11px;border-radius:6px">
+        <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--success);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Secure Document Submission Portal
+      </div>
+    </div>
+
+    <div class="portal-card">
+      <div class="portal-card-head">
+        <h1>Submit Your Document</h1>
+        <p>Use this secure form to submit your legal documents to the Bicol University Legal Affairs Office. Your file will be placed in the Pending Documents folder and reviewed by our legal staff.</p>
+        <div class="portal-folder-select">
+          <div class="pfs-ico"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+          <div class="pfs-label">Destination Folder</div>
+          <div class="pfs-value">📁 Pending Documents — Legal Affairs Office</div>
+        </div>
+      </div>
+
+      <div class="portal-body" id="portal-form-body">
+
+        <div class="portal-section">
+          <div class="portal-label">Submitter Information</div>
+          <div class="portal-input-row">
+            <input class="portal-input" type="text" placeholder="Full Name *" required>
+            <input class="portal-input" type="email" placeholder="Email Address *" required>
+          </div>
+          <div class="portal-input-row">
+            <input class="portal-input" type="tel" placeholder="Contact Number *">
+            <input class="portal-input" type="text" placeholder="Organization / Office (if applicable)">
+          </div>
+        </div>
+
+        <div class="portal-section">
+          <div class="portal-label">Document Details</div>
+          <input class="portal-input" type="text" placeholder="Document Title / Subject *" required>
+          <div class="portal-input-row">
+            <select class="portal-select">
+              <option value="">Document Type *</option>
+              <option>Contract / MOA / MOU</option>
+              <option>Legal Query</option>
+              <option>Complaint / Grievance</option>
+              <option>Request for Legal Opinion</option>
+              <option>Administrative Concern</option>
+              <option>Certificate Request</option>
+              <option>Other</option>
+            </select>
+            <input class="portal-input" type="date" title="Date of Document">
+          </div>
+          <textarea class="portal-textarea" placeholder="Brief description of the document and its purpose…"></textarea>
+        </div>
+
+        <div class="portal-section">
+          <div class="portal-label">Attach Document <span class="req">*</span></div>
+          <div class="portal-dropzone" onclick="simulateAttach()">
+            <div class="pdz-ico">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div class="pdz-title">Drop your file here or browse</div>
+            <div class="pdz-sub">Accepts PDF, JPG, PNG, TIFF &nbsp;·&nbsp; Maximum 20 MB</div>
+            <button class="pdz-btn">Browse Files</button>
+          </div>
+          <div class="portal-file-attached" id="portal-attached" style="display:none">
+            <div class="pfa-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+            <div style="flex:1">
+              <div class="pfa-name">MOA_Submission_Client.pdf</div>
+              <div class="pfa-size">1.8 MB · Ready to submit</div>
+            </div>
+            <button class="pfa-rm" onclick="document.getElementById('portal-attached').style.display='none'">✕</button>
+          </div>
+        </div>
+
+        <div class="portal-info-box">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p>Your submission will be received by the BU Legal Affairs Office and assigned a reference number. You will be notified via email once your document has been reviewed. <strong>Do not submit confidential passwords or financial account details through this form.</strong></p>
+        </div>
+
+        <div class="portal-submit-row">
+          <button class="portal-btn-clear">Clear Form</button>
+          <button class="portal-btn-submit" onclick="submitPortal()">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Submit Document
+          </button>
+        </div>
+
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="portal-success" id="portal-success">
+        <div class="ps-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="ps-title">Document Submitted Successfully!</div>
+        <div class="ps-ref">Reference No: BU-LAO-CLIENT-2025-0047</div>
+        <div class="ps-msg">Your document has been received and placed in the Pending Documents folder of the BU Legal Affairs Office. Our legal staff will review your submission and contact you within 3–5 working days.</div>
+        <button class="ps-back" onclick="resetPortal()">Submit Another Document</button>
+      </div>
+
+    </div>
+
+    <div class="portal-footer">
+      <strong><span>Bicol University — Legal Affairs Office</span></strong><br>
+      For inquiries: legalaffairs@bicol-u.edu.ph &nbsp;·&nbsp; (052) 480-5045<br>
+      This portal is intended for official document submissions only.
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════ SCREEN: CLIENT SUBMISSIONS (ADMIN) ════════════ -->
+<div class="screen" id="screen-clientsub">
+  <div class="bc">
+    <a href="#" onclick="goScreen('tracker',document.querySelectorAll('.snav')[0]);return false">Dashboard</a>
+    <span class="bcsep"> › </span>
+    <span class="bccur">Client Submissions — Pending Review</span>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="cs-toolbar">
+    <div class="tbg">
+      <button class="tbb prim">
+        <svg viewBox="0 0 24 24" style="stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="20 6 9 17 4 12"/></svg>
+        Mark All Reviewed
+      </button>
+    </div>
+    <div class="tbdiv"></div>
+    <div class="tbg">
+      <button class="tbb">
+        <svg viewBox="0 0 24 24" style="stroke:var(--mid);fill:none;stroke-width:2;stroke-linecap:round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/></svg>
+        All Fields
+      </button>
+    </div>
+    <div class="tbdiv"></div>
+    <div class="srch" style="margin-left:auto">
+      <div class="srch-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <input type="text" placeholder="Search by name, reference, or document…">
+      <select>
+        <option>All Status</option>
+        <option>New — Unreviewed</option>
+        <option>Pending</option>
+        <option>For Review</option>
+      </select>
+      <select>
+        <option>All Document Types</option>
+        <option>Contract / MOA / MOU</option>
+        <option>Legal Query</option>
+        <option>Complaint / Grievance</option>
+        <option>Request for Legal Opinion</option>
+        <option>Administrative Concern</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="tracker-main">
+
+    <!-- STATS -->
+    <div class="cs-stat-row">
+      <div class="cs-stat cs-b"><div class="sl">Total Submissions</div><div class="sv">11</div><div class="ss">All client uploads</div></div>
+      <div class="cs-stat cs-r"><div class="sl">New — Unreviewed</div><div class="sv">4</div><div class="ss">Needs immediate action</div></div>
+      <div class="cs-stat cs-w"><div class="sl">Pending / For Review</div><div class="sv">5</div><div class="ss">Assigned to staff</div></div>
+      <div class="cs-stat cs-g"><div class="sl">Processed</div><div class="sv">2</div><div class="ss">Moved to tracker</div></div>
+    </div>
+
+    <!-- PORTAL LINK BANNER -->
+    <div class="cs-banner">
+      <div class="cs-banner-ico"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
+      <div class="cs-banner-info">
+        <h3>Client Upload Portal Link</h3>
+        <p>Share this link with clients to allow them to submit documents directly to the Pending folder.</p>
+      </div>
+      <div class="cs-banner-right">
+        <div style="font-size:11.5px;color:rgba(255,255,255,.55);font-family:sans-serif;background:rgba(255,255,255,.08);padding:6px 12px;border-radius:5px;border:0.5px solid rgba(255,255,255,.15)">https://bu-lao.edu.ph/submit</div>
+        <button class="cs-copy-link" onclick="this.textContent='✓ Copied!'"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy Link</button>
+      </div>
+    </div>
+
+    <!-- COL HEADERS -->
+    <div class="cs-col-head">
+      <span>Ref No.</span><span>Client</span><span>Document</span><span>Type</span><span>Status</span><span>Submitted</span><span>Action</span>
+    </div>
+
+    <!-- ── APRIL 26 GROUP ── -->
+    <div class="cs-dg">
+      <div class="cs-fhdr">
+        <div class="cs-fhdr-ico"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+        <h3>Received: April 26, 2025</h3><span class="fsub">&nbsp;(Today)</span>
+        <span class="cs-fcnt" style="margin-left:7px">3 submissions</span>
+        <span class="cs-client-badge">Client Uploads</span>
+        <div class="cs-fhdr-right">
+          <span class="cs-pending-count">⚠ 2 new — unreviewed</span>
+        </div>
+      </div>
+      <div class="cs-list">
+
+        <!-- Row 1: New unreviewed -->
+        <div class="cs-row new-submission">
+          <div class="cs-ref"><span class="cs-new-dot"></span>C-047</div>
+          <div class="cs-submitter">
+            <div class="cs-submitter-name">Juan dela Cruz</div>
+            <div class="cs-submitter-org">Sorsogon City LGU</div>
+          </div>
+          <div class="cs-doc-col">
+            <div class="cs-doc-title">MOA — Joint Community Extension Program 2025</div>
+            <div class="cs-doc-type">Contract / MOA / MOU &nbsp;·&nbsp; MOA_Extension_2025.pdf · 2.1 MB</div>
+          </div>
+          <div><span class="tp tc" style="font-size:9.5px">Contract / MOA</span></div>
+          <div><span class="csp csp-new"><span class="csp-dot"></span>New</span></div>
+          <div class="cs-time-new">Today 09:14 AM</div>
+          <div class="cs-actions">
+            <button class="cs-btn-review" onclick="goPending()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button>
+          </div>
+        </div>
+
+        <!-- Row 2: New unreviewed -->
+        <div class="cs-row new-submission">
+          <div class="cs-ref"><span class="cs-new-dot"></span>C-046</div>
+          <div class="cs-submitter">
+            <div class="cs-submitter-name">Maria Santos</div>
+            <div class="cs-submitter-org">Individual Client</div>
+          </div>
+          <div class="cs-doc-col">
+            <div class="cs-doc-title">Request for Legal Opinion — Property Dispute</div>
+            <div class="cs-doc-type">Request for Legal Opinion &nbsp;·&nbsp; LegalOpinion_Request.pdf · 1.3 MB</div>
+          </div>
+          <div><span class="tp tl" style="font-size:9.5px">Legal Opinion</span></div>
+          <div><span class="csp csp-new"><span class="csp-dot"></span>New</span></div>
+          <div class="cs-time-new">Today 08:47 AM</div>
+          <div class="cs-actions">
+            <button class="cs-btn-review" onclick="goPending()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button>
+          </div>
+        </div>
+
+        <!-- Row 3: Pending -->
+        <div class="cs-row">
+          <div class="cs-ref">C-045</div>
+          <div class="cs-submitter">
+            <div class="cs-submitter-name">Rolando Abella</div>
+            <div class="cs-submitter-org">BU Faculty Member</div>
+          </div>
+          <div class="cs-doc-col">
+            <div class="cs-doc-title">Administrative Concern — Faculty Promotion Appeal</div>
+            <div class="cs-doc-type">Administrative Concern &nbsp;·&nbsp; Promotion_Appeal.pdf · 0.8 MB</div>
+          </div>
+          <div><span class="tp ta" style="font-size:9.5px">Admin. Concern</span></div>
+          <div><span class="csp csp-pending"><span class="csp-dot"></span>Pending</span></div>
+          <div class="cs-time">Today 07:55 AM</div>
+          <div class="cs-actions">
+            <button class="cs-btn-review" onclick="goPending()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── APRIL 25 GROUP ── -->
+    <div class="cs-dg">
+      <div class="cs-fhdr">
+        <div class="cs-fhdr-ico"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+        <h3>Received: April 25, 2025</h3>
+        <span class="cs-fcnt" style="margin-left:7px">2 submissions</span>
+        <span class="cs-client-badge">Client Uploads</span>
+        <div class="cs-fhdr-right">
+          <span class="cs-pending-count">⚠ 2 new — unreviewed</span>
+        </div>
+      </div>
+      <div class="cs-list">
+
+        <div class="cs-row new-submission">
+          <div class="cs-ref"><span class="cs-new-dot"></span>C-044</div>
+          <div class="cs-submitter">
+            <div class="cs-submitter-name">Lucia Fernandez</div>
+            <div class="cs-submitter-org">Legazpi City LGU</div>
+          </div>
+          <div class="cs-doc-col">
+            <div class="cs-doc-title">Complaint — Unfair Labor Practice</div>
+            <div class="cs-doc-type">Complaint / Grievance &nbsp;·&nbsp; Complaint_Labor.pdf · 1.6 MB</div>
+          </div>
+          <div><span class="tp td" style="font-size:9.5px">Complaint</span></div>
+          <div><span class="csp csp-new"><span class="csp-dot"></span>New</span></div>
+          <div class="cs-time-new">Apr 25, 04:52 PM</div>
+          <div class="cs-actions">
+            <button class="cs-btn-review" onclick="goPending()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button>
+          </div>
+        </div>
+
+        <div class="cs-row">
+          <div class="cs-ref">C-043</div>
+          <div class="cs-submitter">
+            <div class="cs-submitter-name">Ernesto Magana</div>
+            <div class="cs-submitter-org">BU Student — CAS</div>
+          </div>
+          <div class="cs-doc-col">
+            <div class="cs-doc-title">Certificate Request — Good Moral Character</div>
+            <div class="cs-doc-type">Certificate Request &nbsp;·&nbsp; Cert_Request_Form.pdf · 0.5 MB</div>
+          </div>
+          <div><span class="tp tn" style="font-size:9.5px">Certificate</span></div>
+          <div><span class="csp csp-pending"><span class="csp-dot"></span>Pending</span></div>
+          <div class="cs-time">Apr 25, 02:10 PM</div>
+          <div class="cs-actions">
+            <button class="cs-btn-review" onclick="goPending()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── APRIL 24 GROUP ── -->
+    <div class="cs-dg">
+      <div class="cs-fhdr">
+        <div class="cs-fhdr-ico"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+        <h3>Received: April 24, 2025</h3>
+        <span class="cs-fcnt" style="margin-left:7px">3 submissions</span>
+        <span class="cs-client-badge">Client Uploads</span>
+        <div class="cs-fhdr-right">
+          <span style="font-size:10px;color:rgba(255,255,255,.5);font-family:sans-serif">All in review</span>
+        </div>
+      </div>
+      <div class="cs-list">
+
+        <div class="cs-row">
+          <div class="cs-ref">C-042</div>
+          <div class="cs-submitter">
+            <div class="cs-submitter-name">Arvin Reyes</div>
+            <div class="cs-submitter-org">Individual Client</div>
+          </div>
+          <div class="cs-doc-col">
+            <div class="cs-doc-title">Legal Query — Land Title Verification</div>
+            <div class="cs-doc-type">Legal Query &nbsp;·&nbsp; LandTitle_Query.pdf · 3.2 MB</div>
+          </div>
+          <div><span class="tp tl" style="font-size:9.5px">Legal Query</span></div>
+          <div><span class="csp csp-review"><span class="csp-dot"></span>For Review</span></div>
+          <div class="cs-time">Apr 24, 03:40 PM</div>
+          <div class="cs-actions">
+            <button class="cs-btn-review" onclick="goPending()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button>
+          </div>
+        </div>
+
+        <div class="cs-row">
+          <div class="cs-ref">C-041</div>
+          <div class="cs-submitter">
+            <div class="cs-submitter-name">Carla Domingo</div>
+            <div class="cs-submitter-org">NGO — Bicol Advocates</div>
+          </div>
+          <div class="cs-doc-col">
+            <div class="cs-doc-title">MOU — Scholarship Partnership Agreement</div>
+            <div class="cs-doc-type">Contract / MOA / MOU &nbsp;·&nbsp; Scholarship_MOU.pdf · 1.9 MB</div>
+          </div>
+          <div><span class="tp tc" style="font-size:9.5px">Contract / MOA</span></div>
+          <div><span class="csp csp-review"><span class="csp-dot"></span>For Review</span></div>
+          <div class="cs-time">Apr 24, 11:25 AM</div>
+          <div class="cs-actions">
+            <button class="cs-btn-review" onclick="goPending()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button>
+          </div>
+        </div>
+
+        <div class="cs-row">
+          <div class="cs-ref">C-040</div>
+          <div class="cs-submitter">
+            <div class="cs-submitter-name">Dennis Villanueva</div>
+            <div class="cs-submitter-org">BU Admin Staff</div>
+          </div>
+          <div class="cs-doc-col">
+            <div class="cs-doc-title">Administrative Concern — Work Schedule Dispute</div>
+            <div class="cs-doc-type">Administrative Concern &nbsp;·&nbsp; Schedule_Dispute.pdf · 0.7 MB</div>
+          </div>
+          <div><span class="tp ta" style="font-size:9.5px">Admin. Concern</span></div>
+          <div><span class="csp csp-pending"><span class="csp-dot"></span>Pending</span></div>
+          <div class="cs-time">Apr 24, 09:08 AM</div>
+          <div class="cs-actions">
+            <button class="cs-btn-review" onclick="goPending()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── APRIL 23 GROUP — Processed ── -->
+    <div class="cs-dg">
+      <div class="cs-fhdr" style="background:var(--mid)">
+        <div class="cs-fhdr-ico"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+        <h3>Received: April 23, 2025</h3>
+        <span class="cs-fcnt" style="margin-left:7px">3 submissions</span>
+        <span class="cs-client-badge" style="color:#86efac">Client Uploads</span>
+        <div class="cs-fhdr-right">
+          <span style="font-size:10px;color:rgba(255,255,255,.5);font-family:sans-serif;background:rgba(16,185,129,.15);padding:2px 8px;border-radius:4px;border:0.5px solid rgba(16,185,129,.25)">✓ All processed</span>
+        </div>
+      </div>
+      <div class="cs-list" style="opacity:.72">
+        <div class="cs-row">
+          <div class="cs-ref">C-039</div>
+          <div class="cs-submitter"><div class="cs-submitter-name">Ana Bautista</div><div class="cs-submitter-org">Individual Client</div></div>
+          <div class="cs-doc-col"><div class="cs-doc-title">Complaint — Harassment in Workplace</div><div class="cs-doc-type">Complaint / Grievance &nbsp;·&nbsp; Harassment_Complaint.pdf</div></div>
+          <div><span class="tp tcf" style="font-size:9.5px">Complaint</span></div>
+          <div><span class="csp" style="background:#d1fae5;color:#065f46;border:1px solid #6ee7b7"><span class="csp-dot"></span>Processed</span></div>
+          <div class="cs-time">Apr 23, 10:22 AM</div>
+          <div class="cs-actions"></div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-ref">C-038</div>
+          <div class="cs-submitter"><div class="cs-submitter-name">Pedro Castillo</div><div class="cs-submitter-org">Tabaco City LGU</div></div>
+          <div class="cs-doc-col"><div class="cs-doc-title">MOA — Infrastructure Project Collaboration</div><div class="cs-doc-type">Contract / MOA / MOU &nbsp;·&nbsp; Infra_MOA.pdf</div></div>
+          <div><span class="tp tc" style="font-size:9.5px">Contract / MOA</span></div>
+          <div><span class="csp" style="background:#d1fae5;color:#065f46;border:1px solid #6ee7b7"><span class="csp-dot"></span>Processed</span></div>
+          <div class="cs-time">Apr 23, 08:45 AM</div>
+          <div class="cs-actions"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN: PENDING REVIEW (ADMIN)
+══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-pending">
+  <div class="bc">
+    <a href="#" onclick="goScreen('tracker',document.querySelectorAll('.snav')[0]);return false">Dashboard</a>
+    <span class="bcsep"> › </span>
+    <a href="#" onclick="goScreen('clientsub',document.querySelectorAll('.snav')[1]);return false">Client Submissions</a>
+    <span class="bcsep"> › </span>
+    <span class="bccur">📁 Pending Review Folder</span>
+  </div>
+
+  <div class="pr-wrap">
+
+    <!-- STATS -->
+    <div class="pr-stat-row">
+      <div class="cs-stat cs-r"><div class="sl">New — Unreviewed</div><div class="sv">4</div><div class="ss">Needs immediate action</div></div>
+      <div class="cs-stat cs-w"><div class="sl">Pending</div><div class="sv">3</div><div class="ss">Awaiting staff review</div></div>
+      <div class="cs-stat cs-b"><div class="sl">For Review</div><div class="sv">2</div><div class="ss">Assigned to staff</div></div>
+      <div class="cs-stat cs-g"><div class="sl">Forwarded to Tracker</div><div class="sv">2</div><div class="ss">Moved this week</div></div>
+    </div>
+
+    <!-- SECTION HEADER -->
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px;flex:1">
+        <div style="width:4px;height:18px;background:var(--gold);border-radius:2px;flex-shrink:0"></div>
+        <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--bud);font-family:sans-serif">📁 Pending Review Folder — Client Submissions</span>
+      </div>
+      <div style="display:flex;gap:7px">
+        <div class="tbg">
+          <button class="tbb prim" onclick="openForwardModal('C-047','MOA — Joint Community Extension Program 2025')">
+            <svg viewBox="0 0 24 24" style="stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Forward Selected to Tracker
+          </button>
+        </div>
+        <div class="tbg">
+          <button class="tbb">
+            <svg viewBox="0 0 24 24" style="stroke:var(--mid);fill:none;stroke-width:2;stroke-linecap:round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Filter
+          </button>
+          <button class="tbb tb-arr"><svg viewBox="0 0 10 6" style="width:9px;height:9px;stroke:var(--mid);fill:none;stroke-width:2;stroke-linecap:round"><polyline points="1 1 5 5 9 1"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pr-card-list">
+
+      <!-- ── CARD 1: NEW ── -->
+      <div class="pr-card new-card" id="prcard-1">
+        <div class="pr-card-head">
+          <div class="pr-ref-badge">C-047</div>
+          <div class="pr-head-info">
+            <div class="pr-doc-title">MOA — Joint Community Extension Program 2025</div>
+            <div class="pr-meta-row">
+              <span class="pr-type-pill tc">Contract / MOA / MOU</span>
+              <span class="pr-status-pill pr-sp-new"><span class="pr-sdot"></span>New — Unreviewed</span>
+              <div class="pr-divider"></div>
+              <span class="pr-submitter"><strong>Juan dela Cruz</strong> &nbsp;·&nbsp; Sorsogon City LGU</span>
+              <div class="pr-divider"></div>
+              <span class="pr-received">Received via Portal: April 26, 2025</span>
+            </div>
+          </div>
+          <div class="pr-head-right">
+            <span class="pr-time-new">Today 09:14 AM</span>
+            <span class="pr-new-indicator">● NEW</span>
+          </div>
+        </div>
+        <div class="pr-card-body">
+          <div class="pr-file-thumb">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="pr-file-ext">PDF</span>
+          </div>
+          <div class="pr-file-info">
+            <div class="pr-filename">MOA_Extension_2025.pdf</div>
+            <div class="pr-filesize">2.1 MB &nbsp;·&nbsp; Submitted April 26, 2025 at 09:14 AM</div>
+            <div class="pr-description">Memorandum of Agreement between Bicol University and Sorsogon City LGU for a joint community extension program on coastal resource management. Covers roles, funding allocation, and program timeline for 2025–2026.</div>
+            <div class="pr-submitter-contact">
+              <span class="pr-contact-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>juan.delacruz@sorsogon.gov.ph</span>
+              <span class="pr-contact-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .9h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+63 912 000 1111</span>
+            </div>
+          </div>
+        </div>
+        <div class="pr-card-foot">
+          <button class="pr-btn-open" onclick="openDoc()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View File</button>
+          <button class="pr-btn-forward" onclick="openForwardModal('C-047','MOA — Joint Community Extension Program 2025')">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Forward to Tracker
+          </button>
+          <button class="pr-btn-decline"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Decline</button>
+        </div>
+      </div>
+
+      <!-- ── CARD 2: NEW ── -->
+      <div class="pr-card new-card" id="prcard-2">
+        <div class="pr-card-head">
+          <div class="pr-ref-badge">C-046</div>
+          <div class="pr-head-info">
+            <div class="pr-doc-title">Request for Legal Opinion — Property Dispute</div>
+            <div class="pr-meta-row">
+              <span class="pr-type-pill tl">Legal Opinion</span>
+              <span class="pr-status-pill pr-sp-new"><span class="pr-sdot"></span>New — Unreviewed</span>
+              <div class="pr-divider"></div>
+              <span class="pr-submitter"><strong>Maria Santos</strong> &nbsp;·&nbsp; Individual Client</span>
+              <div class="pr-divider"></div>
+              <span class="pr-received">Received via Portal: April 26, 2025</span>
+            </div>
+          </div>
+          <div class="pr-head-right">
+            <span class="pr-time-new">Today 08:47 AM</span>
+            <span class="pr-new-indicator">● NEW</span>
+          </div>
+        </div>
+        <div class="pr-card-body">
+          <div class="pr-file-thumb">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="pr-file-ext">PDF</span>
+          </div>
+          <div class="pr-file-info">
+            <div class="pr-filename">LegalOpinion_Request.pdf</div>
+            <div class="pr-filesize">1.3 MB &nbsp;·&nbsp; Submitted April 26, 2025 at 08:47 AM</div>
+            <div class="pr-description">Request for a formal legal opinion regarding a property boundary dispute in Legazpi City. Client is seeking clarification on applicable land registration laws and possible legal remedies under Philippine law.</div>
+            <div class="pr-submitter-contact">
+              <span class="pr-contact-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>maria.santos@gmail.com</span>
+              <span class="pr-contact-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .9h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+63 917 234 5678</span>
+            </div>
+          </div>
+        </div>
+        <div class="pr-card-foot">
+          <button class="pr-btn-open" onclick="openDoc()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View File</button>
+          <button class="pr-btn-forward" onclick="openForwardModal('C-046','Request for Legal Opinion — Property Dispute')">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Forward to Tracker
+          </button>
+          <button class="pr-btn-decline"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Decline</button>
+        </div>
+      </div>
+
+      <!-- ── CARD 3: PENDING ── -->
+      <div class="pr-card pending-card" id="prcard-3">
+        <div class="pr-card-head">
+          <div class="pr-ref-badge">C-045</div>
+          <div class="pr-head-info">
+            <div class="pr-doc-title">Administrative Concern — Faculty Promotion Appeal</div>
+            <div class="pr-meta-row">
+              <span class="pr-type-pill ta">Admin. Concern</span>
+              <span class="pr-status-pill pr-sp-pend"><span class="pr-sdot"></span>Pending</span>
+              <div class="pr-divider"></div>
+              <span class="pr-submitter"><strong>Rolando Abella</strong> &nbsp;·&nbsp; BU Faculty Member</span>
+              <div class="pr-divider"></div>
+              <span class="pr-received">Received via Portal: April 26, 2025</span>
+            </div>
+          </div>
+          <div class="pr-head-right">
+            <span class="pr-time">Today 07:55 AM</span>
+          </div>
+        </div>
+        <div class="pr-card-body">
+          <div class="pr-file-thumb">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="pr-file-ext">PDF</span>
+          </div>
+          <div class="pr-file-info">
+            <div class="pr-filename">Promotion_Appeal.pdf</div>
+            <div class="pr-filesize">0.8 MB &nbsp;·&nbsp; Submitted April 26, 2025 at 07:55 AM</div>
+            <div class="pr-description">Appeal letter regarding the faculty promotion evaluation results for AY 2024–2025. The faculty member is contesting the scoring in the research output criteria and requests a formal review of the decision.</div>
+            <div class="pr-submitter-contact">
+              <span class="pr-contact-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>r.abella@bicol-u.edu.ph</span>
+              <span class="pr-contact-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .9h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+63 920 888 4444</span>
+            </div>
+          </div>
+        </div>
+        <div class="pr-card-foot">
+          <button class="pr-btn-open" onclick="openDoc()"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View File</button>
+          <button class="pr-btn-forward" onclick="openForwardModal('C-045','Administrative Concern — Faculty Promotion Appeal')">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Forward to Tracker
+          </button>
+          <span class="pr-assigned-to"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Assigned: Ma. Myra Caparos</span>
+          <button class="pr-btn-decline"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Decline</button>
+        </div>
+      </div>
+
+      <!-- ── CARD 4: ALREADY FORWARDED ── -->
+      <div class="pr-card review-card" id="prcard-4" style="opacity:.7">
+        <div class="pr-card-head">
+          <div class="pr-ref-badge" style="background:#10b981">C-044</div>
+          <div class="pr-head-info">
+            <div class="pr-doc-title">Complaint — Unfair Labor Practice</div>
+            <div class="pr-meta-row">
+              <span class="pr-type-pill td">Complaint</span>
+              <span class="pr-status-pill" style="background:#d1fae5;color:#065f46;border:1px solid #6ee7b7"><span class="pr-sdot"></span>Forwarded to Tracker</span>
+              <div class="pr-divider"></div>
+              <span class="pr-submitter"><strong>Lucia Fernandez</strong> &nbsp;·&nbsp; Legazpi City LGU</span>
+              <div class="pr-divider"></div>
+              <span class="pr-received">Received via Portal: April 25, 2025</span>
+            </div>
+          </div>
+          <div class="pr-head-right">
+            <span class="pr-time">Apr 25, 04:52 PM</span>
+          </div>
+        </div>
+        <div class="pr-forwarded-banner">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Forwarded to Document Tracker on April 26, 2025 at 09:05 AM &nbsp;·&nbsp; Assigned Doc ID: <strong style="margin-left:4px">LAO-280</strong> &nbsp;·&nbsp; Status: For Review &nbsp;·&nbsp; Filed under: April 25, 2025
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FORWARD TO TRACKER MODAL
+══════════════════════════════════════════════════════════ -->
+<div class="fwd-overlay hidden" id="fwd-modal-overlay">
+  <div class="fwd-modal">
+    <div class="fwd-top">
+      <div class="fwd-top-ico"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+      <h3>Forward Document to Tracker</h3>
+      <button class="mclose" onclick="closeFwdModal()">✕</button>
+    </div>
+
+    <!-- Document strip -->
+    <div class="fwd-doc-strip">
+      <div class="fwd-doc-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div>
+        <div class="fwd-doc-name" id="fwd-doc-name">MOA — Joint Community Extension Program 2025</div>
+        <div class="fwd-doc-sub">Client submission — pending document</div>
+      </div>
+      <div class="fwd-ref" id="fwd-ref-no">Ref: C-047</div>
+    </div>
+
+    <!-- Main body -->
+    <div class="fwd-body" id="fwd-form-body">
+
+      <!-- Step 1: Date received (folder target) -->
+      <div class="fwd-step">
+        <div class="fwd-step-label"><span class="step-num">1</span>Set the Date Received (Tracker Folder)</div>
+        <div class="fwd-date-row">
+          <div class="fwd-fld">
+            <label>Date Document Was Received <span style="color:#e05555">*</span></label>
+            <input type="date" id="fwd-date-received" value="2025-04-26" class="highlight" oninput="updateFolderPreview()">
+          </div>
+          <div class="fwd-fld">
+            <label>Time Received</label>
+            <input type="time" value="09:14" id="fwd-time-received">
+          </div>
+        </div>
+        <!-- Folder preview -->
+        <div class="fwd-folder-preview">
+          <div class="ffp-ico"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+          <div class="ffp-text">
+            <div class="ffp-label">Will be filed in folder</div>
+            <div class="ffp-value" id="fwd-folder-label">📁 Received: April 26, 2025</div>
+            <div class="ffp-sub" id="fwd-folder-sub">Document Tracker → Date-Grouped View</div>
+          </div>
+          <span class="ffp-new-badge" id="fwd-new-badge">New Folder</span>
+        </div>
+      </div>
+
+      <!-- Step 2: Assign Document ID -->
+      <div class="fwd-step">
+        <div class="fwd-step-label"><span class="step-num">2</span>Assign Document ID</div>
+        <div class="fwd-id-row">
+          <div class="fwd-id-box">
+            <div>
+              <div class="fwd-id-val" id="fwd-doc-id">LAO-280</div>
+              <div class="fwd-id-hint">Auto-generated &nbsp;·&nbsp; Legal Affairs Office</div>
+            </div>
+          </div>
+          <button class="fwd-id-regen" onclick="regenId()">↻ Regenerate</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Classification -->
+      <div class="fwd-step">
+        <div class="fwd-step-label"><span class="step-num">3</span>Classification &amp; Routing</div>
+        <div class="fwd-date-row">
+          <div class="fwd-fld">
+            <label>Document Type</label>
+            <select id="fwd-doc-type">
+              <option selected>Contract / MOA / MOU</option>
+              <option>Legal Opinion</option>
+              <option>Court Filing</option>
+              <option>Administrative Order</option>
+              <option>Demand Letter</option>
+              <option>Notice / Summons</option>
+              <option>Other Legal Document</option>
+            </select>
+          </div>
+          <div class="fwd-fld">
+            <label>From — Unit / Client</label>
+            <input type="text" id="fwd-from" value="Sorsogon City LGU (Client Submission)">
+          </div>
+        </div>
+        <div class="fwd-date-row">
+          <div class="fwd-fld">
+            <label>Assign To (Staff)</label>
+            <select id="fwd-assign">
+              <option>— Assign to staff member —</option>
+              <option>Atty. Reyes</option>
+              <option>Atty. Santos</option>
+              <option selected>Ma. Myra Caparos</option>
+              <option>Legal Staff</option>
+            </select>
+          </div>
+          <div class="fwd-fld">
+            <label>Initial Status in Tracker</label>
+            <select id="fwd-status" style="border-color:var(--bu);background:#eef5ff">
+              <option selected>For Review</option>
+              <option>Pending</option>
+              <option>Under Deliberation</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info note -->
+      <div class="fwd-note">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p>The document will be moved from the <strong>Pending Review Folder</strong> to the <strong>Document Tracker</strong> under the date received. Its status will be set to <strong>"For Review"</strong> and the client submission reference (C-047) will remain linked for audit trail.</p>
+      </div>
+
+    </div>
+
+    <!-- SUCCESS STATE inside modal -->
+    <div class="fwd-success" id="fwd-success">
+      <div class="fwds-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="fwds-title">Document Successfully Forwarded!</div>
+      <div class="fwds-id" id="fwds-id-display">LAO-280</div>
+      <div class="fwds-msg">The document has been moved to the Document Tracker and filed under <strong id="fwds-date-display">April 26, 2025</strong>. Status has been set to <strong>For Review</strong> and assigned to <strong id="fwds-assign-display">Ma. Myra Caparos</strong>. The client submission reference C-047 is linked in the audit trail.</div>
+      <button class="fwds-close" onclick="closeFwdModal()">Done</button>
+    </div>
+
+    <div class="fwd-footer" id="fwd-footer">
+      <button class="fwd-btn-cancel" onclick="closeFwdModal()">Cancel</button>
+      <button class="fwd-btn-confirm" onclick="confirmForward()">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Confirm &amp; Forward to Tracker
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     ASSIGN STAFF MODAL
+══════════════════════════════════════════════════════════ -->
+<div class="asn-overlay hidden" id="asn-modal-overlay">
+  <div class="asn-modal">
+    <div class="asn-top">
+      <div class="asn-top-ico"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+      <h3>Assign Document to Staff</h3>
+      <button class="mclose" onclick="closeAsnModal()">✕</button>
+    </div>
+
+    <!-- Document strip -->
+    <div class="asn-doc-strip">
+      <div class="asn-doc-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div class="asn-doc-name" id="asn-doc-title">MOA — Joint Community Extension Program 2025</div>
+      <div class="asn-doc-ref" id="asn-doc-ref">C-047</div>
+    </div>
+
+    <!-- Form -->
+    <div class="asn-body" id="asn-form-body">
+
+      <!-- Staff selection -->
+      <div>
+        <div class="asn-section-label">Select Staff Member to Assign</div>
+        <div class="asn-staff-grid">
+
+          <div class="asn-staff-card selected" id="asn-card-0" onclick="selectStaff(0,'Atty. Reyes')">
+            <div class="asn-av asn-av-blue">AR</div>
+            <div class="asn-staff-info">
+              <div class="asn-staff-name">Atty. Maria Reyes</div>
+              <div class="asn-staff-role">Senior Legal Counsel — Legal Affairs Office</div>
+              <div class="asn-staff-meta">
+                <span class="asn-workload asn-wl-low">Low Workload</span>
+                <span class="asn-active-docs">3 active documents</span>
+              </div>
+            </div>
+            <div class="asn-select-ico"><svg viewBox="0 0 12 10"><polyline points="1 5 4 8 11 1"/></svg></div>
+          </div>
+
+          <div class="asn-staff-card" id="asn-card-1" onclick="selectStaff(1,'Atty. Santos')">
+            <div class="asn-av asn-av-purple">AS</div>
+            <div class="asn-staff-info">
+              <div class="asn-staff-name">Atty. Jose Santos</div>
+              <div class="asn-staff-role">Legal Officer II — Legal Affairs Office</div>
+              <div class="asn-staff-meta">
+                <span class="asn-workload asn-wl-med">Moderate Workload</span>
+                <span class="asn-active-docs">6 active documents</span>
+              </div>
+            </div>
+            <div class="asn-select-ico"><svg viewBox="0 0 12 10"><polyline points="1 5 4 8 11 1"/></svg></div>
+          </div>
+
+          <div class="asn-staff-card" id="asn-card-2" onclick="selectStaff(2,'Ma. Myra Caparos')">
+            <div class="asn-av asn-av-gold">MC</div>
+            <div class="asn-staff-info">
+              <div class="asn-staff-name">Ma. Myra Caparos</div>
+              <div class="asn-staff-role">Legal Document Officer I — Legal Affairs Office</div>
+              <div class="asn-staff-meta">
+                <span class="asn-workload asn-wl-med">Moderate Workload</span>
+                <span class="asn-active-docs">5 active documents</span>
+              </div>
+            </div>
+            <div class="asn-select-ico"><svg viewBox="0 0 12 10"><polyline points="1 5 4 8 11 1"/></svg></div>
+          </div>
+
+          <div class="asn-staff-card busy" id="asn-card-3">
+            <div class="asn-av asn-av-green">LS</div>
+            <div class="asn-staff-info">
+              <div class="asn-staff-name">Legal Staff (General)</div>
+              <div class="asn-staff-role">Legal Support Staff — Legal Affairs Office</div>
+              <div class="asn-staff-meta">
+                <span class="asn-workload asn-wl-high">High Workload</span>
+                <span class="asn-active-docs">11 active documents — unavailable</span>
+              </div>
+            </div>
+            <div class="asn-select-ico"><svg viewBox="0 0 12 10"><polyline points="1 5 4 8 11 1"/></svg></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Priority + Due date -->
+      <div class="asn-options-row">
+        <div class="asn-fld">
+          <label>Priority Level</label>
+          <select id="asn-priority">
+            <option value="normal" selected>Normal</option>
+            <option value="urgent">Urgent</option>
+            <option value="high">High Priority</option>
+          </select>
+        </div>
+        <div class="asn-fld">
+          <label>Review Due Date</label>
+          <input type="date" id="asn-due" value="2025-05-03">
+        </div>
+      </div>
+
+      <!-- Instructions -->
+      <div class="asn-fld">
+        <label>Assignment Instructions <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <textarea id="asn-instructions" placeholder="Add any specific instructions for the assigned staff member…"></textarea>
+      </div>
+
+      <div class="asn-note">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        The assigned staff member will receive a notification and the document status will be updated to <strong>"For Review"</strong>. A reference to the original client submission (Ref No.) will be retained for audit purposes.
+      </div>
+
+    </div>
+
+    <!-- Success state -->
+    <div class="asn-success" id="asn-success">
+      <div class="asns-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="asns-title">Document Assigned!</div>
+      <div class="asns-who" id="asns-who-display">Atty. Maria Reyes</div>
+      <div class="asns-msg">The document has been assigned and its status updated to <strong>For Review</strong>. <span id="asns-who-display2">Atty. Maria Reyes</span> has been notified and the document will appear in their active queue.</div>
+      <button class="asns-close" onclick="closeAsnModal()">Done</button>
+    </div>
+
+    <div class="asn-footer" id="asn-footer">
+      <button class="asn-btn-cancel" onclick="closeAsnModal()">Cancel</button>
+      <button class="asn-btn-confirm" id="asn-confirm-btn" onclick="confirmAssign()">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Assign Document
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
